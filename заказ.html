@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-dark px-4">
+        <span class="navbar-brand fs-4">🛒 Оформление заказа</span>
+        <a href="магазин.html" class="btn btn-light">← Вернуться в магазин</a>
+    </nav>
+
+    <div class="container my-4">
+        <h1 class="mb-4">Ваш заказ</h1>
+
+        <!-- Сюда JS вставит список заказанных товаров -->
+        <ul class="list-group mb-3" id="orderList"></ul>
+        <h3 id="total" class="mb-4"></h3>
+
+        <hr>
+        <h3 class="mb-3">Свяжитесь для оформления и оплаты:</h3>
+        <div class="d-flex gap-2 flex-wrap mb-4">
+            <a href="https://t.me/zerus9501" class="btn btn-info btn-lg">✈️ Telegram</a>
+            <a href="https://wa.me/79395559211" class="btn btn-success btn-lg">💬 WhatsApp</a>
+            <a href="mailto:abubakarovzerus@gmail.com" class="btn btn-secondary btn-lg">✉️ Почта</a>
+        </div>
+
+        <button class="btn btn-outline-danger" onclick="clearCart()">Очистить корзину</button>
+    </div>
+
+    <script>
+        // читаем корзину из памяти браузера
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const orderList = document.getElementById('orderList');
+        const totalEl = document.getElementById('total');
+
+        if (cart.length === 0) {
+            orderList.innerHTML = '<li class="list-group-item">Корзина пуста — выберите товары в магазине</li>';
+        } else {
+            let total = 0;
+            cart.forEach(item => {
+                total = total + item.price;
+                orderList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>${item.name}</span>
+                        <span>${item.price.toLocaleString('ru-RU')} ₽</span>
+                    </li>`;
+            });
+            totalEl.textContent = 'Итого: ' + total.toLocaleString('ru-RU') + ' ₽';
+        }
+
+        // очистить корзину
+        function clearCart() {
+            localStorage.removeItem('cart');
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
