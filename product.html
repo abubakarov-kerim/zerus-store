@@ -2,21 +2,24 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Товар — Zerus Store</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
     <style>
         body { background:linear-gradient(180deg,#cfe6ff 0%,#eaf3ff 45%,#f5f5f7 100%); background-attachment:fixed; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#1d1d1f; }
-        .navbar-apple { background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); border-bottom:1px solid #d2d2d7; }
-        .btn-apple { background:#0071e3; color:#fff; border:none; border-radius:980px; padding:10px 26px; font-weight:500; }
+        .navbar-apple { background:rgba(255,255,255,0.82); backdrop-filter:blur(14px); border-bottom:1px solid #e5e5e7; }
+        .btn-apple { background:#0071e3; color:#fff; border:none; border-radius:980px; padding:10px 26px; font-weight:500; text-decoration:none; display:inline-block; }
         .btn-apple:hover { background:#0077ed; color:#fff; }
         .img-block { background:#fff; border-radius:22px; padding:30px; text-align:center; box-shadow:0 4px 18px rgba(0,0,0,0.06); }
-        .img-block img { max-width:100%; max-height:380px; object-fit:contain; }
+        .img-block img { max-width:100%; max-height:380px; object-fit:contain; transition:opacity .25s ease; }
         .price-big { font-size:2rem; font-weight:700; }
-        .color-btn { border:1.5px solid #d2d2d7; background:#fff; color:#1d1d1f; border-radius:980px; padding:7px 18px; margin:0 8px 8px 0; cursor:pointer; }
-        .color-btn.active { border-color:#0071e3; background:#eaf3ff; color:#0071e3; font-weight:600; }
+        .color-btn, .opt-btn { border:1.5px solid #d2d2d7; background:#fff; color:#1d1d1f; border-radius:14px; padding:9px 16px; margin:0 8px 8px 0; cursor:pointer; text-align:left; }
+        .color-btn { border-radius:980px; }
+        .color-btn.active, .opt-btn.active { border-color:#0071e3; background:#eaf3ff; color:#0071e3; font-weight:600; }
+        .opt-btn .sub { display:block; font-size:.8rem; color:#86868b; font-weight:400; }
+        .opt-btn.active .sub { color:#0071e3; }
         #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(120px); background:#1d1d1f; color:#fff; padding:12px 26px; border-radius:14px; opacity:0; transition:all .3s ease; z-index:1000; }
         #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-        /* --- анимация входа: фото слева, детали справа --- */
         @keyframes slideInLeft  { from { opacity:0; transform:translateX(-50px); } to { opacity:1; transform:none; } }
         @keyframes slideInRight { from { opacity:0; transform:translateX(50px);  } to { opacity:1; transform:none; } }
         .img-col  { animation: slideInLeft  .55s cubic-bezier(.2,.7,.3,1) both; }
@@ -27,11 +30,10 @@
 
     <nav class="navbar navbar-apple px-4 sticky-top">
         <a href="store.html" class="navbar-brand fs-5 text-decoration-none">← В магазин</a>
-        <a href="order.html" class="btn btn-apple">🛒 Заказ (<span id="cartCount">0</span>)</a>
+        <a href="order.html" class="btn-apple">🛍️ Заказ (<span id="cartCount">0</span>)</a>
     </nav>
 
     <div class="container my-4" id="productBox"></div>
-
     <div id="toast">✅ Добавлено в корзину</div>
 
     <script src="products.js"></script>
@@ -41,43 +43,121 @@
 
         const id = new URLSearchParams(location.search).get('id');
         const p = findProduct(id);
-        let selectedColor = (p && p.colors && p.colors.length) ? p.colors[0] : null;
-
         const box = document.getElementById('productBox');
         const toast = document.getElementById('toast');
 
+        // цвет → кружок
+        const COLORHEX = {
+            'Чёрный':'#1d1d1f','Космический чёрный':'#1d1d1f','Титановый чёрный':'#2b2b2e','Чёрный титан':'#2b2b2e','Тёмная ночь':'#2e3641','Полночь':'#2e3641','Тёмно-синий':'#2e4a6b',
+            'Графитовый':'#4a4a4a','Серый космос':'#4a4a4a','Серый':'#8a8a8a','Титановый серый':'#8a8a8a',
+            'Белый':'#f2f2f0','Титановый белый':'#e8e8e8','Серебристый':'#dcdedd','Титановый натуральный':'#c9c3ba','Натуральный титан':'#c9c3ba','Пустынный титан':'#b8a084','Ваниль':'#f3e6c8','Кремовый':'#efe7d3','Сияющая звезда':'#efe7d3',
+            'Синий':'#4a6a9a','Титановый синий':'#4d5b6a','Небесно-голубой':'#a9c7e0','Ультрамарин':'#3a3fb0','Бирюзовый':'#7fb7c4',
+            'Зелёный':'#5b8a72','Тёмно-зелёный':'#33503f','Светлый мох':'#8a9a5b','Мятный':'#a8d5c0',
+            'Розовый':'#e7c0c8','Красный':'#c0392b','Жёлтый':'#e8c848','Титановый жёлтый':'#d9c47a',
+            'Фиолетовый':'#7a5b9a','Тёмно-фиолетовый':'#4b3b57','Титановый фиолетовый':'#6a5f8a','Лавандовый':'#c3b6e0','Космический оранжевый':'#d4753a','Золотой':'#e3c78a'
+        };
+        function colorHex(name){ return COLORHEX[name] || '#c7c7cc'; }
+
+        // состояние выбора
+        let vIndex = 0, sIndex = 0, selectedColor = null;
+        if (p) {
+            if (p.type === 'config') selectedColor = p.versions[0].colors[0] || null;
+            else if (p.colors && p.colors.length) selectedColor = p.colors[0];
+        }
+
+        function colorsBlock(colors) {
+            if (!colors || !colors.length) return '';
+            let h = '<p class="mt-4 mb-2 fw-medium">Цвет:</p><div>';
+            colors.forEach(c => {
+                h += `<button class="color-btn ${c===selectedColor?'active':''}" onclick="pickColor('${c}')">
+                    <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${colorHex(c)};border:1px solid #c7c7cc;vertical-align:-2px;margin-right:7px"></span>${c}</button>`;
+            });
+            h += `</div>`;
+            return h;
+        }
+
         function render() {
             if (!p) { box.innerHTML = '<h2 class="mt-4">Товар не найден</h2><a href="store.html">← Вернуться в магазин</a>'; return; }
-            const inStock = p.stock > 0;
-            const stockText = inStock
-                ? `<span class="text-success">✅ В наличии: ${p.stock} шт.</span>`
-                : `<span class="text-danger">❌ Нет в наличии</span>`;
 
-            let colorsHTML = '';
-            if (p.colors && p.colors.length) {
-                colorsHTML = '<p class="mt-4 mb-2 fw-medium">Цвет:</p><div>';
-                p.colors.forEach(c => {
-                    colorsHTML += `<button class="color-btn ${c===selectedColor?'active':''}" onclick="pickColor('${c}')">${c}</button>`;
-                });
-                colorsHTML += `</div><p class="text-secondary mt-2">Выбрано: <b>${selectedColor}</b></p>`;
+            // --- СКОРО ---
+            if (p.soon) {
+                box.innerHTML = `
+                <a href="store.html" class="text-decoration-none text-secondary">← Все товары</a>
+                <div class="row mt-2 g-4 align-items-center">
+                    <div class="col-md-6 img-col"><div class="img-block"><img src="${p.img}" alt="${p.name}" style="filter:brightness(0.9)"></div></div>
+                    <div class="col-md-6 info-col">
+                        <span class="badge" style="background:#ff375f;color:#fff;border-radius:980px;padding:6px 16px">🔥 Скоро в продаже</span>
+                        <h1 class="fw-bold mt-3">${p.name}</h1>
+                        <p class="text-secondary">${p.desc || ''}</p>
+                        <p class="price-big" style="color:#ff375f">В продаже с ${p.release}</p>
+                        <p class="text-secondary">Оформи предзаказ уже сейчас — напиши в Telegram, и мы придержим для тебя ${p.name}.</p>
+                        <a href="https://t.me/zerus9501" class="btn-apple mt-2">✈️ Оформить предзаказ</a>
+                    </div>
+                </div>`;
+                return;
             }
 
-            const addBtn = inStock
-                ? `<button class="btn-apple mt-3" onclick="addToCart()">Добавить в корзину</button>`
-                : `<button class="btn btn-secondary mt-3" disabled style="border-radius:980px;padding:10px 26px">Нет в наличии</button>`;
+            // --- КОНФИГУРАТОР (версия + память + цвет) ---
+            if (p.type === 'config') {
+                const v = p.versions[vIndex];
+                if (!v.colors.includes(selectedColor)) selectedColor = v.colors[0] || null;
+                const s = p.storage[sIndex];
+                const price = v.price + s.add;
+                const img = (v.colorImages && v.colorImages[selectedColor]) ? v.colorImages[selectedColor] : v.img;
 
+                let versionsHTML = '<p class="mt-4 mb-2 fw-medium">Модель:</p><div>';
+                p.versions.forEach((vv, i) => {
+                    versionsHTML += `<button class="opt-btn ${i===vIndex?'active':''}" onclick="pickVersion(${i})">${vv.name}<span class="sub">от ${vv.price.toLocaleString('ru-RU')} ₽</span></button>`;
+                });
+                versionsHTML += '</div>';
+
+                let storageHTML = '<p class="mt-4 mb-2 fw-medium">Память:</p><div>';
+                p.storage.forEach((ss, i) => {
+                    const sub = ss.add ? `+${ss.add.toLocaleString('ru-RU')} ₽` : 'базовая';
+                    storageHTML += `<button class="opt-btn ${i===sIndex?'active':''}" onclick="pickStorage(${i})">${ss.name}<span class="sub">${sub}</span></button>`;
+                });
+                storageHTML += '</div>';
+
+                box.innerHTML = `
+                <a href="store.html" class="text-decoration-none text-secondary">← Все товары</a>
+                <div class="row mt-2 g-4 align-items-start">
+                    <div class="col-md-6 img-col"><div class="img-block"><img id="mainImg" src="${img}" alt="${v.name}"></div></div>
+                    <div class="col-md-6 info-col">
+                        <h1 class="fw-bold">${v.name}</h1>
+                        <p class="text-secondary">${p.desc || ''}</p>
+                        <p class="price-big">${price.toLocaleString('ru-RU')} ₽</p>
+                        <p><span class="text-success">✅ В наличии</span></p>
+                        ${versionsHTML}
+                        ${storageHTML}
+                        ${colorsBlock(v.colors)}
+                        <p class="text-secondary mt-2">Выбрано: <b>${v.name} · ${s.name}${selectedColor ? ' · ' + selectedColor : ''}</b></p>
+                        <div class="d-flex gap-2 flex-wrap mt-3">
+                            <button class="btn-apple" onclick="addConfig()">Добавить в корзину</button>
+                            <a href="order.html" class="btn btn-dark" style="border-radius:980px;padding:10px 26px">Оформить заказ →</a>
+                        </div>
+                    </div>
+                </div>`;
+                return;
+            }
+
+            // --- ОБЫЧНЫЙ ТОВАР ---
+            const inStock = p.stock > 0;
+            const stockText = inStock ? `<span class="text-success">✅ В наличии: ${p.stock} шт.</span>` : `<span class="text-danger">❌ Нет в наличии</span>`;
+            const img = (p.colorImages && p.colorImages[selectedColor]) ? p.colorImages[selectedColor] : p.img;
+            const addBtn = inStock
+                ? `<button class="btn-apple mt-3" onclick="addSimple()">Добавить в корзину</button>`
+                : `<button class="btn btn-secondary mt-3" disabled style="border-radius:980px;padding:10px 26px">Нет в наличии</button>`;
             box.innerHTML = `
                 <a href="store.html" class="text-decoration-none text-secondary">← Все товары</a>
                 <div class="row mt-2 g-4 align-items-center">
-                    <div class="col-md-6 img-col">
-                        <div class="img-block"><img src="${p.img}" alt="${p.name}"></div>
-                    </div>
+                    <div class="col-md-6 img-col"><div class="img-block"><img id="mainImg" src="${img}" alt="${p.name}"></div></div>
                     <div class="col-md-6 info-col">
                         <h1 class="fw-bold">${p.name}</h1>
                         <p class="text-secondary">${p.desc || ''}</p>
                         <p class="price-big">${p.price.toLocaleString('ru-RU')} ₽</p>
                         <p>${stockText}</p>
-                        ${colorsHTML}
+                        ${colorsBlock(p.colors)}
+                        ${selectedColor ? `<p class="text-secondary mt-2">Выбрано: <b>${selectedColor}</b></p>` : ''}
                         <div class="d-flex gap-2 flex-wrap mt-3">
                             ${addBtn}
                             <a href="order.html" class="btn btn-dark mt-3" style="border-radius:980px;padding:10px 26px">Оформить заказ →</a>
@@ -86,15 +166,26 @@
                 </div>`;
         }
 
-        function pickColor(c) { selectedColor = c; render(); }
+        function pickVersion(i) { vIndex = i; sIndex = 0; render(); }
+        function pickStorage(i) { sIndex = i; render(); }
+        function pickColor(c)   { selectedColor = c; render(); }
 
-        function addToCart() {
-            const name = selectedColor ? `${p.name} — ${selectedColor}` : p.name;
-            cart.push({ name: name, price: p.price });
+        function showToast() { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1500); }
+
+        function addConfig() {
+            const v = p.versions[vIndex], s = p.storage[sIndex];
+            const name = `${v.name} · ${s.name}${selectedColor ? ' · ' + selectedColor : ''}`;
+            cart.push({ name, price: v.price + s.add });
             localStorage.setItem('cart', JSON.stringify(cart));
             document.getElementById('cartCount').textContent = cart.length;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 1500);
+            showToast();
+        }
+        function addSimple() {
+            const name = selectedColor ? `${p.name} — ${selectedColor}` : p.name;
+            cart.push({ name, price: p.price });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            document.getElementById('cartCount').textContent = cart.length;
+            showToast();
         }
 
         render();

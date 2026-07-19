@@ -119,13 +119,13 @@
 
         <!-- БОЛЬШОЙ ПРОМО-БАННЕР -->
         <h2 class="apple-h">Хит продаж. <span class="muted">Забирают быстро.</span></h2>
-        <div class="promo dark" onclick="location.href='product.html?id=iphone'" style="cursor:pointer">
+        <div class="promo dark" onclick="location.href='product.html?id=iphone17'" style="cursor:pointer">
             <div>
-                <h3>iPhone 15 Pro</h3>
-                <p>Титан. Такой прочный. Такой лёгкий. Такой Pro.</p>
-                <span class="btn-apple">Купить от 110 000 ₽</span>
+                <h3>iPhone 17</h3>
+                <p>Титан. Топовая камера. Выбери версию, память и цвет.</p>
+                <span class="btn-apple">Купить от 69 000 ₽</span>
             </div>
-            <img src="images/iphone.jpg" alt="iPhone 15 Pro">
+            <img src="images/ip17promax.jpg" alt="iPhone 17">
         </div>
 
         <!-- КАТЕГОРИИ -->
@@ -141,6 +141,18 @@
 
         <!-- НОВИНКИ -->
         <h2 class="apple-h">Новинки. <span class="muted">Смотри всё здесь.</span></h2>
+
+        <!-- СКОРО: iPhone 18 -->
+        <div class="promo dark mb-4" onclick="location.href='product.html?id=ip18'" style="cursor:pointer; background:linear-gradient(135deg,#000,#1d1d1f)">
+            <div>
+                <span class="badge-new" style="position:static; display:inline-block; margin-bottom:10px; background:#ff375f">🔥 Скоро в продаже</span>
+                <h3>iPhone 18</h3>
+                <p>Новое поколение iPhone. Уже 20 сентября 2026.</p>
+                <span class="btn-apple">Предзаказ в Telegram →</span>
+            </div>
+            <img src="images/ip17promax.jpg" alt="iPhone 18" style="filter:brightness(0.85)">
+        </div>
+
         <div class="row g-4 mb-2">
             <div class="col-md-6">
                 <div class="feature">
@@ -224,22 +236,44 @@
         document.getElementById('cartCount').textContent = cart.length;
 
         function cardHTML(p) {
+            // товар «скоро в продаже»
+            if (p.soon) {
+                return `
+                <div class="col-md-3 mb-4">
+                    <div class="card product-card h-100 text-center p-3" onclick="location.href='product.html?id=${p.id}'">
+                        <img src="${p.img}" alt="${p.name}" class="product-img" style="filter:brightness(0.9)">
+                        <h6 class="mt-2">${p.name}</h6>
+                        <p class="price" style="color:#ff375f">Скоро</p>
+                        <p class="small"><span class="text-danger">🔜 В продаже с ${p.release}</span></p>
+                        <span class="more">Подробнее →</span>
+                    </div>
+                </div>`;
+            }
             const inStock = p.stock > 0;
             const stockText = inStock
                 ? `<span class="text-success">✅ В наличии: ${p.stock} шт.</span>`
                 : `<span class="text-danger">❌ Нет в наличии</span>`;
+            // конфигуратор — цена «от …», обычный товар — точная цена
+            const priceHTML = (p.type === 'config')
+                ? `от ${minPrice(p).toLocaleString('ru-RU')} ₽`
+                : `${p.price.toLocaleString('ru-RU')} ₽`;
+            const extra = (p.type === 'config') ? '<p class="small text-secondary mb-1">Версия · память · цвет</p>' : '';
             return `
                 <div class="col-md-3 mb-4">
                     <div class="card product-card h-100 text-center p-3" onclick="location.href='product.html?id=${p.id}'">
                         <img src="${p.img}" alt="${p.name}" class="product-img">
                         <h6 class="mt-2">${p.name}</h6>
-                        <p class="price">${p.price.toLocaleString('ru-RU')} ₽</p>
+                        <p class="price">${priceHTML}</p>
+                        ${extra}
                         <p class="small">${stockText}</p>
                         <span class="more">Подробнее →</span>
                     </div>
                 </div>`;
         }
-        const match = p => (brandFilter==='all'||p.brand===brandFilter) && (catFilter==='all'||p.cat===catFilter) && p.price>=filterMin && p.price<=filterMax;
+        const match = p => {
+            const pr = (p.type==='config') ? minPrice(p) : p.price;
+            return (brandFilter==='all'||p.brand===brandFilter) && (catFilter==='all'||p.cat===catFilter) && pr>=filterMin && pr<=filterMax;
+        };
         function section(cat, titleId, boxId) {
             const items = products.filter(p => p.cat===cat && match(p));
             document.getElementById(boxId).innerHTML = items.map(cardHTML).join('');
