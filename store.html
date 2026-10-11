@@ -3,229 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Zerus Store</title>
+    <title>Technic Store — техника с характером</title>
+    <meta name="description" content="Technic Store. Оригинальная техника Apple, Samsung, Redmi, POCO. Официальная гарантия и доставка по всей России.">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#1d1d1f;
-            background:linear-gradient(rgba(245,245,247,0.93),rgba(245,245,247,0.96)), url("images/hero-bg.jpg") center top/cover fixed no-repeat;
-            min-height:100vh;
+        :root{
+            --bg:#080810; --bg2:#0B0F1E; --surface:#0F1426; --surface2:#131A30;
+            --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
+            --blue:#3E6BFF; --blue-br:#5c84ff; --blue-soft:rgba(62,107,255,.14);
+            --gold:#C9A86A; --gold-br:#dcc08a; --gold-soft:rgba(201,168,106,.13);
+            --text:#F2F0EA; --muted:#9BA0B5; --muted2:#6B6F85;
+            --r:18px; --rs:12px; --pill:999px;
+            --ease:cubic-bezier(.2,.7,.3,1);
+            --disp:'Space Grotesk',-apple-system,sans-serif;
+            --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
         }
-        .delivery-bar { background:#1d1d1f; color:#fff; text-align:center; padding:7px; font-size:.85rem; }
-        .apple-nav { background:rgba(255,255,255,0.82); backdrop-filter:blur(14px); border-bottom:1px solid #e5e5e7; position:sticky; top:0; z-index:100; }
-        .apple-nav .inner { max-width:1120px; margin:0 auto; display:flex; align-items:center; gap:24px; height:48px; padding:0 22px; font-size:.86rem; }
-        .apple-nav .logo { font-weight:700; font-size:1.15rem; text-decoration:none; color:inherit; }
-        .apple-nav a { color:#1d1d1f; text-decoration:none; opacity:.82; cursor:pointer; white-space:nowrap; }
-        .apple-nav a:hover { opacity:1; }
-        .apple-nav a.active { color:#0071e3; font-weight:600; opacity:1; }
-        .apple-nav .spacer { margin-left:auto; }
-        .apple-nav .icon { font-size:1.05rem; opacity:.82; }
+        *{ box-sizing:border-box; }
+        body{
+            font-family:var(--sans); color:var(--text); font-weight:300; letter-spacing:.1px;
+            background:
+              radial-gradient(1100px 620px at 50% -8%, #10172E 0%, transparent 60%),
+              radial-gradient(900px 500px at 92% 8%, rgba(62,107,255,.10), transparent 55%),
+              var(--bg) fixed;
+            min-height:100vh; -webkit-font-smoothing:antialiased;
+        }
+        ::selection{ background:var(--blue); color:#fff; }
+        h1,h2,h3,h4,h5,.disp{ font-family:var(--disp); letter-spacing:-.02em; }
+        a{ text-decoration:none; }
+        .wrap{ max-width:1160px; margin:0 auto; padding:0 22px; }
+        .text-secondary{ color:var(--muted)!important; font-weight:300; }
+        .muted{ color:var(--muted); }
+        .eyebrow{ font-family:var(--disp); font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); font-weight:600; }
 
-        /* ГЕРОЙ на фото магазина */
-        .hero { background:linear-gradient(rgba(245,245,247,0.55),rgba(245,245,247,0.80)), url("images/hero-bg.jpg") center/cover no-repeat; padding:104px 22px 92px; }
-        .hero-inner { max-width:1120px; margin:0 auto; }
-        .hero-title { font-size:5rem; font-weight:700; letter-spacing:-2px; margin:0; line-height:1; }
-        .hero-tag { font-size:1.6rem; font-weight:600; margin:14px 0 20px; }
-        .btn-apple { background:#0071e3; color:#fff; border:none; border-radius:980px; padding:9px 24px; font-weight:500; text-decoration:none; display:inline-block; }
-        .btn-apple:hover { background:#0077ed; color:#fff; }
-        .btn-ghost { border:1px solid #0071e3; color:#0071e3; background:transparent; border-radius:980px; padding:9px 24px; font-weight:500; text-decoration:none; display:inline-block; }
-        .btn-ghost:hover { background:#0071e3; color:#fff; }
+        /* ===== TOP STRIP ===== */
+        .strip{ border-bottom:1px solid var(--line); background:rgba(8,8,16,.6); }
+        .strip .wrap{ display:flex; gap:26px; justify-content:center; flex-wrap:wrap; height:38px; align-items:center;
+            font-size:.76rem; color:var(--muted); letter-spacing:.02em; }
+        .strip i{ color:var(--gold); margin-right:7px; }
 
-        /* Плашка преимуществ */
-        .trust { background:#fff; border-radius:20px; box-shadow:0 6px 24px rgba(0,0,0,0.05); padding:22px; margin-top:-42px; position:relative; z-index:5; }
-        .trust .item { text-align:center; }
-        .trust .item .ic { font-size:1.8rem; }
-        .trust .item .t { font-weight:600; margin-top:4px; }
-        .trust .item .s { color:#86868b; font-size:.85rem; }
+        /* ===== NAV ===== */
+        .nav-a{ position:sticky; top:0; z-index:100; background:rgba(9,10,20,.72); backdrop-filter:blur(16px) saturate(140%); border-bottom:1px solid var(--line); }
+        .nav-a .inner{ display:flex; align-items:center; gap:22px; height:62px; }
+        .nav-a .logo{ font-family:var(--disp); font-weight:700; font-size:1.2rem; color:var(--text); letter-spacing:-.01em; display:flex; align-items:center; gap:8px; }
+        .nav-a .logo .dot{ width:7px; height:7px; border-radius:50%; background:var(--gold); box-shadow:0 0 10px var(--gold); }
+        .nav-a nav{ display:flex; gap:26px; }
+        .nav-a nav a{ color:var(--text); opacity:.72; font-size:.84rem; font-weight:400; letter-spacing:.02em; cursor:pointer; position:relative; padding:4px 0; transition:opacity .25s; }
+        .nav-a nav a::after{ content:''; position:absolute; left:0; bottom:-2px; width:0; height:1.5px; background:var(--blue); transition:width .3s var(--ease); }
+        .nav-a nav a:hover{ opacity:1; } .nav-a nav a:hover::after{ width:100%; }
+        .nav-a nav a.active{ opacity:1; color:#fff; } .nav-a nav a.active::after{ width:100%; background:var(--gold); }
+        .nav-a .sp{ margin-left:auto; }
+        .nav-a .act{ display:flex; align-items:center; gap:18px; }
+        .nav-a .act a, .nav-a .act button{ color:var(--text); opacity:.82; font-size:1.1rem; background:none; border:none; cursor:pointer; position:relative; display:inline-flex; align-items:center; transition:opacity .2s,color .2s; }
+        .nav-a .act a:hover, .nav-a .act button:hover{ opacity:1; color:var(--blue-br); }
+        .cart-c{ position:absolute; top:-7px; right:-11px; min-width:17px; height:17px; padding:0 4px; border-radius:var(--pill); background:var(--gold); color:#141019; font-size:.62rem; font-weight:700; display:grid; place-items:center; font-family:var(--sans); }
+        .burger{ display:none; font-size:1.3rem; background:none; border:none; color:var(--text); }
 
-        /* Промо-баннеры */
-        .promo { border-radius:24px; overflow:hidden; padding:44px; display:flex; align-items:center; justify-content:space-between; gap:20px; box-shadow:0 8px 30px rgba(0,0,0,0.08); }
-        .promo.dark { background:linear-gradient(135deg,#1d1d1f,#3a3a3c); color:#fff; }
-        .promo.light { background:linear-gradient(135deg,#e8f0fe,#f5f5f7); }
-        .promo h3 { font-size:2.1rem; font-weight:700; margin:0 0 6px; }
-        .promo p { opacity:.85; margin:0 0 16px; }
-        .promo img { max-height:190px; object-fit:contain; }
+        /* ===== BUTTONS ===== */
+        .btn-b{ display:inline-flex; align-items:center; gap:9px; background:var(--blue); color:#fff; border:none; border-radius:var(--pill);
+            padding:12px 26px; font-weight:500; font-size:.9rem; letter-spacing:.01em; cursor:pointer; transition:transform .2s var(--ease), background .25s, box-shadow .25s;
+            box-shadow:0 8px 26px -10px rgba(62,107,255,.7); }
+        .btn-b:hover{ background:var(--blue-br); color:#fff; transform:translateY(-1px); box-shadow:0 14px 34px -10px rgba(62,107,255,.8); }
+        .btn-g{ display:inline-flex; align-items:center; gap:9px; background:transparent; color:var(--gold); border:1px solid var(--gold); border-radius:var(--pill);
+            padding:11px 24px; font-weight:500; font-size:.9rem; cursor:pointer; transition:background .25s,color .25s,transform .2s; }
+        .btn-g:hover{ background:var(--gold); color:#141019; transform:translateY(-1px); }
+        .btn-o{ display:inline-flex; align-items:center; gap:9px; background:transparent; color:var(--text); border:1px solid var(--line2); border-radius:var(--pill);
+            padding:11px 24px; font-weight:500; font-size:.9rem; cursor:pointer; transition:border-color .25s,color .25s; }
+        .btn-o:hover{ border-color:var(--blue); color:var(--blue-br); }
+        .btn-b i, .btn-g i{ transition:transform .25s var(--ease); }
+        .btn-b:hover i, .btn-g:hover i{ transform:translateX(3px); }
 
-        .apple-h { font-size:2.4rem; font-weight:700; letter-spacing:-1px; margin:46px 0 20px; }
-        .apple-h .muted { color:#86868b; }
+        /* ===== HERO ===== */
+        .hero{ position:relative; overflow:hidden; border-bottom:1px solid var(--line); }
+        .hero .bg{ position:absolute; inset:0; background:url("images/hero-bg.jpg") center/cover no-repeat; opacity:.5; transform:scale(1.04); }
+        .hero::after{ content:''; position:absolute; inset:0;
+            background:linear-gradient(90deg, rgba(8,8,16,.95) 0%, rgba(8,8,16,.72) 46%, rgba(8,8,16,.4) 100%),
+                       linear-gradient(0deg, var(--bg) 2%, transparent 42%); }
+        .hero .wrap{ position:relative; z-index:2; padding:110px 22px 96px; }
+        .hero h1{ font-size:clamp(2.9rem,7vw,5.4rem); font-weight:700; line-height:.98; margin:18px 0 0; max-width:14ch; }
+        .hero h1 .ac{ color:var(--blue-br); }
+        .hero p{ color:var(--muted); font-size:1.08rem; font-weight:300; margin:20px 0 30px; max-width:46ch; line-height:1.55; }
+        .hero .cta{ display:flex; gap:12px; flex-wrap:wrap; }
 
-        .cat-row { display:flex; gap:14px; overflow-x:auto; padding:6px 0; scrollbar-width:none; }
-        .cat-row::-webkit-scrollbar { display:none; }
-        .cat-item { flex:0 0 auto; width:120px; text-align:center; cursor:pointer; }
-        .cat-circle { width:104px; height:104px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; box-shadow:0 4px 14px rgba(0,0,0,0.06); transition:transform .25s, box-shadow .25s; }
-        .cat-item:hover .cat-circle { transform:scale(1.06); box-shadow:0 8px 22px rgba(0,0,0,0.12); }
-        .cat-item.active .cat-circle { box-shadow:0 0 0 2px #0071e3; }
-        .cat-circle img { max-width:70px; max-height:70px; object-fit:contain; }
-        .cat-item .lbl { font-size:.9rem; font-weight:500; }
+        /* ===== SECTION HEADINGS ===== */
+        .sec-h{ font-size:clamp(1.7rem,3.6vw,2.5rem); font-weight:600; margin:0; letter-spacing:-.02em; }
+        .sec-h .mut{ color:var(--muted2); }
+        .sec-top{ margin:64px 0 24px; }
 
-        .feature { position:relative; border-radius:22px; overflow:hidden; background:#fff; min-height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:28px; box-shadow:0 6px 24px rgba(0,0,0,0.06); transition:transform .35s cubic-bezier(.2,.7,.3,1), box-shadow .35s; }
-        .feature:hover { transform:translateY(-8px); box-shadow:0 22px 48px rgba(0,0,0,0.14); }
-        .feature img { max-width:100%; max-height:210px; object-fit:contain; transition:transform .5s cubic-bezier(.2,.7,.3,1); }
-        .feature:hover img { transform:scale(1.06); }
-        .badge-new { position:absolute; top:16px; left:16px; background:#0071e3; color:#fff; padding:4px 14px; border-radius:980px; font-size:.8rem; font-weight:600; }
+        /* ===== TRUST ===== */
+        .trust{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+            border:1px solid var(--line); border-radius:var(--r); overflow:hidden; margin-top:-38px; position:relative; z-index:6;
+            box-shadow:0 30px 70px -30px rgba(0,0,0,.9); }
+        .trust .it{ background:var(--surface); padding:22px 20px; display:flex; gap:14px; align-items:center; }
+        .trust .it i{ font-size:1.5rem; color:var(--gold); }
+        .trust .it .t{ font-family:var(--disp); font-weight:600; font-size:.96rem; }
+        .trust .it .s{ color:var(--muted); font-size:.78rem; margin-top:2px; }
 
-        .product-card { background:#fff; border:none; border-radius:18px; overflow:hidden; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,0.05); transition:transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s; }
-        .product-card:hover { transform:translateY(-8px); box-shadow:0 20px 45px rgba(0,0,0,0.14); }
-        .product-img { height:170px; object-fit:contain; margin:10px 0; transition:transform .45s cubic-bezier(.2,.7,.3,1); }
-        .product-card:hover .product-img { transform:scale(1.09); }
-        .price { font-size:1.2rem; font-weight:600; }
-        .more { color:#0071e3; font-size:.9rem; }
-        .filter-btn { border:1px solid #d2d2d7; background:#fff; color:#1d1d1f; border-radius:980px; padding:6px 18px; margin:0 4px 8px 0; cursor:pointer; }
-        .filter-btn.active { background:#1d1d1f; color:#fff; border-color:#1d1d1f; }
-        .sec-white { background:rgba(255,255,255,0.6); border-radius:24px; padding:8px 20px 24px; margin-top:20px; }
-        footer { background:#1d1d1f; color:#a1a1a6; }
-        footer a { color:#a1a1a6; text-decoration:none; }
-        footer a:hover { color:#fff; }
+        /* ===== PROMO (split) ===== */
+        .promo{ position:relative; overflow:hidden; border:1px solid var(--line); border-radius:var(--r);
+            background:linear-gradient(120deg, var(--surface2), var(--surface) 70%); display:grid; grid-template-columns:1fr auto; align-items:center; gap:24px;
+            padding:40px 44px; cursor:pointer; transition:border-color .3s, transform .3s var(--ease), box-shadow .3s; }
+        .promo:hover{ border-color:rgba(62,107,255,.4); transform:translateY(-3px); box-shadow:0 30px 70px -34px rgba(0,0,0,.9); }
+        .promo::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(var(--gold),transparent); }
+        .promo .lbl-soon{ display:inline-block; font-family:var(--disp); font-size:.66rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-soft); background:var(--gold-soft); padding:5px 12px; border-radius:var(--pill); margin-bottom:14px; }
+        .promo h3{ font-size:clamp(1.8rem,3.6vw,2.6rem); font-weight:700; margin:0 0 8px; }
+        .promo p{ color:var(--muted); margin:0 0 18px; font-weight:300; max-width:40ch; }
+        .promo .pimg{ width:clamp(150px,26vw,250px); }
+        .promo .pimg img{ width:100%; max-height:210px; object-fit:contain; filter:drop-shadow(0 22px 30px rgba(0,0,0,.6)); transition:transform .5s var(--ease); }
+        .promo:hover .pimg img{ transform:scale(1.05) rotate(-1deg); }
+        .price-from{ font-family:var(--disp); font-weight:600; }
+        .price-from b{ color:var(--gold); font-weight:700; }
+
+        /* ===== CATEGORIES ===== */
+        .cat-row{ display:flex; gap:14px; overflow-x:auto; padding:4px 2px 10px; scrollbar-width:none; }
+        .cat-row::-webkit-scrollbar{ display:none; }
+        .cat-item{ flex:0 0 auto; width:132px; cursor:pointer; text-align:center; }
+        .cat-tile{ height:132px; border:1px solid var(--line); border-radius:var(--r); background:var(--surface);
+            display:grid; place-items:center; margin-bottom:11px; transition:border-color .25s, transform .25s var(--ease), background .25s; }
+        .cat-item:hover .cat-tile{ transform:translateY(-4px); border-color:var(--line2); background:var(--surface2); }
+        .cat-item.active .cat-tile{ border-color:var(--gold); box-shadow:inset 0 0 0 1px var(--gold-soft); }
+        .cat-tile img{ max-width:76px; max-height:76px; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.5)); }
+        .cat-item .lbl{ font-size:.86rem; font-weight:500; letter-spacing:.02em; }
+        .cat-item.active .lbl{ color:var(--gold); }
+
+        /* ===== FEATURE CARDS ===== */
+        .feature{ position:relative; border:1px solid var(--line); border-radius:var(--r); background:var(--surface);
+            min-height:320px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px;
+            transition:transform .35s var(--ease), border-color .35s, box-shadow .35s; overflow:hidden; }
+        .feature:hover{ transform:translateY(-6px); border-color:rgba(62,107,255,.4); box-shadow:0 30px 64px -32px rgba(0,0,0,.9); }
+        .feature img{ max-width:100%; max-height:210px; object-fit:contain; filter:drop-shadow(0 18px 24px rgba(0,0,0,.55)); transition:transform .5s var(--ease); }
+        .feature:hover img{ transform:scale(1.05); }
+        .feature h3{ font-size:1.3rem; font-weight:600; margin:18px 0 4px; }
+        .feature p{ color:var(--muted); font-size:.88rem; margin-bottom:16px; font-weight:300; }
+        .tag{ position:absolute; top:16px; left:16px; font-family:var(--disp); font-size:.64rem; letter-spacing:.22em; text-transform:uppercase; color:var(--blue-br);
+            border:1px solid var(--blue-soft); background:var(--blue-soft); padding:5px 12px; border-radius:var(--pill); font-weight:600; }
+
+        /* ===== CATALOG ===== */
+        .catalog{ border:1px solid var(--line); border-radius:var(--r); background:rgba(255,255,255,.015); padding:10px 26px 30px; margin-top:22px; }
+        .filters{ display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px; }
+        .fbtn{ border:1px solid var(--line2); background:transparent; color:var(--muted); border-radius:var(--pill); padding:8px 18px; font-size:.82rem; cursor:pointer; transition:.2s; }
+        .fbtn:hover{ color:var(--text); border-color:var(--text); }
+        .fbtn.active{ background:var(--blue); color:#fff; border-color:var(--blue); }
+        .cat-title{ font-family:var(--disp); font-size:1.05rem; font-weight:600; letter-spacing:.02em; color:var(--muted); display:flex; align-items:center; gap:10px; margin:26px 0 16px; }
+        .cat-title i{ color:var(--gold); font-size:1rem; }
+
+        .pcard{ height:100%; border:1px solid var(--line); border-radius:var(--rs); background:var(--surface); overflow:hidden; cursor:pointer;
+            display:flex; flex-direction:column; text-align:center; padding:18px 16px 20px; transition:transform .3s var(--ease), border-color .3s, box-shadow .3s; }
+        .pcard:hover{ transform:translateY(-6px); border-color:rgba(62,107,255,.45); box-shadow:0 26px 54px -30px rgba(0,0,0,.9); }
+        .pcard .pimg{ height:168px; display:grid; place-items:center; margin-bottom:12px; }
+        .pcard .pimg img{ max-height:168px; max-width:100%; object-fit:contain; filter:drop-shadow(0 16px 20px rgba(0,0,0,.55)); transition:transform .45s var(--ease); }
+        .pcard:hover .pimg img{ transform:scale(1.07); }
+        .pcard .pn{ font-family:var(--disp); font-weight:600; font-size:.98rem; margin-bottom:6px; }
+        .pcard .pp{ font-size:1.08rem; font-weight:600; font-family:var(--disp); }
+        .pcard .pp .from{ color:var(--muted2); font-weight:400; font-size:.82rem; margin-right:4px; }
+        .pcard .sub{ color:var(--muted2); font-size:.76rem; margin-top:3px; }
+        .pcard .stk{ font-size:.78rem; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:6px; }
+        .pcard .stk .d{ width:6px; height:6px; border-radius:50%; }
+        .pcard .in{ color:#6fcf97; } .pcard .in .d{ background:#6fcf97; }
+        .pcard .out{ color:#e06a5a; } .pcard .out .d{ background:#e06a5a; }
+        .pcard .soon-p{ color:var(--gold); } .pcard .soon-p .d{ background:var(--gold); }
+        .pcard .more{ color:var(--blue-br); font-size:.84rem; font-weight:500; margin-top:12px; display:inline-flex; align-items:center; gap:5px; justify-content:center; }
+        .empty-msg{ color:var(--muted); padding:40px 0; text-align:center; }
+
+        /* ===== FOOTER ===== */
+        footer{ border-top:1px solid var(--line); margin-top:70px; background:rgba(6,6,12,.5); }
+        footer .wrap{ padding:56px 22px 34px; }
+        footer .fb{ font-family:var(--disp); font-weight:700; font-size:1.3rem; display:flex; align-items:center; gap:8px; }
+        footer .fb .dot{ width:7px; height:7px; border-radius:50%; background:var(--gold); }
+        footer p{ color:var(--muted); font-weight:300; font-size:.9rem; margin-top:12px; max-width:34ch; }
+        footer .fh{ font-family:var(--disp); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted2); margin-bottom:14px; }
+        footer a.fl{ display:flex; align-items:center; gap:8px; color:var(--muted); font-size:.9rem; margin-bottom:10px; transition:color .2s; cursor:pointer; }
+        footer a.fl:hover{ color:var(--gold); }
+        footer .fbot{ border-top:1px solid var(--line); margin-top:36px; padding-top:22px; color:var(--muted2); font-size:.78rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+        /* ===== INTRO (сборка букв) ===== */
+        #intro{ position:fixed; inset:0; z-index:9999; overflow:hidden;
+            background:radial-gradient(circle at 50% 38%, #10152A, #060609 72%);
+            display:flex; flex-direction:column; align-items:center; justify-content:center; perspective:1200px;
+            transition:opacity 1s ease, transform 1s ease, filter 1s ease; }
+        #intro.hide{ opacity:0; transform:scale(1.12); filter:blur(14px); pointer-events:none; }
+        #intro .glow{ position:absolute; border-radius:50%; filter:blur(90px); opacity:.5; pointer-events:none; }
+        #intro .glow.g1{ width:460px; height:460px; background:var(--blue); top:12%; left:14%; animation:gl1 9s ease-in-out infinite; }
+        #intro .glow.g2{ width:520px; height:520px; background:var(--gold); bottom:8%; right:12%; animation:gl2 11s ease-in-out infinite; opacity:.32; }
+        #intro .glow.g3{ width:360px; height:360px; background:#2746b8; top:44%; left:52%; animation:gl3 13s ease-in-out infinite; }
+        @keyframes gl1{ 50%{ transform:translate(70px,50px) scale(1.18);} }
+        @keyframes gl2{ 50%{ transform:translate(-60px,-40px) scale(1.12);} }
+        @keyframes gl3{ 50%{ transform:translate(-50px,40px) scale(1.2);} }
+        #intro .dot-p{ position:absolute; width:3px; height:3px; border-radius:50%; background:#fff; box-shadow:0 0 8px #cfe0ff; opacity:0; animation:rise linear infinite; }
+        @keyframes rise{ 0%{ transform:translateY(60px); opacity:0;} 14%{ opacity:.65;} 86%{ opacity:.5;} 100%{ transform:translateY(-150px); opacity:0;} }
+        .intro-name{ position:relative; display:flex; flex-wrap:wrap; justify-content:center;
+            font-family:var(--disp); font-size:clamp(2.3rem,8.5vw,6rem); font-weight:700; letter-spacing:-.03em;
+            transform-style:preserve-3d; filter:drop-shadow(0 6px 30px rgba(62,107,255,.3)); }
+        .intro-name .ch{ display:inline-block; white-space:pre; opacity:0;
+            background:linear-gradient(120deg,#ffffff 0%,#9db8ff 26%,#ffffff 50%,#dcc08a 76%,#ffffff 100%);
+            background-size:300% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+            transform:translate3d(var(--x),var(--y),var(--z)) rotateX(var(--rx)) rotateY(var(--ry)) scale(.45); filter:blur(14px);
+            transition:transform 1.2s cubic-bezier(.19,1,.22,1), opacity .9s ease, filter 1s ease; }
+        .intro-name.go .ch{ opacity:1; transform:none; filter:blur(0); animation:shine 3.4s linear .2s infinite; }
+        @keyframes shine{ to{ background-position:-200% 0; } }
+        .intro-line{ width:min(70%,420px); height:2px; margin-top:28px; transform:scaleX(0); transform-origin:center;
+            background:linear-gradient(90deg, transparent, var(--blue), var(--gold), transparent); transition:transform 1s cubic-bezier(.19,1,.22,1) .2s; }
+        #intro.ready .intro-line{ transform:scaleX(1); }
+        .intro-tag{ margin-top:18px; color:var(--muted); letter-spacing:.28em; text-transform:uppercase; font-size:clamp(.62rem,2vw,.76rem);
+            opacity:0; transform:translateY(14px); transition:opacity .9s ease .3s, transform .9s ease .3s; }
+        #intro.ready .intro-tag{ opacity:1; transform:none; }
+
+        /* ===== MOBILE ===== */
+        @media(max-width:860px){
+            .nav-a nav{ display:none; }
+            .burger{ display:block; }
+            .trust{ grid-template-columns:1fr 1fr; }
+            .promo{ grid-template-columns:1fr; text-align:left; }
+            .promo .pimg{ width:min(60%,220px); }
+            .mnav{ display:flex; }
+        }
+        @media(max-width:560px){
+            .hero .wrap{ padding:84px 22px 64px; }
+            .trust{ grid-template-columns:1fr; margin-top:-20px; }
+            .promo{ padding:28px 24px; }
+            .sec-top{ margin:46px 0 18px; }
+        }
+        @media(prefers-reduced-motion:reduce){
+            *{ animation:none!important; }
+            .intro-name .ch{ transition:opacity .4s!important; transform:none!important; filter:none!important; }
+        }
+
+        /* мобильное меню */
+        .mnav{ display:none; position:fixed; inset:0; z-index:200; background:rgba(8,8,16,.97); backdrop-filter:blur(14px);
+            flex-direction:column; align-items:center; justify-content:center; gap:6px; opacity:0; pointer-events:none; transition:opacity .3s; }
+        .mnav.open{ opacity:1; pointer-events:auto; }
+        .mnav a{ font-family:var(--disp); font-size:1.6rem; color:var(--text); padding:12px; }
+        .mnav .mx{ position:absolute; top:22px; right:26px; font-size:1.6rem; color:var(--muted); background:none; border:none; }
     </style>
 </head>
 <body>
 
-    <div class="delivery-bar">🚚 Бесплатная доставка по всей России · 🔒 Официальная гарантия на всю технику</div>
+    <!-- ЗАСТАВКА -->
+    <div id="intro">
+        <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+        <h1 class="intro-name" id="introName"></h1>
+        <div class="intro-line"></div>
+        <div class="intro-tag">Вся техника, которую хочется</div>
+    </div>
 
-    <nav class="apple-nav">
-        <div class="inner">
-            <a href="store.html" class="logo">Zerus</a>
+    <!-- ВЕРХНЯЯ ПЛАШКА -->
+    <div class="strip"><div class="wrap">
+        <span><i class="bi bi-truck"></i>Бесплатная доставка по России</span>
+        <span><i class="bi bi-shield-check"></i>Официальная гарантия 1 год</span>
+        <span><i class="bi bi-patch-check"></i>100% оригинал</span>
+    </div></div>
+
+    <!-- НАВИГАЦИЯ -->
+    <div class="nav-a"><div class="wrap inner">
+        <a href="store.html" class="logo"><span class="dot"></span>Technic</a>
+        <nav>
             <a data-brand="all"     onclick="filterBy('all','all')">Все</a>
             <a data-brand="Apple"   onclick="filterBy('Apple','all')">Apple</a>
             <a data-brand="Samsung" onclick="filterBy('Samsung','all')">Samsung</a>
             <a data-brand="Redmi"   onclick="filterBy('Redmi','all')">Redmi</a>
             <a data-brand="POCO"    onclick="filterBy('POCO','all')">POCO</a>
-            <span class="spacer"></span>
-            <span class="icon">🔍</span>
-            <a href="order.html" class="icon">🛍️ <span id="cartCount">0</span></a>
+        </nav>
+        <span class="sp"></span>
+        <div class="act">
+            <button onclick="document.getElementById('catalogTop').scrollIntoView({behavior:'smooth'})" aria-label="Поиск"><i class="bi bi-search"></i></button>
+            <a href="order.html" aria-label="Корзина"><i class="bi bi-bag"></i><span class="cart-c" id="cartCount">0</span></a>
+            <button class="burger" onclick="document.getElementById('mnav').classList.add('open')" aria-label="Меню"><i class="bi bi-list"></i></button>
         </div>
-    </nav>
+    </div></div>
+
+    <!-- МОБИЛЬНОЕ МЕНЮ -->
+    <div class="mnav" id="mnav">
+        <button class="mx" onclick="document.getElementById('mnav').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
+        <a onclick="mgo('all')">Все</a>
+        <a onclick="mgo('Apple')">Apple</a>
+        <a onclick="mgo('Samsung')">Samsung</a>
+        <a onclick="mgo('Redmi')">Redmi</a>
+        <a onclick="mgo('POCO')">POCO</a>
+        <a href="order.html">Корзина</a>
+    </div>
 
     <!-- ГЕРОЙ -->
     <section class="hero">
-        <div class="hero-inner">
-            <h1 class="hero-title">Zerus Store</h1>
-            <p class="hero-tag">Вся техника, которую хочется.<br>Официально. С доставкой по России.</p>
-            <a href="#catalogTop" class="btn-apple">Смотреть каталог</a>
-            <a href="https://t.me/zerus9501" class="btn-ghost ms-2">Связаться ↗</a>
+        <div class="bg"></div>
+        <div class="wrap">
+            <div class="eyebrow">Official reseller · Apple · Samsung · Xiaomi</div>
+            <h1>Техника, которой <span class="ac">доверяешь.</span></h1>
+            <p>Оригинальные устройства, официальная гарантия и бесплатная доставка по всей России. Выбирай спокойно — остальное берём на себя.</p>
+            <div class="cta">
+                <a href="#catalogTop" class="btn-b" onclick="document.getElementById('catalogTop').scrollIntoView({behavior:'smooth'});return false">Смотреть каталог <i class="bi bi-arrow-right"></i></a>
+                <a href="https://t.me/zerus9501" class="btn-g">Связаться <i class="bi bi-telegram"></i></a>
+            </div>
         </div>
     </section>
 
-    <div class="container">
-        <!-- ПЛАШКА ПРЕИМУЩЕСТВ -->
+    <div class="wrap">
+        <!-- ПРЕИМУЩЕСТВА -->
         <div class="trust">
-            <div class="row g-3">
-                <div class="col-6 col-md-3 item"><div class="ic">🚚</div><div class="t">Доставка по РФ</div><div class="s">Бесплатно, от 3 дней</div></div>
-                <div class="col-6 col-md-3 item"><div class="ic">🔒</div><div class="t">Гарантия</div><div class="s">Официальная, 1 год</div></div>
-                <div class="col-6 col-md-3 item"><div class="ic">✅</div><div class="t">Оригинал</div><div class="s">100% подлинная техника</div></div>
-                <div class="col-6 col-md-3 item"><div class="ic">💬</div><div class="t">Поддержка</div><div class="s">Ответим в Telegram</div></div>
-            </div>
+            <div class="it"><i class="bi bi-truck"></i><div><div class="t">Доставка по РФ</div><div class="s">Бесплатно, от 3 дней</div></div></div>
+            <div class="it"><i class="bi bi-shield-check"></i><div><div class="t">Гарантия</div><div class="s">Официальная, 1 год</div></div></div>
+            <div class="it"><i class="bi bi-patch-check"></i><div><div class="t">Оригинал</div><div class="s">100% подлинная техника</div></div></div>
+            <div class="it"><i class="bi bi-chat-dots"></i><div><div class="t">Поддержка</div><div class="s">Ответим в Telegram</div></div></div>
         </div>
 
-        <!-- БОЛЬШОЙ ПРОМО-БАННЕР -->
-        <h2 class="apple-h">Хит продаж. <span class="muted">Забирают быстро.</span></h2>
-        <div class="promo dark" onclick="location.href='product.html?id=iphone17'" style="cursor:pointer">
+        <!-- ХИТ -->
+        <div class="sec-top"><div class="eyebrow">Хит продаж</div><h2 class="sec-h">Забирают быстро.</h2></div>
+        <div class="promo" onclick="location.href='product.html?id=iphone17'">
             <div>
                 <h3>iPhone 17</h3>
-                <p>Титан. Топовая камера. Выбери версию, память и цвет.</p>
-                <span class="btn-apple">Купить от 69 000 ₽</span>
+                <p>Титан. Топовая камера. Выбери версию, память и цвет под себя.</p>
+                <span class="price-from">от <b>69 000 ₽</b></span>
             </div>
-            <img src="images/ip17promax.jpg" alt="iPhone 17">
+            <div class="pimg"><img src="images/ip17promax.png" alt="iPhone 17"></div>
         </div>
 
         <!-- КАТЕГОРИИ -->
-        <h2 class="apple-h">Категории. <span class="muted">Выбери своё.</span></h2>
+        <div class="sec-top"><h2 class="sec-h">Категории. <span class="mut">Выбери своё.</span></h2></div>
         <div class="cat-row">
-            <div class="cat-item" data-brand="Apple"   onclick="filterBy('Apple','all')"><div class="cat-circle"><img src="images/macbook.jpg"></div><div class="lbl">Apple</div></div>
-            <div class="cat-item" data-brand="Samsung" onclick="filterBy('Samsung','all')"><div class="cat-circle"><img src="images/samsung_s24.jpg"></div><div class="lbl">Samsung</div></div>
-            <div class="cat-item" data-brand="Redmi"   onclick="filterBy('Redmi','all')"><div class="cat-circle"><img src="images/redmi_note13pro.jpg"></div><div class="lbl">Redmi</div></div>
-            <div class="cat-item" data-brand="POCO"    onclick="filterBy('POCO','all')"><div class="cat-circle"><img src="images/poco_x6pro.jpg"></div><div class="lbl">POCO</div></div>
-            <div class="cat-item" data-cat="watch"     onclick="filterBy('all','watch')"><div class="cat-circle"><img src="images/applewatch.jpg"></div><div class="lbl">Часы</div></div>
-            <div class="cat-item" data-cat="acc"       onclick="filterBy('all','acc')"><div class="cat-circle"><img src="images/airpods.jpg"></div><div class="lbl">Аксессуары</div></div>
+            <div class="cat-item" data-brand="Apple"   onclick="filterBy('Apple','all')"><div class="cat-tile"><img src="images/macbook.png"></div><div class="lbl">Apple</div></div>
+            <div class="cat-item" data-brand="Samsung" onclick="filterBy('Samsung','all')"><div class="cat-tile"><img src="images/samsung_s24.png"></div><div class="lbl">Samsung</div></div>
+            <div class="cat-item" data-brand="Redmi"   onclick="filterBy('Redmi','all')"><div class="cat-tile"><img src="images/redmi_note13pro.png"></div><div class="lbl">Redmi</div></div>
+            <div class="cat-item" data-brand="POCO"    onclick="filterBy('POCO','all')"><div class="cat-tile"><img src="images/poco_x6pro.png"></div><div class="lbl">POCO</div></div>
+            <div class="cat-item" data-cat="watch"     onclick="filterBy('all','watch')"><div class="cat-tile"><img src="images/applewatch.png"></div><div class="lbl">Часы</div></div>
+            <div class="cat-item" data-cat="acc"       onclick="filterBy('all','acc')"><div class="cat-tile"><img src="images/airpods.png"></div><div class="lbl">Аксессуары</div></div>
         </div>
 
         <!-- НОВИНКИ -->
-        <h2 class="apple-h">Новинки. <span class="muted">Смотри всё здесь.</span></h2>
-
-        <!-- СКОРО: iPhone 18 -->
-        <div class="promo dark mb-4" onclick="location.href='product.html?id=ip18'" style="cursor:pointer; background:linear-gradient(135deg,#000,#1d1d1f)">
+        <div class="sec-top"><div class="eyebrow">Новинки</div><h2 class="sec-h">Только что приехало.</h2></div>
+        <div class="promo" onclick="location.href='product.html?id=ip18'" style="margin-bottom:22px">
             <div>
-                <span class="badge-new" style="position:static; display:inline-block; margin-bottom:10px; background:#ff375f">🔥 Скоро в продаже</span>
+                <span class="lbl-soon">Скоро в продаже</span>
                 <h3>iPhone 18</h3>
-                <p>Новое поколение iPhone. Уже 20 сентября 2026.</p>
-                <span class="btn-apple">Предзаказ в Telegram →</span>
+                <p>Новое поколение iPhone. Уже 20 сентября 2026. Оформи предзаказ заранее.</p>
+                <span class="price-from" style="color:var(--blue-br)">Предзаказ в Telegram →</span>
             </div>
-            <img src="images/ip17promax.jpg" alt="iPhone 18" style="filter:brightness(0.85)">
+            <div class="pimg"><img src="images/ip17promax.png" alt="iPhone 18" style="filter:brightness(.82) drop-shadow(0 22px 30px rgba(0,0,0,.6))"></div>
         </div>
 
-        <div class="row g-4 mb-2">
+        <div class="row g-4">
             <div class="col-md-6">
                 <div class="feature">
-                    <span class="badge-new">Новинка</span>
-                    <img src="images/newarrivals_watch.jpg" alt="Apple Watch">
-                    <h3 class="fw-bold mt-3">Apple Watch</h3>
-                    <p class="text-secondary mb-3">Новое поколение уже в наличии</p>
-                    <a href="#catalogTop" class="btn-apple">Смотреть</a>
+                    <span class="tag">Новинка</span>
+                    <img src="images/newarrivals_watch.png" alt="Apple Watch">
+                    <h3>Apple Watch</h3>
+                    <p>Новое поколение уже в наличии</p>
+                    <a href="#catalogTop" class="btn-o" onclick="filterBy('all','watch');return false">Смотреть</a>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="feature">
-                    <span class="badge-new">Новинка</span>
-                    <img src="images/newarrivals_bands.jpg" alt="Ремешки">
-                    <h3 class="fw-bold mt-3">Ремешки Apple Watch</h3>
-                    <p class="text-secondary mb-3">Разные цвета и стили</p>
-                    <a href="#catalogTop" class="btn-apple">Смотреть</a>
+                    <span class="tag">Новинка</span>
+                    <img src="images/newarrivals_bands.png" alt="Ремешки">
+                    <h3>Ремешки Apple Watch</h3>
+                    <p>Разные цвета и стили</p>
+                    <a href="#catalogTop" class="btn-o" onclick="filterBy('all','watch');return false">Смотреть</a>
                 </div>
             </div>
         </div>
 
-        <!-- ВТОРОЙ ПРОМО -->
-        <div class="promo light mt-4" onclick="location.href='product.html?id=ultra'" style="cursor:pointer">
+        <div class="promo" style="margin-top:22px" onclick="location.href='product.html?id=ultra'">
             <div>
                 <h3>Apple Watch Ultra 2</h3>
-                <p>Для спорта и приключений. До 36 часов работы.</p>
-                <span class="btn-apple">Купить от 90 000 ₽</span>
+                <p>Для спорта и приключений. До 36 часов автономной работы.</p>
+                <span class="price-from">от <b>90 000 ₽</b></span>
             </div>
-            <img src="images/applewatchultra.jpg" alt="Apple Watch Ultra">
+            <div class="pimg"><img src="images/applewatchultra.png" alt="Apple Watch Ultra"></div>
         </div>
 
         <!-- КАТАЛОГ -->
         <div id="catalogTop"></div>
-        <div class="sec-white">
-            <h2 class="apple-h">Каталог. <span class="muted">Вся техника.</span></h2>
-            <div class="mb-3">
-                <button class="filter-btn active" onclick="setFilter(0, 999999999, this)">Все цены</button>
-                <button class="filter-btn" onclick="setFilter(0, 20000, this)">До 20 000 ₽</button>
-                <button class="filter-btn" onclick="setFilter(20000, 100000, this)">20–100 тыс ₽</button>
-                <button class="filter-btn" onclick="setFilter(100000, 999999999, this)">Дороже 100 тыс ₽</button>
+        <div class="sec-top"><div class="eyebrow">Каталог</div><h2 class="sec-h">Вся техника.</h2></div>
+        <div class="catalog">
+            <div class="filters">
+                <button class="fbtn active" onclick="setFilter(0, 999999999, this)">Все цены</button>
+                <button class="fbtn" onclick="setFilter(0, 20000, this)">До 20 000 ₽</button>
+                <button class="fbtn" onclick="setFilter(20000, 100000, this)">20–100 тыс ₽</button>
+                <button class="fbtn" onclick="setFilter(100000, 999999999, this)">Дороже 100 тыс ₽</button>
             </div>
-            <h4 class="mt-2 mb-3" id="techTitle">📱 Смартфоны и компьютеры</h4>
+            <div class="cat-title" id="techTitle"><i class="bi bi-phone"></i>Смартфоны и компьютеры</div>
             <div class="row" id="techCatalog"></div>
-            <h4 class="mt-4 mb-3" id="watchTitle">⌚ Часы и ремешки</h4>
+            <div class="cat-title" id="watchTitle"><i class="bi bi-smartwatch"></i>Часы и ремешки</div>
             <div class="row" id="watchCatalog"></div>
-            <h4 class="mt-4 mb-3" id="accTitle">🎧 Аксессуары</h4>
+            <div class="cat-title" id="accTitle"><i class="bi bi-headphones"></i>Аксессуары</div>
             <div class="row" id="accCatalog"></div>
-            <p id="emptyMsg" class="text-secondary my-5" style="display:none">По этому фильтру товаров нет.</p>
+            <p id="emptyMsg" class="empty-msg" style="display:none">По этому фильтру товаров нет.</p>
         </div>
     </div>
 
-    <footer class="mt-5 py-5">
-        <div class="container">
-            <div class="row">
+    <footer>
+        <div class="wrap">
+            <div class="row g-4">
                 <div class="col-md-6">
-                    <h5 class="text-white">Zerus Store</h5>
-                    <p>Магазин техники Apple · Samsung · Redmi · POCO.<br>Официально, с гарантией и доставкой по всей России.</p>
+                    <div class="fb"><span class="dot"></span>Technic Store</div>
+                    <p>Магазин техники Apple · Samsung · Redmi · POCO. Официально, с гарантией и доставкой по всей России.</p>
                 </div>
-                <div class="col-md-3">
-                    <div class="text-white mb-2">Бренды</div>
-                    <div><a href="#" onclick="filterBy('Apple','all')">Apple</a></div>
-                    <div><a href="#" onclick="filterBy('Samsung','all')">Samsung</a></div>
-                    <div><a href="#" onclick="filterBy('Redmi','all')">Redmi</a></div>
-                    <div><a href="#" onclick="filterBy('POCO','all')">POCO</a></div>
+                <div class="col-6 col-md-3">
+                    <div class="fh">Бренды</div>
+                    <a class="fl" onclick="filterBy('Apple','all')">Apple</a>
+                    <a class="fl" onclick="filterBy('Samsung','all')">Samsung</a>
+                    <a class="fl" onclick="filterBy('Redmi','all')">Redmi</a>
+                    <a class="fl" onclick="filterBy('POCO','all')">POCO</a>
                 </div>
-                <div class="col-md-3">
-                    <div class="text-white mb-2">Связь</div>
-                    <div><a href="https://t.me/zerus9501">✈️ Telegram</a></div>
-                    <div><a href="order.html">🛍️ Оформить заказ</a></div>
+                <div class="col-6 col-md-3">
+                    <div class="fh">Связь</div>
+                    <a class="fl" href="https://t.me/zerus9501"><i class="bi bi-telegram"></i>Telegram</a>
+                    <a class="fl" href="order.html"><i class="bi bi-bag"></i>Оформить заказ</a>
                 </div>
             </div>
-            <hr style="border-color:#3a3a3c">
-            <div class="small">© 2026 Zerus Store · Сделано Керимом 🚀</div>
+            <div class="fbot"><span>© 2026 Technic Store</span><span>Сделано Керимом</span></div>
         </div>
     </footer>
 
@@ -235,69 +422,89 @@
         let brandFilter='all', catFilter='all', filterMin=0, filterMax=999999999;
         document.getElementById('cartCount').textContent = cart.length;
 
-        function cardHTML(p) {
-            // товар «скоро в продаже»
-            if (p.soon) {
-                return `
-                <div class="col-md-3 mb-4">
-                    <div class="card product-card h-100 text-center p-3" onclick="location.href='product.html?id=${p.id}'">
-                        <img src="${p.img}" alt="${p.name}" class="product-img" style="filter:brightness(0.9)">
-                        <h6 class="mt-2">${p.name}</h6>
-                        <p class="price" style="color:#ff375f">Скоро</p>
-                        <p class="small"><span class="text-danger">🔜 В продаже с ${p.release}</span></p>
-                        <span class="more">Подробнее →</span>
-                    </div>
-                </div>`;
+        function cardHTML(p){
+            if(p.soon){
+                return `<div class="col-6 col-md-3 mb-2"><div class="pcard" onclick="location.href='product.html?id=${p.id}'">
+                    <div class="pimg"><img src="${p.img}" alt="${p.name}" style="filter:brightness(.88) drop-shadow(0 16px 20px rgba(0,0,0,.55))"></div>
+                    <div class="pn">${p.name}</div>
+                    <div class="pp" style="color:var(--gold)">Скоро</div>
+                    <div class="stk soon-p"><span class="d"></span>В продаже с ${p.release}</div>
+                    <span class="more">Подробнее <i class="bi bi-arrow-right"></i></span>
+                </div></div>`;
             }
             const inStock = p.stock > 0;
-            const stockText = inStock
-                ? `<span class="text-success">✅ В наличии: ${p.stock} шт.</span>`
-                : `<span class="text-danger">❌ Нет в наличии</span>`;
-            // конфигуратор — цена «от …», обычный товар — точная цена
+            const stockHTML = inStock
+                ? `<div class="stk in"><span class="d"></span>В наличии · ${p.stock} шт.</div>`
+                : `<div class="stk out"><span class="d"></span>Нет в наличии</div>`;
             const priceHTML = (p.type === 'config')
-                ? `от ${minPrice(p).toLocaleString('ru-RU')} ₽`
+                ? `<span class="from">от</span>${minPrice(p).toLocaleString('ru-RU')} ₽`
                 : `${p.price.toLocaleString('ru-RU')} ₽`;
-            const extra = (p.type === 'config') ? '<p class="small text-secondary mb-1">Версия · память · цвет</p>' : '';
-            return `
-                <div class="col-md-3 mb-4">
-                    <div class="card product-card h-100 text-center p-3" onclick="location.href='product.html?id=${p.id}'">
-                        <img src="${p.img}" alt="${p.name}" class="product-img">
-                        <h6 class="mt-2">${p.name}</h6>
-                        <p class="price">${priceHTML}</p>
-                        ${extra}
-                        <p class="small">${stockText}</p>
-                        <span class="more">Подробнее →</span>
-                    </div>
-                </div>`;
+            const extra = (p.type === 'config') ? '<div class="sub">версия · память · цвет</div>' : '';
+            return `<div class="col-6 col-md-3 mb-2"><div class="pcard" onclick="location.href='product.html?id=${p.id}'">
+                <div class="pimg"><img src="${p.img}" alt="${p.name}"></div>
+                <div class="pn">${p.name}</div>
+                <div class="pp">${priceHTML}</div>
+                ${extra}
+                ${stockHTML}
+                <span class="more">Подробнее <i class="bi bi-arrow-right"></i></span>
+            </div></div>`;
         }
         const match = p => {
             const pr = (p.type==='config') ? minPrice(p) : p.price;
             return (brandFilter==='all'||p.brand===brandFilter) && (catFilter==='all'||p.cat===catFilter) && pr>=filterMin && pr<=filterMax;
         };
-        function section(cat, titleId, boxId) {
+        function section(cat, titleId, boxId){
             const items = products.filter(p => p.cat===cat && match(p));
             document.getElementById(boxId).innerHTML = items.map(cardHTML).join('');
-            document.getElementById(titleId).style.display = items.length ? '' : 'none';
+            document.getElementById(titleId).style.display = items.length ? 'flex' : 'none';
             return items.length;
         }
-        function render() {
+        function render(){
             const total = section('tech','techTitle','techCatalog')+section('watch','watchTitle','watchCatalog')+section('acc','accTitle','accCatalog');
             document.getElementById('emptyMsg').style.display = total ? 'none' : '';
         }
-        function highlight() {
+        function highlight(){
             document.querySelectorAll('[data-brand]').forEach(el => el.classList && el.classList.toggle('active', el.dataset.brand===brandFilter && catFilter==='all'));
             document.querySelectorAll('[data-cat]').forEach(el => el.classList.toggle('active', el.dataset.cat===catFilter));
         }
-        function filterBy(brand, cat) {
+        function filterBy(brand, cat){
             brandFilter=brand; catFilter=cat; render(); highlight();
             document.getElementById('catalogTop').scrollIntoView({behavior:'smooth', block:'start'});
         }
-        function setFilter(min, max, btn) {
+        function setFilter(min, max, btn){
             filterMin=min; filterMax=max;
-            document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.fbtn').forEach(x => x.classList.remove('active'));
             btn.classList.add('active'); render();
         }
+        function mgo(brand){ document.getElementById('mnav').classList.remove('open'); filterBy(brand,'all'); }
         render(); highlight();
+    </script>
+
+    <!-- ЗАСТАВКА: сборка букв -->
+    <script>
+        (function(){
+            var intro = document.getElementById('intro');
+            if(sessionStorage.getItem('introShown')){ if(intro) intro.remove(); return; }
+            sessionStorage.setItem('introShown','1');
+            var box = document.getElementById('introName');
+            var name = "Technic Store";
+            var html = '';
+            for(var i=0;i<name.length;i++){
+                var x=((Math.random()*2-1)*620).toFixed(0), y=((Math.random()*2-1)*440).toFixed(0), z=(-(Math.random()*500+300)).toFixed(0);
+                var rx=((Math.random()*2-1)*120).toFixed(0), ry=((Math.random()*2-1)*120).toFixed(0);
+                html += '<span class="ch" style="--x:'+x+'px;--y:'+y+'px;--z:'+z+'px;--rx:'+rx+'deg;--ry:'+ry+'deg;transition-delay:'+(i*0.07).toFixed(2)+'s">'+name[i]+'</span>';
+            }
+            box.innerHTML = html;
+            var dots='';
+            for(var d=0;d<16;d++){ dots += '<span class="dot-p" style="left:'+(Math.random()*100).toFixed(1)+'%;bottom:'+(Math.random()*45).toFixed(0)+'%;animation-duration:'+(4+Math.random()*4).toFixed(1)+'s;animation-delay:'+(Math.random()*4).toFixed(1)+'s"></span>'; }
+            intro.insertAdjacentHTML('afterbegin', dots);
+            document.body.style.overflow='hidden';
+            requestAnimationFrame(function(){ requestAnimationFrame(function(){ box.classList.add('go'); }); });
+            var assemble = (name.length*0.07 + 1.2)*1000;
+            setTimeout(function(){ intro.classList.add('ready'); }, assemble);
+            setTimeout(function(){ intro.classList.add('hide'); document.body.style.overflow='';
+                setTimeout(function(){ if(intro.parentNode) intro.parentNode.removeChild(intro); }, 1050); }, assemble + 1700);
+        })();
     </script>
 
 </body>
