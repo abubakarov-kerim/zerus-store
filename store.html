@@ -368,12 +368,11 @@
         <div class="sec-top"><div class="eyebrow" data-edit="new_eyebrow" data-edit-label="Новинки: надзаголовок">Новинки</div><h2 class="sec-h" data-edit="new_title" data-edit-label="Новинки: заголовок">Только что приехало.</h2></div>
         <div class="promo" onclick="location.href='product.html?id=ip18'" style="margin-bottom:22px">
             <div>
-                <span class="lbl-soon">Скоро в продаже</span>
                 <h3 data-edit="new_name" data-edit-label="Новинка: название">iPhone 18</h3>
-                <p data-edit="new_desc" data-edit-label="Новинка: описание">Новое поколение iPhone. Уже 20 сентября 2026. Оформи предзаказ заранее.</p>
-                <span class="price-from" style="color:var(--blue-br)">Предзаказ в Telegram →</span>
+                <p data-edit="new_desc" data-edit-label="Новинка: описание">Новое поколение уже в продаже. Выбери версию, память, цвет и тип SIM.</p>
+                <span class="price-from" data-edit="new_price" data-edit-label="Новинка: цена">от 79 000 ₽</span>
             </div>
-            <div class="pimg"><img src="images/ip17promax.png" alt="iPhone 18" style="filter:brightness(.82) drop-shadow(0 22px 30px rgba(0,0,0,.6))"></div>
+            <div class="pimg"><img src="images/ip17promax.png" alt="iPhone 18"></div>
         </div>
 
         <div class="row g-4">
@@ -426,8 +425,8 @@
         <div class="wrap" id="cmsFooter"></div>
     </footer>
 
-    <script src="products.js?v=4"></script>
-    <script src="cms.js?v=4"></script>
+    <script src="products.js?v=5"></script>
+    <script src="cms.js?v=5"></script>
     <script>
         document.getElementById('cartCount').textContent = (JSON.parse(localStorage.getItem('cart'))||[]).length;
         let catFilter='all', filterMin=0, filterMax=999999999;

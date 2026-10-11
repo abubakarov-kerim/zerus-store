@@ -145,9 +145,9 @@
   .cms-inline:hover{ background:var(--c-gold); color:#fff; }
   body:not(.cms-admin-on) .cms-inline{ display:none; }
   /* inline content editing affordance */
-  body.cms-admin-on [data-edit]{ outline:1.5px dashed var(--c-gold); outline-offset:3px; border-radius:4px; cursor:pointer; transition:background .15s, outline-color .15s; }
-  body.cms-admin-on [data-edit]:hover{ background:var(--c-blue-s); outline-style:solid; }
-  body.cms-admin-on [data-edit].cms-img-chip{ outline:none; }
+  body.cms-admin-on [data-edit]{ cursor:pointer; border-radius:5px; outline:1.5px solid transparent; outline-offset:2px; transition:background .18s, outline-color .18s; }
+  body.cms-admin-on [data-edit]:hover{ background:var(--c-blue-s); outline-color:var(--c-blue); }
+  body.cms-admin-on [data-edit].cms-img-chip{ outline:none; background:none; }
   /* tg float */
   #cmsTg{ position:fixed; right:22px; bottom:22px; z-index:4500; width:56px; height:56px; border-radius:50%; background:#229ED9; display:grid; place-items:center;
     box-shadow:0 14px 34px -10px rgba(34,158,217,.7); color:#fff; font-size:1.6rem; transition:transform .25s; }

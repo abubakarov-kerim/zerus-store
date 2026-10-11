@@ -3,13 +3,16 @@
 
 const iStorageOld = [{name:'128 ГБ',add:0},{name:'256 ГБ',add:8000},{name:'512 ГБ',add:18000}];
 const iStorageNew = [{name:'128 ГБ',add:0},{name:'256 ГБ',add:9000},{name:'512 ГБ',add:20000},{name:'1 ТБ',add:34000}];
+const iStorage18  = [{name:'256 ГБ',add:0},{name:'512 ГБ',add:20000},{name:'1 ТБ',add:34000}];
 const iPadStorage = [{name:'128 ГБ',add:0},{name:'256 ГБ',add:10000},{name:'512 ГБ',add:22000},{name:'1 ТБ',add:40000}];
+// Тип SIM (eSIM / физическая SIM) — доступно на всех iPhone
+const iSim = [{name:'Физическая SIM + eSIM',add:0},{name:'Только eSIM',add:0}];
 
 const products = [
     // ===== iPhone — конфигураторы по поколениям =====
     { id:'iphone13', brand:'Apple', cat:'tech', name:'iPhone 13', img:'images/ip13.png', type:'config', stock:12,
       desc:'Выбери версию, память и цвет. Чип A15 Bionic, экран Super Retina XDR.',
-      storage:iStorageOld,
+      storage:iStorageOld, sim:iSim,
       versions:[
         {name:'iPhone 13', price:35000, img:'images/ip13.png', colors:['Тёмная ночь','Сияющая звезда','Синий','Розовый','Красный'],
           colorImages:{'Тёмная ночь':'images/ip13_midnight.png','Сияющая звезда':'images/ip13_starlight.png','Синий':'images/ip13_blue.png','Розовый':'images/ip13_pink.png','Красный':'images/ip13_red.png'}},
@@ -18,7 +21,7 @@ const products = [
       ] },
     { id:'iphone14', brand:'Apple', cat:'tech', name:'iPhone 14', img:'images/ip14.png', type:'config', stock:12,
       desc:'Выбери версию, память и цвет. Dynamic Island (Pro), камера 48 Мп.',
-      storage:iStorageOld,
+      storage:iStorageOld, sim:iSim,
       versions:[
         {name:'iPhone 14', price:46000, img:'images/ip14.png', colors:['Тёмная ночь','Сияющая звезда','Синий','Фиолетовый','Красный'],
           colorImages:{'Тёмная ночь':'images/ip14_midnight.png','Сияющая звезда':'images/ip14_starlight.png','Синий':'images/ip14_blue.png','Фиолетовый':'images/ip14_purple.png','Красный':'images/ip14_red.png'}},
@@ -30,6 +33,7 @@ const products = [
     { id:'iphone15', brand:'Apple', cat:'tech', name:'iPhone 15', img:'images/ip15.png', type:'config', stock:14,
       desc:'Выбери версию, память и цвет. USB-C, Dynamic Island, титан (Pro).',
       storage:iStorageNew,
+      sim:iSim,
       versions:[
         {name:'iPhone 15', price:50000, img:'images/ip15.png', colors:['Чёрный','Синий','Зелёный','Жёлтый','Розовый'],
           colorImages:{'Чёрный':'images/ip15_black.png','Синий':'images/ip15_blue.png','Зелёный':'images/ip15_green.png','Жёлтый':'images/ip15_yellow.png','Розовый':'images/ip15_pink.png'}},
@@ -41,6 +45,7 @@ const products = [
     { id:'iphone16', brand:'Apple', cat:'tech', name:'iPhone 16', img:'images/ip16.png', type:'config', stock:12,
       desc:'Выбери версию, память и цвет. Чип A18, кнопка камеры, Apple Intelligence.',
       storage:iStorageNew,
+      sim:iSim,
       versions:[
         {name:'iPhone 16', price:62000, img:'images/ip16.png', colors:['Чёрный','Белый','Розовый','Бирюзовый','Ультрамарин'],
           colorImages:{'Чёрный':'images/ip16_black.png','Белый':'images/ip16_white.png','Розовый':'images/ip16_pink.png','Бирюзовый':'images/ip16_teal.png','Ультрамарин':'images/ip16_ultramarine.png'}},
@@ -52,6 +57,7 @@ const products = [
     { id:'iphone17', brand:'Apple', cat:'tech', name:'iPhone 17', img:'images/ip17.png', type:'config', stock:10,
       desc:'Выбери версию, память и цвет. Новейшее поколение, топовая камера.',
       storage:iStorageNew,
+      sim:iSim,
       versions:[
         {name:'iPhone 17', price:69000, img:'images/ip17.png', colors:['Чёрный','Белый','Синий','Лавандовый'],
           colorImages:{'Чёрный':'images/ip17_black.png','Белый':'images/ip17_white.png','Синий':'images/ip17_mist-blue.png','Лавандовый':'images/ip17_lavender.png'}},
@@ -61,10 +67,18 @@ const products = [
           colorImages:{'Космический оранжевый':'images/ip17promax_cosmic-orange.png','Тёмно-синий':'images/ip17promax_deep-blue.png','Серебристый':'images/ip17promax_silver.png'}},
       ] },
 
-    // ===== СКОРО =====
-    { id:'ip18', brand:'Apple', cat:'tech', name:'iPhone 18', img:'images/ip17promax.png', price:0, stock:0,
-      soon:true, release:'20 сентября 2026',
-      desc:'Новое поколение iPhone. Скоро в продаже — оформи предзаказ в Telegram.', colors:[] },
+    // ===== iPhone 18 — уже в продаже =====
+    { id:'ip18', brand:'Apple', cat:'tech', name:'iPhone 18', img:'images/ip17promax.png', type:'config', stock:9,
+      desc:'Новейшее поколение iPhone. Выбери версию, память, цвет и тип SIM. Чип нового поколения, улучшенная камера и экран.',
+      storage:iStorage18, sim:iSim,
+      versions:[
+        {name:'iPhone 18', price:79000, img:'images/ip17.png', colors:['Чёрный','Белый','Синий','Лавандовый'],
+          colorImages:{'Чёрный':'images/ip17_black.png','Белый':'images/ip17_white.png','Синий':'images/ip17_mist-blue.png','Лавандовый':'images/ip17_lavender.png'}},
+        {name:'iPhone 18 Pro', price:92000, img:'images/ip17pro.png', colors:['Космический оранжевый','Тёмно-синий','Серебристый'],
+          colorImages:{'Космический оранжевый':'images/ip17pro_cosmic-orange.png','Тёмно-синий':'images/ip17pro_deep-blue.png','Серебристый':'images/ip17pro_silver.png'}},
+        {name:'iPhone 18 Pro Max', price:105000, img:'images/ip17promax.png', colors:['Космический оранжевый','Тёмно-синий','Серебристый'],
+          colorImages:{'Космический оранжевый':'images/ip17promax_cosmic-orange.png','Тёмно-синий':'images/ip17promax_deep-blue.png','Серебристый':'images/ip17promax_silver.png'}},
+      ] },
 
     // ===== iPad — конфигуратор =====
     { id:'ipad', brand:'Apple', cat:'tech', name:'iPad', img:'images/ipad10.png', type:'config', stock:10,

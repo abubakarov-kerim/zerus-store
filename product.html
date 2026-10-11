@@ -83,8 +83,8 @@
         <div class="container" id="cmsFooter" style="max-width:1120px;padding:48px 16px 30px"></div>
     </footer>
 
-    <script src="products.js?v=4"></script>
-    <script src="cms.js?v=4"></script>
+    <script src="products.js?v=5"></script>
+    <script src="cms.js?v=5"></script>
     <script>
         CMS.init({ footerEl:'cmsFooter' });
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -108,7 +108,7 @@
         function colorHex(name){ return COLORHEX[name] || '#c7c7cc'; }
 
         // состояние выбора
-        let vIndex = 0, sIndex = 0, selectedColor = null;
+        let vIndex = 0, sIndex = 0, simIndex = 0, selectedColor = null;
         if (p) {
             if (p.type === 'config') selectedColor = p.versions[0].colors[0] || null;
             else if (p.colors && p.colors.length) selectedColor = p.colors[0];
@@ -156,7 +156,8 @@
                 const v = p.versions[vIndex];
                 if (!v.colors.includes(selectedColor)) selectedColor = v.colors[0] || null;
                 const s = p.storage[sIndex];
-                const price = v.price + s.add;
+                const sim = (p.sim && p.sim.length) ? p.sim[simIndex] : null;
+                const price = v.price + s.add + (sim ? sim.add : 0);
                 const img = (v.colorImages && v.colorImages[selectedColor]) ? v.colorImages[selectedColor] : v.img;
 
                 let versionsHTML = '<p class="mt-4 mb-2 fw-medium">Модель:</p><div>';
@@ -172,6 +173,16 @@
                 });
                 storageHTML += '</div>';
 
+                let simHTML = '';
+                if (p.sim && p.sim.length) {
+                    simHTML = '<p class="mt-4 mb-2 fw-medium">Тип SIM:</p><div>';
+                    p.sim.forEach((sm, i) => {
+                        const sub = sm.add ? `+${sm.add.toLocaleString('ru-RU')} ₽` : '';
+                        simHTML += `<button class="opt-btn ${i===simIndex?'active':''}" onclick="pickSim(${i})">${sm.name}${sub?`<span class="sub">${sub}</span>`:''}</button>`;
+                    });
+                    simHTML += '</div>';
+                }
+
                 box.innerHTML = `
                 <a href="store.html" class="text-decoration-none text-secondary">← Все товары</a>
                 <div class="row mt-2 g-4 align-items-start">
@@ -184,8 +195,9 @@
                         <p><span class="text-success"><i class="bi bi-check-circle"></i> В наличии</span></p>
                         ${versionsHTML}
                         ${storageHTML}
+                        ${simHTML}
                         ${colorsBlock(v.colors)}
-                        <p class="text-secondary mt-2">Выбрано: <b>${v.name} · ${s.name}${selectedColor ? ' · ' + selectedColor : ''}</b></p>
+                        <p class="text-secondary mt-2">Выбрано: <b>${v.name} · ${s.name}${sim ? ' · ' + sim.name : ''}${selectedColor ? ' · ' + selectedColor : ''}</b></p>
                         ${specsHTML}
                         <div class="d-flex gap-2 flex-wrap mt-3">
                             <button class="btn-apple" onclick="addConfig()">Добавить в корзину</button>
@@ -226,14 +238,16 @@
 
         function pickVersion(i) { vIndex = i; sIndex = 0; render(); }
         function pickStorage(i) { sIndex = i; render(); }
+        function pickSim(i)     { simIndex = i; render(); }
         function pickColor(c)   { selectedColor = c; render(); }
 
         function showToast() { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1500); }
 
         function addConfig() {
             const v = p.versions[vIndex], s = p.storage[sIndex];
-            const name = `${v.name} · ${s.name}${selectedColor ? ' · ' + selectedColor : ''}`;
-            cart.push({ name, price: v.price + s.add });
+            const sim = (p.sim && p.sim.length) ? p.sim[simIndex] : null;
+            const name = `${v.name} · ${s.name}${sim ? ' · ' + sim.name : ''}${selectedColor ? ' · ' + selectedColor : ''}`;
+            cart.push({ name, price: v.price + s.add + (sim ? sim.add : 0) });
             localStorage.setItem('cart', JSON.stringify(cart));
             document.getElementById('cartCount').textContent = cart.length;
             showToast();
