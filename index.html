@@ -163,16 +163,15 @@
         .pcard{ height:100%; border:1px solid var(--line); border-radius:var(--rs); background:var(--surface); overflow:hidden; cursor:pointer;
             display:flex; flex-direction:column; text-align:center; padding:18px 16px 20px; transition:transform .3s var(--ease), border-color .3s, box-shadow .3s; }
         .pcard:hover{ transform:translateY(-6px); border-color:rgba(62,107,255,.45); box-shadow:0 26px 54px -30px rgba(0,0,0,.9); }
-        .pcard .pimg{ position:relative; height:184px; display:grid; place-items:center; margin-bottom:12px; perspective:900px; }
-        .pcard .pimg::before{ content:''; position:absolute; inset:14% 16% 26%; border-radius:24px; z-index:0;
-            background:radial-gradient(130% 120% at 50% 18%, var(--gold-soft), transparent 62%); opacity:.7; transition:opacity .5s var(--ease); }
-        .pcard .pimg::after{ content:''; position:absolute; bottom:16px; left:50%; width:60%; height:15px; transform:translateX(-50%);
-            background:radial-gradient(ellipse at center, rgba(0,0,0,.4), transparent 72%); filter:blur(5px); border-radius:50%; z-index:0; transition:.5s var(--ease); }
-        .pcard .pimg img{ position:relative; z-index:1; max-height:150px; max-width:84%; object-fit:contain; transform-style:preserve-3d;
-            filter:drop-shadow(0 18px 22px rgba(0,0,0,.5)); transform:rotateX(7deg); transition:transform .55s var(--ease), filter .55s; }
-        .pcard:hover .pimg img{ transform:rotateX(0deg) translateY(-9px) scale(1.07); filter:drop-shadow(0 32px 36px rgba(0,0,0,.58)); }
+        .pcard .pimg{ position:relative; height:200px; display:grid; place-items:center; margin-bottom:12px; }
+        .pcard .pimg::before{ content:''; position:absolute; inset:8% 12% 32%; border-radius:28px; z-index:0;
+            background:radial-gradient(130% 120% at 50% 14%, var(--gold-soft), transparent 60%); opacity:.8; transition:opacity .5s var(--ease); }
+        .pcard .pimg img{ position:relative; z-index:1; max-height:136px; max-width:78%; object-fit:contain;
+            filter:drop-shadow(0 24px 28px rgba(0,0,0,.5));
+            -webkit-box-reflect:below 2px linear-gradient(transparent, transparent 54%, rgba(0,0,0,.24));
+            transition:transform .5s var(--ease), filter .5s; }
+        .pcard:hover .pimg img{ transform:translateY(-11px) scale(1.08); filter:drop-shadow(0 38px 40px rgba(0,0,0,.6)); }
         .pcard:hover .pimg::before{ opacity:1; }
-        .pcard:hover .pimg::after{ width:50%; height:12px; opacity:.85; }
         .pcard .pn{ font-family:var(--disp); font-weight:600; font-size:.98rem; margin-bottom:6px; }
         .pcard .pp{ font-size:1.08rem; font-weight:600; font-family:var(--disp); }
         .pcard .pp .from{ color:var(--muted2); font-weight:400; font-size:.82rem; margin-right:4px; }
@@ -418,8 +417,8 @@
         <div class="wrap" id="cmsFooter"></div>
     </footer>
 
-    <script src="products.js"></script>
-    <script src="cms.js"></script>
+    <script src="products.js?v=3"></script>
+    <script src="cms.js?v=3"></script>
     <script>
         document.getElementById('cartCount').textContent = (JSON.parse(localStorage.getItem('cart'))||[]).length;
         let catFilter='all', filterMin=0, filterMax=999999999;
