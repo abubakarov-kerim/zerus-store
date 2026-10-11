@@ -493,8 +493,12 @@
         (function(){
             var intro = document.getElementById('intro');
             if(location.hash==='#admin'){ if(intro) intro.remove(); return; }   // прямой вход в админку — без заставки
-            if(sessionStorage.getItem('introShown')){ if(intro) intro.remove(); return; }
-            sessionStorage.setItem('introShown','1');
+            // Заставка играет при каждом открытии сайта и при каждом обновлении страницы.
+            // Пропускаем только переходы внутри сайта (из товара, корзины, кнопкой «назад»), чтобы не мешать покупке.
+            var nav = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || {};
+            var inner = false;
+            try{ inner = !!document.referrer && new URL(document.referrer).origin === location.origin; }catch(e){}
+            if(nav.type!=='reload' && (nav.type==='back_forward' || inner)){ if(intro) intro.remove(); return; }
             var box = document.getElementById('introName');
             var name = "Technic Store";
             var html = '';
