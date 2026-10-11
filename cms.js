@@ -68,14 +68,19 @@
 
   /* ---------- CSS ---------- */
   const CSS = `
-  :root{ --c-bg:#080810; --c-surf:#0F1426; --c-surf2:#131A30; --c-line:rgba(255,255,255,.08); --c-line2:rgba(255,255,255,.14);
-    --c-blue:#3E6BFF; --c-blue2:#5c84ff; --c-blue-s:rgba(62,107,255,.14); --c-gold:#C9A86A; --c-gold-s:rgba(201,168,106,.14);
-    --c-text:#F2F0EA; --c-mut:#9BA0B5; --c-mut2:#6B6F85; --c-disp:'Space Grotesk',sans-serif; --c-sans:'Manrope',-apple-system,sans-serif; }
+  :root{ --c-bg:#0A0A0C; --c-surf:#141418; --c-surf2:#1B1B21; --c-line:rgba(255,255,255,.08); --c-line2:rgba(255,255,255,.15);
+    --c-blue:#2F6BFF; --c-blue2:#5a86ff; --c-blue-s:rgba(47,107,255,.14); --c-gold:#2F6BFF; --c-gold-s:rgba(47,107,255,.14);
+    --c-text:#F5F5F7; --c-mut:#9A9AA3; --c-mut2:#6A6A73; --c-inp:rgba(255,255,255,.04); --c-inp2:rgba(255,255,255,.07);
+    --c-bar:#101014; --c-ovr:rgba(0,0,0,.68); --c-disp:'Space Grotesk',sans-serif; --c-sans:'Manrope',-apple-system,sans-serif; }
+  :root[data-theme="light"]{ --c-bg:#F5F5F7; --c-surf:#FFFFFF; --c-surf2:#FFFFFF; --c-line:rgba(0,0,0,.09); --c-line2:rgba(0,0,0,.14);
+    --c-blue:#0A5FE0; --c-blue2:#0A5FE0; --c-blue-s:rgba(10,95,224,.1); --c-gold:#0A5FE0; --c-gold-s:rgba(10,95,224,.1);
+    --c-text:#1D1D1F; --c-mut:#6E6E73; --c-mut2:#9093A0; --c-inp:rgba(0,0,0,.035); --c-inp2:rgba(0,0,0,.06);
+    --c-bar:#FFFFFF; --c-ovr:rgba(0,0,0,.4); }
   #cmsToast{ position:fixed; bottom:92px; left:50%; transform:translateX(-50%) translateY(16px); z-index:4000; background:var(--c-surf2); border:1px solid var(--c-line2);
     color:var(--c-text); font-family:var(--c-sans); padding:12px 24px; border-radius:12px; font-size:.86rem; opacity:0; pointer-events:none; transition:.35s cubic-bezier(.2,.7,.3,1); }
   #cmsToast.show{ opacity:1; transform:translateX(-50%); }
   .cms-modal{ position:fixed; inset:0; z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px; font-family:var(--c-sans);
-    background:rgba(0,0,0,.68); opacity:0; pointer-events:none; transition:opacity .3s; }
+    background:var(--c-ovr); opacity:0; pointer-events:none; transition:opacity .3s; }
   .cms-modal.open{ opacity:1; pointer-events:auto; }
   .cms-modal .box{ width:min(560px,100%); max-height:90vh; overflow-y:auto; background:var(--c-surf); border:1px solid var(--c-line2); border-radius:18px; color:var(--c-text);
     transform:translateY(14px) scale(.985); transition:transform .3s; }
@@ -88,11 +93,11 @@
   .cms-btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:999px; padding:12px 22px; font-family:var(--c-sans); font-weight:500; font-size:.88rem; cursor:pointer; border:1px solid var(--c-line2); background:transparent; color:var(--c-text); transition:.2s; }
   .cms-btn:hover{ border-color:var(--c-gold); color:var(--c-gold); }
   .cms-btn.pri{ background:var(--c-blue); border-color:var(--c-blue); color:#fff; } .cms-btn.pri:hover{ background:var(--c-blue2); color:#fff; }
-  .cms-btn.gold{ background:var(--c-gold); border-color:var(--c-gold); color:#141019; } .cms-btn.gold:hover{ filter:brightness(1.07); color:#141019; }
+  .cms-btn.gold{ background:var(--c-gold); border-color:var(--c-gold); color:#fff; } .cms-btn.gold:hover{ filter:brightness(1.07); color:#fff; }
   .cms-btn.block{ width:100%; }
   .cms-hint{ font-size:.8rem; color:var(--c-mut); line-height:1.6; } .cms-hint b{ color:var(--c-text); }
   .cms-fld{ margin-bottom:15px; } .cms-fld label{ display:block; font-family:var(--c-disp); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c-mut); margin-bottom:7px; }
-  .cms-inp{ width:100%; background:rgba(255,255,255,.04); color:var(--c-text); border:1px solid var(--c-line2); border-radius:10px; padding:11px 14px; font-family:var(--c-sans); font-size:.9rem; outline:none; }
+  .cms-inp{ width:100%; background:var(--c-inp); color:var(--c-text); border:1px solid var(--c-line2); border-radius:10px; padding:11px 14px; font-family:var(--c-sans); font-size:.9rem; outline:none; }
   .cms-inp:focus{ border-color:var(--c-blue); } textarea.cms-inp{ resize:vertical; min-height:84px; line-height:1.5; }
   .cms-row2{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
   .cms-chips{ display:flex; flex-wrap:wrap; gap:8px; } .cms-chip{ font-size:.74rem; padding:8px 13px; border:1px solid var(--c-line2); border-radius:9px; cursor:pointer; user-select:none; transition:.2s; }
@@ -103,11 +108,11 @@
   .cms-ch{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:16px 0 18px; }
   .cms-chb{ display:flex; flex-direction:column; align-items:center; gap:8px; padding:16px 6px; border:1px solid var(--c-line2); border-radius:12px; cursor:pointer; color:var(--c-text); transition:.2s; }
   .cms-chb:hover{ border-color:var(--c-gold); transform:translateY(-2px); } .cms-chb i{ font-size:1.5rem; } .cms-chb span{ font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; }
-  .cms-ot{ width:100%; min-height:150px; background:rgba(255,255,255,.04); color:var(--c-text); border:1px solid var(--c-line2); border-radius:10px; padding:13px; font-family:var(--c-sans); font-size:.84rem; line-height:1.5; resize:vertical; }
+  .cms-ot{ width:100%; min-height:150px; background:var(--c-inp); color:var(--c-text); border:1px solid var(--c-line2); border-radius:10px; padding:13px; font-family:var(--c-sans); font-size:.84rem; line-height:1.5; resize:vertical; }
   /* admin panel */
   .cms-admin{ position:fixed; inset:0; z-index:4800; background:var(--c-bg); color:var(--c-text); font-family:var(--c-sans); overflow-y:auto; opacity:0; pointer-events:none; transition:opacity .3s; }
   .cms-admin.open{ opacity:1; pointer-events:auto; }
-  .cms-atop{ position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px clamp(14px,4vw,36px); background:rgba(9,10,20,.9); backdrop-filter:blur(14px); border-bottom:1px solid var(--c-line); }
+  .cms-atop{ position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px clamp(14px,4vw,36px); background:var(--c-surf); backdrop-filter:blur(14px); border-bottom:1px solid var(--c-line); }
   .cms-atop .tt{ font-family:var(--c-disp); font-size:1.3rem; } .cms-atop .tt b{ color:var(--c-gold); }
   .cms-atabs{ display:flex; gap:6px; flex-wrap:wrap; padding:16px clamp(14px,4vw,36px) 0; }
   .cms-atab{ font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--c-mut); padding:10px 15px; border:1px solid var(--c-line2); border-radius:9px; background:none; cursor:pointer; transition:.2s; font-family:var(--c-sans); }
@@ -116,7 +121,7 @@
   .cms-sech{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
   .cms-sech h2{ font-family:var(--c-disp); font-size:1.5rem; margin:0; }
   .cms-arow{ display:flex; align-items:center; gap:13px; padding:11px 13px; border:1px solid var(--c-line); border-radius:11px; margin-bottom:9px; background:var(--c-surf); }
-  .cms-arow img{ width:44px; height:44px; object-fit:contain; background:rgba(255,255,255,.03); border-radius:8px; flex-shrink:0; }
+  .cms-arow img{ width:44px; height:44px; object-fit:contain; background:var(--c-inp); border-radius:8px; flex-shrink:0; }
   .cms-arow .i{ flex:1; min-width:0; } .cms-arow .n{ font-size:.86rem; } .cms-arow .m{ font-size:.72rem; color:var(--c-mut); margin-top:2px; }
   .cms-arow .acts{ display:flex; gap:7px; flex-shrink:0; }
   .cms-mini{ font-size:.56rem; letter-spacing:.12em; text-transform:uppercase; padding:8px 12px; border:1px solid var(--c-line2); border-radius:8px; background:none; color:var(--c-text); cursor:pointer; white-space:nowrap; transition:.2s; }
@@ -125,22 +130,28 @@
   .cms-login-ic{ width:48px; height:48px; border-radius:50%; background:var(--c-gold-s); display:grid; place-items:center; margin:0 auto 14px; color:var(--c-gold); font-size:1.4rem; }
   /* admin bar + inline */
   #cmsBar{ position:fixed; top:0; left:0; right:0; z-index:4600; display:none; align-items:center; gap:10px; height:44px; padding:0 clamp(12px,3vw,22px);
-    background:#17130D; border-bottom:1px solid var(--c-gold); color:var(--c-text); font-family:var(--c-sans); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; }
+    background:var(--c-bar); border-bottom:1px solid var(--c-gold); color:var(--c-text); font-family:var(--c-sans); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; }
   body.cms-admin-on #cmsBar{ display:flex; }
   #cmsBar .d{ width:7px; height:7px; border-radius:50%; background:var(--c-gold); box-shadow:0 0 9px var(--c-gold); flex-shrink:0; }
   #cmsBar .t{ color:var(--c-gold); white-space:nowrap; } #cmsBar .sp{ flex:1; }
   #cmsBar button{ font:inherit; letter-spacing:.12em; text-transform:uppercase; color:var(--c-text); background:none; border:1px solid rgba(255,255,255,.2); border-radius:7px; padding:7px 12px; cursor:pointer; white-space:nowrap; transition:.2s; }
-  #cmsBar button:hover{ border-color:var(--c-gold); color:var(--c-gold); } #cmsBar button.pri{ background:var(--c-gold); color:#141019; border-color:var(--c-gold); }
+  #cmsBar button:hover{ border-color:var(--c-gold); color:var(--c-gold); } #cmsBar button.pri{ background:var(--c-gold); color:#fff; border-color:var(--c-gold); }
   body.cms-admin-on{ padding-top:44px; }
   body.cms-admin-on .nav-a, body.cms-admin-on .navbar-apple{ top:44px!important; }
   .cms-inline{ display:inline-flex; align-items:center; gap:7px; font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; font-family:var(--c-sans);
-    padding:9px 14px; border:1px solid var(--c-gold); color:var(--c-gold); background:rgba(8,8,16,.6); border-radius:9px; cursor:pointer; transition:.2s; }
-  .cms-inline:hover{ background:var(--c-gold); color:#141019; }
+    padding:9px 14px; border:1px solid var(--c-gold); color:var(--c-gold); background:var(--c-surf); border-radius:9px; cursor:pointer; transition:.2s; }
+  .cms-inline:hover{ background:var(--c-gold); color:#fff; }
   body:not(.cms-admin-on) .cms-inline{ display:none; }
   /* tg float */
   #cmsTg{ position:fixed; right:22px; bottom:22px; z-index:4500; width:56px; height:56px; border-radius:50%; background:#229ED9; display:grid; place-items:center;
     box-shadow:0 14px 34px -10px rgba(34,158,217,.7); color:#fff; font-size:1.6rem; transition:transform .25s; }
   #cmsTg:hover{ transform:translateY(-3px) scale(1.05); color:#fff; }
+  /* theme toggle */
+  #cmsTheme{ position:fixed; right:22px; bottom:88px; z-index:4500; width:46px; height:46px; border-radius:50%; background:var(--c-surf);
+    border:1px solid var(--c-line2); color:var(--c-text); display:grid; place-items:center; font-size:1.15rem; cursor:pointer;
+    box-shadow:0 12px 30px -14px rgba(0,0,0,.6); transition:transform .25s, color .2s, border-color .2s; }
+  #cmsTheme:hover{ transform:translateY(-3px); color:var(--c-blue2); border-color:var(--c-blue2); }
+  body.cms-admin-on #cmsTheme{ bottom:88px; }
   /* footer */
   .cms-foot .fgrid{ display:grid; grid-template-columns:1.5fr 1fr 1.2fr; gap:34px; }
   .cms-foot .fb{ font-family:var(--c-disp); font-weight:700; font-size:1.3rem; display:flex; align-items:center; gap:8px; }
@@ -156,6 +167,7 @@
     .cms-ch{ grid-template-columns:1fr 1fr 1fr; } .cms-row2{ grid-template-columns:1fr; }
     .cms-modal{ padding:0; align-items:flex-end; } .cms-modal .box{ width:100%; max-height:94vh; border-radius:16px 16px 0 0; }
     #cmsTg{ right:16px; bottom:16px; width:52px; height:52px; }
+    #cmsTheme{ right:16px; bottom:78px; width:42px; height:42px; font-size:1.05rem; }
     #cmsBar{ overflow-x:auto; } #cmsBar .d,#cmsBar .t,#cmsBar .sp{ display:none; } #cmsBar button{ flex:0 0 auto; }
     .cms-arow{ flex-wrap:wrap; } .cms-arow .acts{ width:100%; } .cms-mini{ flex:1; text-align:center; }
   }`;
@@ -163,6 +175,7 @@
   /* ---------- UI (инъекция общих блоков) ---------- */
   const UI = `
   <div id="cmsToast"></div>
+  <button id="cmsTheme" onclick="cmsToggleTheme()" aria-label="Сменить тему"><i class="bi bi-moon-stars"></i></button>
   <a id="cmsTg" href="#" target="_blank" rel="noopener" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
   <div id="cmsBar">
     <span class="d"></span><span class="t">Режим админа</span><span class="sp"></span>
@@ -443,13 +456,24 @@
   }
   function updateTg(){ const f=$('#cmsTg'); if(!f) return; if(STORE.telegram){ f.href=`https://t.me/${encodeURIComponent(STORE.telegram)}`; f.style.display='grid'; } else f.style.display='none'; }
 
+  /* ---------- ТЕМА (день/ночь) ---------- */
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme')==='light' ? 'light' : 'dark'; }
+  function updateThemeIcons(){ const i=$('#cmsTheme i'); if(i) i.className = currentTheme()==='light' ? 'bi bi-sun' : 'bi bi-moon-stars'; }
+  function applyTheme(t){
+    if(t==='light') document.documentElement.setAttribute('data-theme','light');
+    else document.documentElement.removeAttribute('data-theme');
+    try{ localStorage.setItem('zerus_theme', t); }catch(e){}
+    updateThemeIcons();
+  }
+  function cmsToggleTheme(){ applyTheme(currentTheme()==='light' ? 'dark' : 'light'); }
+
   /* ---------- перезагрузка ---------- */
   function reloadAll(){ loadData(); updateTg(); if(CMS.footerEl) renderFooter(CMS.footerEl); if(CMS.onChange) CMS.onChange(); }
 
   /* ---------- экспорт в window (для onclick в инъецированном HTML) ---------- */
   Object.assign(window, { openAdminGate, closeAdmin, closeLogin, tryLogin, logoutAdmin, openAdmin, openAdminAt, admTab,
     editProduct, saveProductForm, askDeleteProduct, cmsPickImg, addCat, renameCat, askDeleteCat, saveStore, saveAccess,
-    exportDB, importDB, askReset, closeForm, closeConfirm, closeOrder, sendOrder, copyOrder });
+    exportDB, importDB, askReset, closeForm, closeConfirm, closeOrder, sendOrder, copyOrder, cmsToggleTheme });
 
   /* ---------- init ---------- */
   const CMS = {
@@ -463,7 +487,7 @@
       const st=document.createElement('style'); st.textContent=CSS; document.head.appendChild(st);
       document.body.insertAdjacentHTML('beforeend', UI);
       document.getElementById('cmsConfirmYes').addEventListener('click',()=>{ const cb=confirmCb; closeConfirm(); if(cb) cb(); });
-      loadData(); updateTg();
+      loadData(); updateTg(); updateThemeIcons();
       if(CMS.footerEl) renderFooter(CMS.footerEl);
       if(isAdmin()) enableAdminMode();
       if(location.hash==='#admin') openAdminGate();

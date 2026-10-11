@@ -8,19 +8,27 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>(function(){try{if(localStorage.getItem('zerus_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
     <style>
         :root{
-            --bg:#080810; --surface:#0F1426; --surface2:#131A30; --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
-            --blue:#3E6BFF; --blue-br:#5c84ff; --blue-soft:rgba(62,107,255,.14); --gold:#C9A86A; --gold-soft:rgba(201,168,106,.13);
-            --text:#F2F0EA; --muted:#9BA0B5; --muted2:#6B6F85; --pill:999px; --ease:cubic-bezier(.2,.7,.3,1);
+            --bg:#0A0A0C; --surface:#141418; --surface2:#1B1B21; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.15);
+            --blue:#2F6BFF; --blue-br:#5a86ff; --blue-soft:rgba(47,107,255,.14); --gold:#2F6BFF; --gold-soft:rgba(47,107,255,.14);
+            --text:#F5F5F7; --muted:#9A9AA3; --muted2:#6A6A73; --pill:999px; --ease:cubic-bezier(.2,.7,.3,1);
             --disp:'Space Grotesk',sans-serif; --sans:'Manrope',-apple-system,sans-serif;
+            --glass:rgba(12,12,15,.72); --panel:rgba(255,255,255,.02); --bgglow:#12152B; --inp:rgba(255,255,255,.04); --inp2:rgba(255,255,255,.07);
+        }
+        :root[data-theme="light"]{
+            --bg:#F5F5F7; --surface:#FFFFFF; --surface2:#FFFFFF; --line:rgba(0,0,0,.09); --line2:rgba(0,0,0,.14);
+            --blue:#0A5FE0; --blue-br:#0A5FE0; --blue-soft:rgba(10,95,224,.1); --gold:#0A5FE0; --gold-soft:rgba(10,95,224,.1);
+            --text:#1D1D1F; --muted:#6E6E73; --muted2:#9093A0;
+            --glass:rgba(255,255,255,.82); --panel:rgba(0,0,0,.025); --bgglow:#E7ECF5; --inp:rgba(0,0,0,.035); --inp2:rgba(0,0,0,.06);
         }
         *{ box-sizing:border-box; }
         body{ font-family:var(--sans); font-weight:300; color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased;
-            background:radial-gradient(1100px 620px at 50% -8%, #10172E 0%, transparent 60%), var(--bg) fixed; }
+            background:radial-gradient(1100px 620px at 50% -8%, var(--bgglow) 0%, transparent 60%), var(--bg) fixed; }
         h1,h2,h3,h4,h5{ font-family:var(--disp); letter-spacing:-.02em; }
         ::selection{ background:var(--blue); color:#fff; }
-        .navbar-apple { background:rgba(9,10,20,.72); backdrop-filter:blur(16px) saturate(140%); border-bottom:1px solid var(--line); }
+        .navbar-apple { background:var(--glass); backdrop-filter:blur(16px) saturate(140%); border-bottom:1px solid var(--line); }
         .navbar-apple .navbar-brand { color:var(--text); font-family:var(--disp); font-weight:600; letter-spacing:-.01em; }
         .navbar-apple .navbar-brand:hover{ color:var(--gold); }
         .text-secondary { color:var(--muted) !important; font-weight:300; }
@@ -29,10 +37,13 @@
         .btn-apple:hover { background:var(--blue-br); color:#fff; transform:translateY(-1px); }
         .btn-dark { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line2)!important; color:var(--text); background:transparent; border-radius:var(--pill); padding:11px 26px; font-weight:500; text-decoration:none; transition:border-color .25s,color .25s; }
         .btn-dark:hover{ border-color:var(--gold)!important; color:var(--gold); }
-        .eyebrow{ font-family:var(--disp); font-size:.66rem; letter-spacing:.26em; text-transform:uppercase; color:var(--gold); font-weight:600; }
-        .img-block { background:linear-gradient(140deg, var(--surface2), var(--surface) 72%); border:1px solid var(--line); border-radius:22px; padding:34px; text-align:center; box-shadow:0 30px 70px -34px rgba(0,0,0,.9); position:relative; overflow:hidden; }
-        .img-block::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(var(--gold),transparent); }
-        .img-block img { max-width:100%; max-height:390px; object-fit:contain; filter:drop-shadow(0 22px 28px rgba(0,0,0,.6)); transition:opacity .25s ease; }
+        .eyebrow{ font-family:var(--disp); font-size:.66rem; letter-spacing:.26em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+        .img-block { background:linear-gradient(140deg, var(--surface2), var(--surface) 72%); border:1px solid var(--line); border-radius:22px; padding:44px 34px 54px; text-align:center; box-shadow:0 30px 70px -34px rgba(0,0,0,.9); position:relative; overflow:hidden; perspective:1100px; }
+        .img-block::before{ content:''; position:absolute; inset:14% 20% 30%; border-radius:30px; z-index:0; background:radial-gradient(130% 120% at 50% 16%, var(--gold-soft), transparent 64%); opacity:.75; }
+        .img-block::after{ content:''; position:absolute; bottom:34px; left:50%; width:56%; height:22px; transform:translateX(-50%); background:radial-gradient(ellipse at center, rgba(0,0,0,.42), transparent 72%); filter:blur(8px); border-radius:50%; z-index:0; transition:.6s var(--ease); }
+        .img-block img { position:relative; z-index:1; max-width:88%; max-height:360px; object-fit:contain; transform:rotateX(7deg); transform-style:preserve-3d; filter:drop-shadow(0 26px 30px rgba(0,0,0,.55)); transition:transform .6s var(--ease), filter .6s, opacity .25s ease; }
+        .img-block:hover img { transform:rotateX(0deg) translateY(-10px) scale(1.04); filter:drop-shadow(0 40px 42px rgba(0,0,0,.6)); }
+        .img-block:hover::after{ width:46%; opacity:.85; }
         .price-big { font-size:2.1rem; font-weight:700; font-family:var(--disp); }
         .color-btn, .opt-btn { border:1px solid var(--line2); background:transparent; color:var(--text); border-radius:12px; padding:10px 16px; margin:0 8px 8px 0; cursor:pointer; text-align:left; font-weight:400; transition:.2s; }
         .color-btn { border-radius:var(--pill); }
@@ -65,7 +76,7 @@
     <div class="container my-4" style="max-width:1120px" id="productBox"></div>
     <div id="toast"><i class="bi bi-check-circle-fill"></i> Добавлено в корзину</div>
 
-    <footer style="border-top:1px solid rgba(255,255,255,.07);margin-top:56px;background:rgba(6,6,12,.5)">
+    <footer style="border-top:1px solid var(--line);margin-top:56px;background:var(--panel)">
         <div class="container" id="cmsFooter" style="max-width:1120px;padding:48px 16px 30px"></div>
     </footer>
 
