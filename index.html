@@ -95,6 +95,11 @@
         .hero .wrap{ position:relative; z-index:2; padding:110px 22px 96px; }
         .hero h1{ font-size:clamp(2.9rem,7vw,5.4rem); font-weight:700; line-height:.98; margin:18px 0 0; max-width:14ch; }
         .hero h1 .ac{ color:var(--blue-br); }
+        .hero-edit{ display:none; }
+        body.cms-admin-on .hero-edit{ display:inline-flex; align-items:center; gap:7px; position:absolute; top:16px; right:16px; z-index:4;
+            padding:9px 14px; border-radius:10px; background:var(--blue); color:#fff; font-size:.72rem; font-weight:600; letter-spacing:.02em; cursor:pointer;
+            box-shadow:0 12px 28px -10px rgba(0,0,0,.6); }
+        body.cms-admin-on .hero-edit:hover{ background:var(--blue-br); }
         .hero p{ color:var(--muted); font-size:1.08rem; font-weight:300; margin:20px 0 30px; max-width:46ch; line-height:1.55; }
         .hero .cta{ display:flex; gap:12px; flex-wrap:wrap; }
 
@@ -163,15 +168,18 @@
         .pcard{ height:100%; border:1px solid var(--line); border-radius:var(--rs); background:var(--surface); overflow:hidden; cursor:pointer;
             display:flex; flex-direction:column; text-align:center; padding:18px 16px 20px; transition:transform .3s var(--ease), border-color .3s, box-shadow .3s; }
         .pcard:hover{ transform:translateY(-6px); border-color:rgba(62,107,255,.45); box-shadow:0 26px 54px -30px rgba(0,0,0,.9); }
-        .pcard .pimg{ position:relative; height:200px; display:grid; place-items:center; margin-bottom:12px; }
-        .pcard .pimg::before{ content:''; position:absolute; inset:8% 12% 32%; border-radius:28px; z-index:0;
-            background:radial-gradient(130% 120% at 50% 14%, var(--gold-soft), transparent 60%); opacity:.8; transition:opacity .5s var(--ease); }
-        .pcard .pimg img{ position:relative; z-index:1; max-height:136px; max-width:78%; object-fit:contain;
-            filter:drop-shadow(0 24px 28px rgba(0,0,0,.5));
-            -webkit-box-reflect:below 2px linear-gradient(transparent, transparent 54%, rgba(0,0,0,.24));
-            transition:transform .5s var(--ease), filter .5s; }
-        .pcard:hover .pimg img{ transform:translateY(-11px) scale(1.08); filter:drop-shadow(0 38px 40px rgba(0,0,0,.6)); }
+        .pcard .pimg{ position:relative; height:196px; display:grid; place-items:center; margin-bottom:12px; }
+        .pcard .pimg::before{ content:''; position:absolute; inset:8% 12% 24%; border-radius:28px; z-index:0;
+            background:radial-gradient(130% 120% at 50% 16%, var(--gold-soft), transparent 60%); opacity:.7; transition:opacity .45s var(--ease); }
+        .pcard .pimg::after{ content:''; position:absolute; bottom:16px; left:50%; width:58%; height:16px; margin-left:-29%;
+            background:radial-gradient(ellipse at center, rgba(0,0,0,.4), transparent 72%); filter:blur(6px); border-radius:50%; z-index:0;
+            transition:transform .45s var(--ease), opacity .45s; will-change:transform; }
+        .pcard .pimg img{ position:relative; z-index:1; max-height:150px; max-width:82%; object-fit:contain;
+            filter:drop-shadow(0 20px 24px rgba(0,0,0,.45)); transition:transform .45s var(--ease), filter .45s;
+            will-change:transform; transform:translateZ(0); backface-visibility:hidden; }
+        .pcard:hover .pimg img{ transform:translate3d(0,-10px,0) scale(1.06); filter:drop-shadow(0 32px 34px rgba(0,0,0,.55)); }
         .pcard:hover .pimg::before{ opacity:1; }
+        .pcard:hover .pimg::after{ transform:scaleX(.8); opacity:.82; }
         .pcard .pn{ font-family:var(--disp); font-weight:600; font-size:.98rem; margin-bottom:6px; }
         .pcard .pp{ font-size:1.08rem; font-weight:600; font-family:var(--disp); }
         .pcard .pp .from{ color:var(--muted2); font-weight:400; font-size:.82rem; margin-right:4px; }
@@ -276,9 +284,9 @@
 
     <!-- ВЕРХНЯЯ ПЛАШКА -->
     <div class="strip"><div class="wrap">
-        <span><i class="bi bi-truck"></i>Бесплатная доставка по России</span>
-        <span><i class="bi bi-shield-check"></i>Официальная гарантия 1 год</span>
-        <span><i class="bi bi-patch-check"></i>100% оригинал</span>
+        <span><i class="bi bi-truck"></i><span data-edit="strip_1" data-edit-label="Плашка сверху 1">Бесплатная доставка по России</span></span>
+        <span><i class="bi bi-shield-check"></i><span data-edit="strip_2" data-edit-label="Плашка сверху 2">Официальная гарантия 1 год</span></span>
+        <span><i class="bi bi-patch-check"></i><span data-edit="strip_3" data-edit-label="Плашка сверху 3">100% оригинал</span></span>
     </div></div>
 
     <!-- НАВИГАЦИЯ -->
@@ -313,10 +321,11 @@
     <!-- ГЕРОЙ -->
     <section class="hero">
         <div class="bg"></div>
+        <div class="hero-edit cms-img-chip" data-edit="heroImg" data-edit-type="image" data-edit-label="Фон героя (заставка)"><i class="bi bi-image"></i> Сменить фон</div>
         <div class="wrap">
-            <div class="eyebrow">Official reseller · Apple · Samsung · Xiaomi</div>
-            <h1>Техника, которой <span class="ac">доверяешь.</span></h1>
-            <p>Оригинальные устройства, официальная гарантия и бесплатная доставка по всей России. Выбирай спокойно — остальное берём на себя.</p>
+            <div class="eyebrow" data-edit="hero_eyebrow" data-edit-label="Надзаголовок героя">Official reseller · Apple · Samsung · Xiaomi</div>
+            <h1 data-edit="hero_title" data-edit-label="Заголовок героя">Техника, которой <span class="ac">доверяешь.</span></h1>
+            <p data-edit="hero_sub" data-edit-label="Подзаголовок героя">Оригинальные устройства, официальная гарантия и бесплатная доставка по всей России. Выбирай спокойно — остальное берём на себя.</p>
             <div class="cta">
                 <a href="#catalogTop" class="btn-b" onclick="document.getElementById('catalogTop').scrollIntoView({behavior:'smooth'});return false">Смотреть каталог <i class="bi bi-arrow-right"></i></a>
                 <a href="https://t.me/zerus9501" class="btn-g">Связаться <i class="bi bi-telegram"></i></a>
@@ -327,25 +336,25 @@
     <div class="wrap">
         <!-- ПРЕИМУЩЕСТВА -->
         <div class="trust">
-            <div class="it"><i class="bi bi-truck"></i><div><div class="t">Доставка по РФ</div><div class="s">Бесплатно, от 3 дней</div></div></div>
-            <div class="it"><i class="bi bi-shield-check"></i><div><div class="t">Гарантия</div><div class="s">Официальная, 1 год</div></div></div>
-            <div class="it"><i class="bi bi-patch-check"></i><div><div class="t">Оригинал</div><div class="s">100% подлинная техника</div></div></div>
-            <div class="it"><i class="bi bi-chat-dots"></i><div><div class="t">Поддержка</div><div class="s">Ответим в Telegram</div></div></div>
+            <div class="it"><i class="bi bi-truck"></i><div><div class="t" data-edit="trust1_t" data-edit-label="Плитка 1: заголовок">Доставка по РФ</div><div class="s" data-edit="trust1_s" data-edit-label="Плитка 1: текст">Бесплатно, от 3 дней</div></div></div>
+            <div class="it"><i class="bi bi-shield-check"></i><div><div class="t" data-edit="trust2_t" data-edit-label="Плитка 2: заголовок">Гарантия</div><div class="s" data-edit="trust2_s" data-edit-label="Плитка 2: текст">Официальная, 1 год</div></div></div>
+            <div class="it"><i class="bi bi-patch-check"></i><div><div class="t" data-edit="trust3_t" data-edit-label="Плитка 3: заголовок">Оригинал</div><div class="s" data-edit="trust3_s" data-edit-label="Плитка 3: текст">100% подлинная техника</div></div></div>
+            <div class="it"><i class="bi bi-chat-dots"></i><div><div class="t" data-edit="trust4_t" data-edit-label="Плитка 4: заголовок">Поддержка</div><div class="s" data-edit="trust4_s" data-edit-label="Плитка 4: текст">Ответим в Telegram</div></div></div>
         </div>
 
         <!-- ХИТ -->
-        <div class="sec-top"><div class="eyebrow">Хит продаж</div><h2 class="sec-h">Забирают быстро.</h2></div>
+        <div class="sec-top"><div class="eyebrow" data-edit="hit_eyebrow" data-edit-label="Хит: надзаголовок">Хит продаж</div><h2 class="sec-h" data-edit="hit_title" data-edit-label="Хит: заголовок">Забирают быстро.</h2></div>
         <div class="promo" onclick="location.href='product.html?id=iphone17'">
             <div>
-                <h3>iPhone 17</h3>
-                <p>Титан. Топовая камера. Выбери версию, память и цвет под себя.</p>
-                <span class="price-from">от <b>69 000 ₽</b></span>
+                <h3 data-edit="hit_name" data-edit-label="Хит: название">iPhone 17</h3>
+                <p data-edit="hit_desc" data-edit-label="Хит: описание">Титан. Топовая камера. Выбери версию, память и цвет под себя.</p>
+                <span class="price-from" data-edit="hit_price" data-edit-label="Хит: цена">от 69 000 ₽</span>
             </div>
             <div class="pimg"><img src="images/ip17promax.png" alt="iPhone 17"></div>
         </div>
 
         <!-- КАТЕГОРИИ -->
-        <div class="sec-top"><h2 class="sec-h">Категории. <span class="mut">Выбери своё.</span></h2></div>
+        <div class="sec-top"><h2 class="sec-h" data-edit="cat_title" data-edit-label="Категории: заголовок">Категории. Выбери своё.</h2></div>
         <div class="cat-row">
             <div class="cat-item" onclick="filterByCat('Apple')"><div class="cat-tile"><img src="images/macbook.png"></div><div class="lbl">Apple</div></div>
             <div class="cat-item" onclick="filterByCat('Samsung')"><div class="cat-tile"><img src="images/samsung_s24.png"></div><div class="lbl">Samsung</div></div>
@@ -356,12 +365,12 @@
         </div>
 
         <!-- НОВИНКИ -->
-        <div class="sec-top"><div class="eyebrow">Новинки</div><h2 class="sec-h">Только что приехало.</h2></div>
+        <div class="sec-top"><div class="eyebrow" data-edit="new_eyebrow" data-edit-label="Новинки: надзаголовок">Новинки</div><h2 class="sec-h" data-edit="new_title" data-edit-label="Новинки: заголовок">Только что приехало.</h2></div>
         <div class="promo" onclick="location.href='product.html?id=ip18'" style="margin-bottom:22px">
             <div>
                 <span class="lbl-soon">Скоро в продаже</span>
-                <h3>iPhone 18</h3>
-                <p>Новое поколение iPhone. Уже 20 сентября 2026. Оформи предзаказ заранее.</p>
+                <h3 data-edit="new_name" data-edit-label="Новинка: название">iPhone 18</h3>
+                <p data-edit="new_desc" data-edit-label="Новинка: описание">Новое поколение iPhone. Уже 20 сентября 2026. Оформи предзаказ заранее.</p>
                 <span class="price-from" style="color:var(--blue-br)">Предзаказ в Telegram →</span>
             </div>
             <div class="pimg"><img src="images/ip17promax.png" alt="iPhone 18" style="filter:brightness(.82) drop-shadow(0 22px 30px rgba(0,0,0,.6))"></div>
@@ -372,8 +381,8 @@
                 <div class="feature">
                     <span class="tag">Новинка</span>
                     <img src="images/newarrivals_watch.png" alt="Apple Watch">
-                    <h3>Apple Watch</h3>
-                    <p>Новое поколение уже в наличии</p>
+                    <h3 data-edit="feat1_name" data-edit-label="Карточка 1: название">Apple Watch</h3>
+                    <p data-edit="feat1_desc" data-edit-label="Карточка 1: текст">Новое поколение уже в наличии</p>
                     <a href="#catalogTop" class="btn-o" onclick="filterByCat('Часы');return false">Смотреть</a>
                 </div>
             </div>
@@ -381,8 +390,8 @@
                 <div class="feature">
                     <span class="tag">Новинка</span>
                     <img src="images/newarrivals_bands.png" alt="Ремешки">
-                    <h3>Ремешки Apple Watch</h3>
-                    <p>Разные цвета и стили</p>
+                    <h3 data-edit="feat2_name" data-edit-label="Карточка 2: название">Ремешки Apple Watch</h3>
+                    <p data-edit="feat2_desc" data-edit-label="Карточка 2: текст">Разные цвета и стили</p>
                     <a href="#catalogTop" class="btn-o" onclick="filterByCat('Часы');return false">Смотреть</a>
                 </div>
             </div>
@@ -390,16 +399,16 @@
 
         <div class="promo" style="margin-top:22px" onclick="location.href='product.html?id=ultra'">
             <div>
-                <h3>Apple Watch Ultra 2</h3>
-                <p>Для спорта и приключений. До 36 часов автономной работы.</p>
-                <span class="price-from">от <b>90 000 ₽</b></span>
+                <h3 data-edit="ultra_name" data-edit-label="Ultra: название">Apple Watch Ultra 2</h3>
+                <p data-edit="ultra_desc" data-edit-label="Ultra: описание">Для спорта и приключений. До 36 часов автономной работы.</p>
+                <span class="price-from" data-edit="ultra_price" data-edit-label="Ultra: цена">от 90 000 ₽</span>
             </div>
             <div class="pimg"><img src="images/applewatchultra.png" alt="Apple Watch Ultra"></div>
         </div>
 
         <!-- КАТАЛОГ -->
         <div id="catalogTop"></div>
-        <div class="sec-top"><div class="eyebrow">Каталог</div><h2 class="sec-h">Вся техника.</h2></div>
+        <div class="sec-top"><div class="eyebrow" data-edit="catalog_eyebrow" data-edit-label="Каталог: надзаголовок">Каталог</div><h2 class="sec-h" data-edit="catalog_title" data-edit-label="Каталог: заголовок">Вся техника.</h2></div>
         <div class="catalog">
             <div class="catbar" id="catbar"></div>
             <div class="filters">
@@ -417,8 +426,8 @@
         <div class="wrap" id="cmsFooter"></div>
     </footer>
 
-    <script src="products.js?v=3"></script>
-    <script src="cms.js?v=3"></script>
+    <script src="products.js?v=4"></script>
+    <script src="cms.js?v=4"></script>
     <script>
         document.getElementById('cartCount').textContent = (JSON.parse(localStorage.getItem('cart'))||[]).length;
         let catFilter='all', filterMin=0, filterMax=999999999;

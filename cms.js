@@ -7,7 +7,7 @@
   "use strict";
 
   /* ---------- стандартные данные ---------- */
-  const LS = { prod:'zerus_products', cats:'zerus_categories', store:'zerus_store', admin:'zerus_admin' };
+  const LS = { prod:'zerus_products', cats:'zerus_categories', store:'zerus_store', admin:'zerus_admin', content:'zerus_content' };
   const DEFAULT_CATEGORIES = ['Apple','Samsung','Redmi','POCO','Часы','Аксессуары'];
   const DEFAULT_STORE = {
     name:'Technic Store',
@@ -30,7 +30,8 @@
     products(){ return this.load(LS.prod, seedProducts()); },
     categories(){ return this.load(LS.cats, DEFAULT_CATEGORIES); },
     store(){ return Object.assign(clone(DEFAULT_STORE), this.load(LS.store, {})); },
-    admin(){ return Object.assign(clone(DEFAULT_ADMIN), this.load(LS.admin, {})); }
+    admin(){ return Object.assign(clone(DEFAULT_ADMIN), this.load(LS.admin, {})); },
+    content(){ return this.load(LS.content, {}); }
   };
 
   /* категория товара (для каталога) */
@@ -50,11 +51,12 @@
   }
 
   /* живые данные */
-  let PRODUCTS=[], CATEGORIES=[], STORE={};
+  let PRODUCTS=[], CATEGORIES=[], STORE={}, CONTENT={};
   function loadData(){
     PRODUCTS = applyMeta(DB.products());
     CATEGORIES = DB.categories();
     STORE = DB.store();
+    CONTENT = DB.content();
   }
 
   /* ---------- helpers ---------- */
@@ -142,6 +144,10 @@
     padding:9px 14px; border:1px solid var(--c-gold); color:var(--c-gold); background:var(--c-surf); border-radius:9px; cursor:pointer; transition:.2s; }
   .cms-inline:hover{ background:var(--c-gold); color:#fff; }
   body:not(.cms-admin-on) .cms-inline{ display:none; }
+  /* inline content editing affordance */
+  body.cms-admin-on [data-edit]{ outline:1.5px dashed var(--c-gold); outline-offset:3px; border-radius:4px; cursor:pointer; transition:background .15s, outline-color .15s; }
+  body.cms-admin-on [data-edit]:hover{ background:var(--c-blue-s); outline-style:solid; }
+  body.cms-admin-on [data-edit].cms-img-chip{ outline:none; }
   /* tg float */
   #cmsTg{ position:fixed; right:22px; bottom:22px; z-index:4500; width:56px; height:56px; border-radius:50%; background:#229ED9; display:grid; place-items:center;
     box-shadow:0 14px 34px -10px rgba(34,158,217,.7); color:#fff; font-size:1.6rem; transition:transform .25s; }
@@ -262,11 +268,58 @@
   function confirmAction(msg, cb){ $('#cmsConfirmMsg').textContent=msg; confirmCb=cb; $('#cmsConfirm').classList.add('open'); }
   function closeConfirm(){ $('#cmsConfirm').classList.remove('open'); confirmCb=null; }
   function closeForm(){ $('#cmsForm').classList.remove('open'); }
-  function promptModal(title,label,value,onOk){
+  function promptModal(title,label,value,onOk,multiline){
     $('#cmsFormTitle').textContent=title;
-    $('#cmsFormBody').innerHTML=`<div class="cms-fld"><label>${esc(label)}</label><input class="cms-inp" id="cmsPrompt" value="${esc(value)}"></div>`;
+    const field = multiline
+      ? `<textarea class="cms-inp" id="cmsPrompt" style="min-height:100px">${esc(value)}</textarea>`
+      : `<input class="cms-inp" id="cmsPrompt" value="${esc(value)}">`;
+    $('#cmsFormBody').innerHTML=`<div class="cms-fld"><label>${esc(label)}</label>${field}</div>`;
+    $('#cmsFormSave').textContent='Сохранить';
     $('#cmsFormSave').onclick=()=>onOk($('#cmsPrompt').value);
-    $('#cmsForm').classList.add('open'); setTimeout(()=>{ const el=$('#cmsPrompt'); if(el){el.focus();el.select();} },90);
+    $('#cmsForm').classList.add('open'); setTimeout(()=>{ const el=$('#cmsPrompt'); if(el){el.focus(); if(!multiline)el.select();} },90);
+  }
+
+  /* ---------- РЕДАКТИРОВАНИЕ КОНТЕНТА САЙТА (инлайн, с главной страницы) ---------- */
+  function applyContent(){
+    document.querySelectorAll('[data-edit]').forEach(el=>{
+      const k=el.dataset.edit, type=el.dataset.editType||'text';
+      if(type==='image'){
+        if(k==='heroImg' && STORE.hero){ const bg=document.querySelector('.hero .bg'); if(bg) bg.style.backgroundImage='url("'+String(STORE.hero).replace(/["\\]/g,'')+'")'; }
+        return;
+      }
+      const v=CONTENT[k];
+      if(v!=null && v!=='') el.textContent=v;
+    });
+  }
+  function editContent(el){
+    const k=el.dataset.edit, type=el.dataset.editType||'text', label=el.dataset.editLabel||'Текст';
+    if(type==='image'){ openImageEditor(k,label); return; }
+    const cur = (CONTENT[k]!=null && CONTENT[k]!=='') ? CONTENT[k] : el.textContent.trim();
+    promptModal('Изменить: '+label,'Текст на сайте',cur,function(v){
+      confirmAction('Сохранить изменение на сайте?', function(){
+        v=(v||'').trim();
+        if(v==='') delete CONTENT[k]; else CONTENT[k]=v;
+        DB.save(LS.content,CONTENT); applyContent(); closeForm(); toast('Сохранено');
+      });
+    }, true);
+  }
+  function openImageEditor(k,label){
+    $('#cmsFormTitle').textContent='Изменить: '+label;
+    const cur = (k==='heroImg') ? (STORE.hero||'') : (CONTENT[k]||'');
+    $('#cmsFormBody').innerHTML=`<div class="cms-fld"><label>Фото — ссылка</label>
+      <input class="cms-inp" id="cmsImgUrl" value="${esc(cur)}" placeholder="https://...">
+      <label class="cms-file" style="margin-top:8px"><input type="file" accept="image/*" hidden onchange="cmsPickImg(this,'cmsImgUrl')">Загрузить фото с устройства</label>
+      <div class="cms-hint" style="margin-top:8px">Оставьте пустым, чтобы вернуть стандартную картинку.</div></div>`;
+    $('#cmsFormSave').textContent='Сохранить';
+    $('#cmsFormSave').onclick=function(){
+      const v=$('#cmsImgUrl').value.trim();
+      confirmAction('Сохранить изображение?', function(){
+        if(k==='heroImg'){ const s=DB.store(); s.hero=v; DB.save(LS.store,s); }
+        else { if(v) CONTENT[k]=v; else delete CONTENT[k]; DB.save(LS.content,CONTENT); }
+        reloadAll(); applyContent(); closeForm(); toast('Сохранено');
+      });
+    };
+    $('#cmsForm').classList.add('open');
   }
 
   /* ---------- АДМИН ---------- */
@@ -282,7 +335,7 @@
     const a=DB.admin();
     if($('#cmsLoginU').value.trim()===a.user && $('#cmsLoginP').value===a.pass){
       try{ sessionStorage.setItem('zerus_authed','1'); }catch(e){}
-      enableAdminMode(); closeLogin(); openAdmin(); toast('Вы вошли. Редактируйте прямо на сайте или в панели.');
+      enableAdminMode(); closeLogin(); openAdmin(); toast('Вы вошли. Нажимайте на тексты и фото прямо на сайте, чтобы править их.');
     } else { $('#cmsLoginErr').style.display='block'; }
   }
   function logoutAdmin(){ try{ sessionStorage.removeItem('zerus_authed'); }catch(e){} disableAdminMode(); closeAdmin(); toast('Вы вышли из админки'); }
@@ -468,7 +521,7 @@
   function cmsToggleTheme(){ applyTheme(currentTheme()==='light' ? 'dark' : 'light'); }
 
   /* ---------- перезагрузка ---------- */
-  function reloadAll(){ loadData(); updateTg(); if(CMS.footerEl) renderFooter(CMS.footerEl); if(CMS.onChange) CMS.onChange(); }
+  function reloadAll(){ loadData(); updateTg(); applyContent(); if(CMS.footerEl) renderFooter(CMS.footerEl); if(CMS.onChange) CMS.onChange(); }
 
   /* ---------- экспорт в window (для onclick в инъецированном HTML) ---------- */
   Object.assign(window, { openAdminGate, closeAdmin, closeLogin, tryLogin, logoutAdmin, openAdmin, openAdminAt, admTab,
@@ -487,8 +540,15 @@
       const st=document.createElement('style'); st.textContent=CSS; document.head.appendChild(st);
       document.body.insertAdjacentHTML('beforeend', UI);
       document.getElementById('cmsConfirmYes').addEventListener('click',()=>{ const cb=confirmCb; closeConfirm(); if(cb) cb(); });
-      loadData(); updateTg(); updateThemeIcons();
+      loadData(); updateTg(); updateThemeIcons(); applyContent();
       if(CMS.footerEl) renderFooter(CMS.footerEl);
+      document.addEventListener('click', function(e){
+        if(!document.body.classList.contains('cms-admin-on')) return;
+        const el = e.target.closest('[data-edit]');
+        if(!el) return;
+        e.preventDefault(); e.stopPropagation();
+        editContent(el);
+      }, true);
       if(isAdmin()) enableAdminMode();
       if(location.hash==='#admin') openAdminGate();
     }
