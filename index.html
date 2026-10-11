@@ -88,9 +88,14 @@
 
         /* ===== HERO ===== */
         .hero{ position:relative; overflow:hidden; border-bottom:1px solid var(--line); }
-        .hero .bg{ position:absolute; inset:0; background:url("images/hero-bg.jpg") center/cover no-repeat; opacity:.5; transform:scale(1.04); }
-        .hero::after{ content:''; position:absolute; inset:0;
+        .hero .bg{ position:absolute; inset:0; background:url("images/hero-bg.jpg") center/cover no-repeat; opacity:.5; transform:scale(1.04); transition:opacity .4s ease; }
+        .hero::after{ content:''; position:absolute; inset:0; transition:background .4s ease;
             background:linear-gradient(90deg, rgba(8,8,16,.95) 0%, rgba(8,8,16,.72) 46%, rgba(8,8,16,.4) 100%),
+                       linear-gradient(0deg, var(--bg) 2%, transparent 42%); }
+        /* светлая тема: заставка мягкая, без чёрного пятна, текст читается */
+        :root[data-theme="light"] .hero .bg{ opacity:.3; }
+        :root[data-theme="light"] .hero::after{
+            background:linear-gradient(90deg, rgba(245,245,247,.9) 0%, rgba(245,245,247,.72) 46%, rgba(245,245,247,.48) 100%),
                        linear-gradient(0deg, var(--bg) 2%, transparent 42%); }
         .hero .wrap{ position:relative; z-index:2; padding:110px 22px 96px; }
         .hero h1{ font-size:clamp(2.9rem,7vw,5.4rem); font-weight:700; line-height:.98; margin:18px 0 0; max-width:14ch; }
@@ -425,8 +430,8 @@
         <div class="wrap" id="cmsFooter"></div>
     </footer>
 
-    <script src="products.js?v=5"></script>
-    <script src="cms.js?v=5"></script>
+    <script src="products.js?v=6"></script>
+    <script src="cms.js?v=6"></script>
     <script>
         document.getElementById('cartCount').textContent = (JSON.parse(localStorage.getItem('cart'))||[]).length;
         let catFilter='all', filterMin=0, filterMax=999999999;

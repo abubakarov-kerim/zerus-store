@@ -6,7 +6,7 @@ const iStorageNew = [{name:'128 ГБ',add:0},{name:'256 ГБ',add:9000},{name:'5
 const iStorage18  = [{name:'256 ГБ',add:0},{name:'512 ГБ',add:20000},{name:'1 ТБ',add:34000}];
 const iPadStorage = [{name:'128 ГБ',add:0},{name:'256 ГБ',add:10000},{name:'512 ГБ',add:22000},{name:'1 ТБ',add:40000}];
 // Тип SIM (eSIM / физическая SIM) — доступно на всех iPhone
-const iSim = [{name:'Физическая SIM + eSIM',add:0},{name:'Только eSIM',add:0}];
+const iSim = [{name:'eSIM + SIM',add:0},{name:'eSIM',add:0}];
 
 const products = [
     // ===== iPhone — конфигураторы по поколениям =====
@@ -74,9 +74,9 @@ const products = [
       versions:[
         {name:'iPhone 18', price:79000, img:'images/ip17.png', colors:['Чёрный','Белый','Синий','Лавандовый'],
           colorImages:{'Чёрный':'images/ip17_black.png','Белый':'images/ip17_white.png','Синий':'images/ip17_mist-blue.png','Лавандовый':'images/ip17_lavender.png'}},
-        {name:'iPhone 18 Pro', price:92000, img:'images/ip17pro.png', colors:['Космический оранжевый','Тёмно-синий','Серебристый'],
+        {name:'iPhone 18 Pro', price:92000, img:'images/ip17pro.png', colors:['Космический оранжевый','Тёмно-синий','Серебристый','Титановый чёрный','Титановый золотой','Титановый натуральный'],
           colorImages:{'Космический оранжевый':'images/ip17pro_cosmic-orange.png','Тёмно-синий':'images/ip17pro_deep-blue.png','Серебристый':'images/ip17pro_silver.png'}},
-        {name:'iPhone 18 Pro Max', price:105000, img:'images/ip17promax.png', colors:['Космический оранжевый','Тёмно-синий','Серебристый'],
+        {name:'iPhone 18 Pro Max', price:105000, img:'images/ip17promax.png', colors:['Космический оранжевый','Тёмно-синий','Серебристый','Титановый чёрный','Титановый золотой','Титановый натуральный'],
           colorImages:{'Космический оранжевый':'images/ip17promax_cosmic-orange.png','Тёмно-синий':'images/ip17promax_deep-blue.png','Серебристый':'images/ip17promax_silver.png'}},
       ] },
 
