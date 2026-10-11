@@ -67,14 +67,21 @@
 
         <div class="block">
             <h5 class="mb-2"><i class="bi bi-chat-dots"></i>Оформление и оплата</h5>
-            <p class="text-secondary">Напишите в Telegram — ответим по заказу, оплате и доставке.</p>
-            <a href="https://t.me/zerus9501" class="tg-btn mt-1"><i class="bi bi-telegram"></i> Написать в Telegram</a>
+            <p class="text-secondary">Нажмите «Оформить заказ» — соберём готовый текст вашего заказа и отправим менеджеру в удобный мессенджер: WhatsApp, Telegram или Instagram.</p>
+            <button class="btn-apple mt-1" style="padding:13px 30px" onclick="checkout()"><i class="bi bi-bag-check"></i> Оформить заказ</button>
         </div>
     </div>
 
+    <footer style="border-top:1px solid rgba(255,255,255,.07);margin-top:40px;background:rgba(6,6,12,.5)">
+        <div class="container" id="cmsFooter" style="max-width:960px;padding:48px 16px 30px"></div>
+    </footer>
+
+    <script src="cms.js"></script>
     <script>
+        CMS.init({ footerEl:'cmsFooter' });
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const orderBlock = document.getElementById('orderBlock');
+        function checkout(){ if(!cart.length){ return; } CMS.openOrder(cart); }
 
         function render() {
             if (cart.length === 0) {

@@ -167,6 +167,15 @@
         .pcard .soon-p{ color:var(--gold); } .pcard .soon-p .d{ background:var(--gold); }
         .pcard .more{ color:var(--blue-br); font-size:.84rem; font-weight:500; margin-top:12px; display:inline-flex; align-items:center; gap:5px; justify-content:center; }
         .empty-msg{ color:var(--muted); padding:40px 0; text-align:center; }
+        .catbar{ display:flex; gap:9px; overflow-x:auto; padding:4px 0 16px; scrollbar-width:none; }
+        .catbar::-webkit-scrollbar{ display:none; }
+        .catpill{ flex:0 0 auto; font-size:.78rem; letter-spacing:.02em; color:var(--muted); padding:9px 18px; border:1px solid var(--line2); border-radius:var(--pill); background:transparent; white-space:nowrap; cursor:pointer; transition:.2s; }
+        .catpill:hover{ color:var(--text); border-color:var(--text); }
+        .catpill.on{ background:var(--gold); color:#141019; border-color:var(--gold); }
+        .pcard{ position:relative; }
+        .pcard-adm{ position:absolute; top:10px; right:10px; z-index:4; display:flex; gap:6px; }
+        .pcard-adm button{ width:32px; height:32px; display:grid; place-items:center; border:none; border-radius:8px; background:rgba(201,168,106,.95); color:#141019; cursor:pointer; font-size:.9rem; transition:.2s; }
+        .pcard-adm button:hover{ filter:brightness(1.08); }
 
         /* ===== FOOTER ===== */
         footer{ border-top:1px solid var(--line); margin-top:70px; background:rgba(6,6,12,.5); }
@@ -260,11 +269,11 @@
     <div class="nav-a"><div class="wrap inner">
         <a href="store.html" class="logo"><span class="dot"></span>Technic</a>
         <nav>
-            <a data-brand="all"     onclick="filterBy('all','all')">Все</a>
-            <a data-brand="Apple"   onclick="filterBy('Apple','all')">Apple</a>
-            <a data-brand="Samsung" onclick="filterBy('Samsung','all')">Samsung</a>
-            <a data-brand="Redmi"   onclick="filterBy('Redmi','all')">Redmi</a>
-            <a data-brand="POCO"    onclick="filterBy('POCO','all')">POCO</a>
+            <a onclick="filterByCat('')">Все</a>
+            <a onclick="filterByCat('Apple')">Apple</a>
+            <a onclick="filterByCat('Samsung')">Samsung</a>
+            <a onclick="filterByCat('Redmi')">Redmi</a>
+            <a onclick="filterByCat('POCO')">POCO</a>
         </nav>
         <span class="sp"></span>
         <div class="act">
@@ -277,7 +286,7 @@
     <!-- МОБИЛЬНОЕ МЕНЮ -->
     <div class="mnav" id="mnav">
         <button class="mx" onclick="document.getElementById('mnav').classList.remove('open')"><i class="bi bi-x-lg"></i></button>
-        <a onclick="mgo('all')">Все</a>
+        <a onclick="mgo('')">Все</a>
         <a onclick="mgo('Apple')">Apple</a>
         <a onclick="mgo('Samsung')">Samsung</a>
         <a onclick="mgo('Redmi')">Redmi</a>
@@ -322,12 +331,12 @@
         <!-- КАТЕГОРИИ -->
         <div class="sec-top"><h2 class="sec-h">Категории. <span class="mut">Выбери своё.</span></h2></div>
         <div class="cat-row">
-            <div class="cat-item" data-brand="Apple"   onclick="filterBy('Apple','all')"><div class="cat-tile"><img src="images/macbook.png"></div><div class="lbl">Apple</div></div>
-            <div class="cat-item" data-brand="Samsung" onclick="filterBy('Samsung','all')"><div class="cat-tile"><img src="images/samsung_s24.png"></div><div class="lbl">Samsung</div></div>
-            <div class="cat-item" data-brand="Redmi"   onclick="filterBy('Redmi','all')"><div class="cat-tile"><img src="images/redmi_note13pro.png"></div><div class="lbl">Redmi</div></div>
-            <div class="cat-item" data-brand="POCO"    onclick="filterBy('POCO','all')"><div class="cat-tile"><img src="images/poco_x6pro.png"></div><div class="lbl">POCO</div></div>
-            <div class="cat-item" data-cat="watch"     onclick="filterBy('all','watch')"><div class="cat-tile"><img src="images/applewatch.png"></div><div class="lbl">Часы</div></div>
-            <div class="cat-item" data-cat="acc"       onclick="filterBy('all','acc')"><div class="cat-tile"><img src="images/airpods.png"></div><div class="lbl">Аксессуары</div></div>
+            <div class="cat-item" onclick="filterByCat('Apple')"><div class="cat-tile"><img src="images/macbook.png"></div><div class="lbl">Apple</div></div>
+            <div class="cat-item" onclick="filterByCat('Samsung')"><div class="cat-tile"><img src="images/samsung_s24.png"></div><div class="lbl">Samsung</div></div>
+            <div class="cat-item" onclick="filterByCat('Redmi')"><div class="cat-tile"><img src="images/redmi_note13pro.png"></div><div class="lbl">Redmi</div></div>
+            <div class="cat-item" onclick="filterByCat('POCO')"><div class="cat-tile"><img src="images/poco_x6pro.png"></div><div class="lbl">POCO</div></div>
+            <div class="cat-item" onclick="filterByCat('Часы')"><div class="cat-tile"><img src="images/applewatch.png"></div><div class="lbl">Часы</div></div>
+            <div class="cat-item" onclick="filterByCat('Аксессуары')"><div class="cat-tile"><img src="images/airpods.png"></div><div class="lbl">Аксессуары</div></div>
         </div>
 
         <!-- НОВИНКИ -->
@@ -349,7 +358,7 @@
                     <img src="images/newarrivals_watch.png" alt="Apple Watch">
                     <h3>Apple Watch</h3>
                     <p>Новое поколение уже в наличии</p>
-                    <a href="#catalogTop" class="btn-o" onclick="filterBy('all','watch');return false">Смотреть</a>
+                    <a href="#catalogTop" class="btn-o" onclick="filterByCat('Часы');return false">Смотреть</a>
                 </div>
             </div>
             <div class="col-md-6">
@@ -358,7 +367,7 @@
                     <img src="images/newarrivals_bands.png" alt="Ремешки">
                     <h3>Ремешки Apple Watch</h3>
                     <p>Разные цвета и стили</p>
-                    <a href="#catalogTop" class="btn-o" onclick="filterBy('all','watch');return false">Смотреть</a>
+                    <a href="#catalogTop" class="btn-o" onclick="filterByCat('Часы');return false">Смотреть</a>
                 </div>
             </div>
         </div>
@@ -376,114 +385,85 @@
         <div id="catalogTop"></div>
         <div class="sec-top"><div class="eyebrow">Каталог</div><h2 class="sec-h">Вся техника.</h2></div>
         <div class="catalog">
+            <div class="catbar" id="catbar"></div>
             <div class="filters">
                 <button class="fbtn active" onclick="setFilter(0, 999999999, this)">Все цены</button>
                 <button class="fbtn" onclick="setFilter(0, 20000, this)">До 20 000 ₽</button>
                 <button class="fbtn" onclick="setFilter(20000, 100000, this)">20–100 тыс ₽</button>
                 <button class="fbtn" onclick="setFilter(100000, 999999999, this)">Дороже 100 тыс ₽</button>
             </div>
-            <div class="cat-title" id="techTitle"><i class="bi bi-phone"></i>Смартфоны и компьютеры</div>
-            <div class="row" id="techCatalog"></div>
-            <div class="cat-title" id="watchTitle"><i class="bi bi-smartwatch"></i>Часы и ремешки</div>
-            <div class="row" id="watchCatalog"></div>
-            <div class="cat-title" id="accTitle"><i class="bi bi-headphones"></i>Аксессуары</div>
-            <div class="row" id="accCatalog"></div>
+            <div class="row" id="catalogGrid"></div>
             <p id="emptyMsg" class="empty-msg" style="display:none">По этому фильтру товаров нет.</p>
         </div>
     </div>
 
     <footer>
-        <div class="wrap">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="fb"><span class="dot"></span>Technic Store</div>
-                    <p>Магазин техники Apple · Samsung · Redmi · POCO. Официально, с гарантией и доставкой по всей России.</p>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="fh">Бренды</div>
-                    <a class="fl" onclick="filterBy('Apple','all')">Apple</a>
-                    <a class="fl" onclick="filterBy('Samsung','all')">Samsung</a>
-                    <a class="fl" onclick="filterBy('Redmi','all')">Redmi</a>
-                    <a class="fl" onclick="filterBy('POCO','all')">POCO</a>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="fh">Связь</div>
-                    <a class="fl" href="https://t.me/zerus9501"><i class="bi bi-telegram"></i>Telegram</a>
-                    <a class="fl" href="order.html"><i class="bi bi-bag"></i>Оформить заказ</a>
-                </div>
-            </div>
-            <div class="fbot"><span>© 2026 Technic Store</span><span>Сделано Керимом</span></div>
-        </div>
+        <div class="wrap" id="cmsFooter"></div>
     </footer>
 
     <script src="products.js"></script>
+    <script src="cms.js"></script>
     <script>
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let brandFilter='all', catFilter='all', filterMin=0, filterMax=999999999;
-        document.getElementById('cartCount').textContent = cart.length;
+        document.getElementById('cartCount').textContent = (JSON.parse(localStorage.getItem('cart'))||[]).length;
+        let catFilter='all', filterMin=0, filterMax=999999999;
 
         function cardHTML(p){
+            const adm = CMS.isAdmin() ? `<div class="pcard-adm">
+                <button onclick="event.stopPropagation();editProduct('${p.id}')" title="Изменить"><i class="bi bi-pencil"></i></button>
+                <button onclick="event.stopPropagation();askDeleteProduct('${p.id}')" title="Удалить"><i class="bi bi-trash"></i></button></div>` : '';
             if(p.soon){
-                return `<div class="col-6 col-md-3 mb-2"><div class="pcard" onclick="location.href='product.html?id=${p.id}'">
-                    <div class="pimg"><img src="${p.img}" alt="${p.name}" style="filter:brightness(.88) drop-shadow(0 16px 20px rgba(0,0,0,.55))"></div>
-                    <div class="pn">${p.name}</div>
+                return `<div class="col-6 col-md-3 mb-2"><div class="pcard" onclick="location.href='product.html?id=${p.id}'">${adm}
+                    <div class="pimg"><img src="${p.img}" alt="${CMS.esc(p.name)}" style="filter:brightness(.88) drop-shadow(0 16px 20px rgba(0,0,0,.55))"></div>
+                    <div class="pn">${CMS.esc(p.name)}</div>
                     <div class="pp" style="color:var(--gold)">Скоро</div>
-                    <div class="stk soon-p"><span class="d"></span>В продаже с ${p.release}</div>
-                    <span class="more">Подробнее <i class="bi bi-arrow-right"></i></span>
-                </div></div>`;
+                    <div class="stk soon-p"><span class="d"></span>В продаже с ${CMS.esc(p.release||'')}</div>
+                    <span class="more">Подробнее <i class="bi bi-arrow-right"></i></span></div></div>`;
             }
-            const inStock = p.stock > 0;
+            const inStock = (p.stock==null) ? true : p.stock>0;
             const stockHTML = inStock
-                ? `<div class="stk in"><span class="d"></span>В наличии · ${p.stock} шт.</div>`
+                ? `<div class="stk in"><span class="d"></span>В наличии${p.stock!=null?' · '+p.stock+' шт.':''}</div>`
                 : `<div class="stk out"><span class="d"></span>Нет в наличии</div>`;
-            const priceHTML = (p.type === 'config')
-                ? `<span class="from">от</span>${minPrice(p).toLocaleString('ru-RU')} ₽`
-                : `${p.price.toLocaleString('ru-RU')} ₽`;
-            const extra = (p.type === 'config') ? '<div class="sub">версия · память · цвет</div>' : '';
-            return `<div class="col-6 col-md-3 mb-2"><div class="pcard" onclick="location.href='product.html?id=${p.id}'">
-                <div class="pimg"><img src="${p.img}" alt="${p.name}"></div>
-                <div class="pn">${p.name}</div>
+            const priceHTML = CMS.isConfig(p)
+                ? `<span class="from">от</span>${CMS.priceOf(p).toLocaleString('ru-RU')} ₽`
+                : `${(p.price||0).toLocaleString('ru-RU')} ₽`;
+            const extra = CMS.isConfig(p) ? '<div class="sub">версия · память · цвет</div>' : '';
+            return `<div class="col-6 col-md-3 mb-2"><div class="pcard" onclick="location.href='product.html?id=${p.id}'">${adm}
+                <div class="pimg"><img src="${p.img}" alt="${CMS.esc(p.name)}"></div>
+                <div class="pn">${CMS.esc(p.name)}</div>
                 <div class="pp">${priceHTML}</div>
                 ${extra}
                 ${stockHTML}
-                <span class="more">Подробнее <i class="bi bi-arrow-right"></i></span>
-            </div></div>`;
+                <span class="more">Подробнее <i class="bi bi-arrow-right"></i></span></div></div>`;
         }
-        const match = p => {
-            const pr = (p.type==='config') ? minPrice(p) : p.price;
-            return (brandFilter==='all'||p.brand===brandFilter) && (catFilter==='all'||p.cat===catFilter) && pr>=filterMin && pr<=filterMax;
-        };
-        function section(cat, titleId, boxId){
-            const items = products.filter(p => p.cat===cat && match(p));
-            document.getElementById(boxId).innerHTML = items.map(cardHTML).join('');
-            document.getElementById(titleId).style.display = items.length ? 'flex' : 'none';
-            return items.length;
+        function matchP(p){ const pr=CMS.priceOf(p); return (catFilter==='all'||CMS.catOf(p)===catFilter) && pr>=filterMin && pr<=filterMax; }
+        function renderCatbar(){
+            const cats=CMS.getCategories();
+            document.getElementById('catbar').innerHTML =
+                `<button class="catpill${catFilter==='all'?' on':''}" data-cat="">Все</button>`
+                + cats.map(c=>`<button class="catpill${catFilter===c?' on':''}" data-cat="${CMS.esc(c)}">${CMS.esc(c)}</button>`).join('');
         }
-        function render(){
-            const total = section('tech','techTitle','techCatalog')+section('watch','watchTitle','watchCatalog')+section('acc','accTitle','accCatalog');
-            document.getElementById('emptyMsg').style.display = total ? 'none' : '';
+        function renderCatalog(){
+            const list = CMS.getProducts().filter(matchP);
+            document.getElementById('catalogGrid').innerHTML = list.map(cardHTML).join('');
+            document.getElementById('emptyMsg').style.display = list.length ? 'none' : '';
+            renderCatbar();
         }
-        function highlight(){
-            document.querySelectorAll('[data-brand]').forEach(el => el.classList && el.classList.toggle('active', el.dataset.brand===brandFilter && catFilter==='all'));
-            document.querySelectorAll('[data-cat]').forEach(el => el.classList.toggle('active', el.dataset.cat===catFilter));
-        }
-        function filterBy(brand, cat){
-            brandFilter=brand; catFilter=cat; render(); highlight();
-            document.getElementById('catalogTop').scrollIntoView({behavior:'smooth', block:'start'});
-        }
-        function setFilter(min, max, btn){
-            filterMin=min; filterMax=max;
-            document.querySelectorAll('.fbtn').forEach(x => x.classList.remove('active'));
-            btn.classList.add('active'); render();
-        }
-        function mgo(brand){ document.getElementById('mnav').classList.remove('open'); filterBy(brand,'all'); }
-        render(); highlight();
+        function catPick(c){ catFilter=c||'all'; renderCatalog(); document.getElementById('catalogTop').scrollIntoView({behavior:'smooth', block:'start'}); }
+        function filterByCat(c){ catPick(c); }
+        function setFilter(min, max, btn){ filterMin=min; filterMax=max; document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); renderCatalog(); }
+        function mgo(c){ document.getElementById('mnav').classList.remove('open'); filterByCat(c); }
+
+        document.getElementById('catbar').addEventListener('click', e=>{ const b=e.target.closest('.catpill'); if(b) catPick(b.dataset.cat||''); });
+
+        CMS.init({ footerEl:'cmsFooter', onChange:renderCatalog, onCatPick:catPick });
+        renderCatalog();
     </script>
 
     <!-- ЗАСТАВКА: сборка букв -->
     <script>
         (function(){
             var intro = document.getElementById('intro');
+            if(location.hash==='#admin'){ if(intro) intro.remove(); return; }   // прямой вход в админку — без заставки
             if(sessionStorage.getItem('introShown')){ if(intro) intro.remove(); return; }
             sessionStorage.setItem('introShown','1');
             var box = document.getElementById('introName');

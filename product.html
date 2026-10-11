@@ -48,6 +48,10 @@
         @keyframes slideInRight { from { opacity:0; transform:translateX(50px);  } to { opacity:1; transform:none; } }
         .img-col  { animation: slideInLeft  .55s var(--ease) both; }
         .info-col { animation: slideInRight .55s var(--ease) both; animation-delay:.08s; }
+        .pv-specs{ margin-top:24px; border-top:1px solid var(--line); padding-top:22px; }
+        .pv-specs .l{ font-family:var(--disp); font-size:.64rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+        .pv-specs .srow{ display:flex; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid var(--line); font-size:.88rem; }
+        .pv-specs .srow:last-child{ border-bottom:none; } .pv-specs .srow .sk{ color:var(--muted); font-weight:300; }
         @media(prefers-reduced-motion:reduce){ *{ animation:none!important; } }
     </style>
 </head>
@@ -61,13 +65,19 @@
     <div class="container my-4" style="max-width:1120px" id="productBox"></div>
     <div id="toast"><i class="bi bi-check-circle-fill"></i> Добавлено в корзину</div>
 
+    <footer style="border-top:1px solid rgba(255,255,255,.07);margin-top:56px;background:rgba(6,6,12,.5)">
+        <div class="container" id="cmsFooter" style="max-width:1120px;padding:48px 16px 30px"></div>
+    </footer>
+
     <script src="products.js"></script>
+    <script src="cms.js"></script>
     <script>
+        CMS.init({ footerEl:'cmsFooter' });
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         document.getElementById('cartCount').textContent = cart.length;
 
         const id = new URLSearchParams(location.search).get('id');
-        const p = findProduct(id);
+        const p = CMS.getProducts().find(x=>x.id===id) || findProduct(id);
         const box = document.getElementById('productBox');
         const toast = document.getElementById('toast');
 
@@ -104,6 +114,9 @@
         function render() {
             if (!p) { box.innerHTML = '<h2 class="mt-4">Товар не найден</h2><a href="store.html">← Вернуться в магазин</a>'; return; }
 
+            const specsHTML = (p.specs && p.specs.length) ? `<div class="pv-specs"><div class="l">Характеристики</div>${p.specs.map(s=>`<div class="srow"><span class="sk">${CMS.esc(s.k)}</span><span>${CMS.esc(s.v)}</span></div>`).join('')}</div>` : '';
+            const admBtn = CMS.isAdmin() ? `<button class="cms-inline" style="margin:12px 0" onclick="editProduct('${p.id}')"><i class="bi bi-pencil"></i> Изменить товар</button>` : '';
+
             // --- СКОРО ---
             if (p.soon) {
                 box.innerHTML = `
@@ -113,8 +126,10 @@
                     <div class="col-md-6 info-col">
                         <span class="lbl-soon">Скоро в продаже</span>
                         <h1 class="fw-bold mt-3">${p.name}</h1>
+                        ${admBtn}
                         <p class="text-secondary">${p.desc || ''}</p>
                         <p class="price-big" style="color:var(--gold)">В продаже с ${p.release}</p>
+                        ${specsHTML}
                         <p class="text-secondary">Оформи предзаказ уже сейчас — напиши в Telegram, и мы придержим для тебя ${p.name}.</p>
                         <a href="https://t.me/zerus9501" class="btn-apple mt-2"><i class="bi bi-telegram"></i> Оформить предзаказ</a>
                     </div>
@@ -149,6 +164,7 @@
                     <div class="col-md-6 img-col"><div class="img-block"><img id="mainImg" src="${img}" alt="${v.name}"></div></div>
                     <div class="col-md-6 info-col">
                         <h1 class="fw-bold">${v.name}</h1>
+                        ${admBtn}
                         <p class="text-secondary">${p.desc || ''}</p>
                         <p class="price-big">${price.toLocaleString('ru-RU')} ₽</p>
                         <p><span class="text-success"><i class="bi bi-check-circle"></i> В наличии</span></p>
@@ -156,6 +172,7 @@
                         ${storageHTML}
                         ${colorsBlock(v.colors)}
                         <p class="text-secondary mt-2">Выбрано: <b>${v.name} · ${s.name}${selectedColor ? ' · ' + selectedColor : ''}</b></p>
+                        ${specsHTML}
                         <div class="d-flex gap-2 flex-wrap mt-3">
                             <button class="btn-apple" onclick="addConfig()">Добавить в корзину</button>
                             <a href="order.html" class="btn btn-dark" style="border-radius:980px;padding:10px 26px">Оформить заказ →</a>
@@ -178,11 +195,13 @@
                     <div class="col-md-6 img-col"><div class="img-block"><img id="mainImg" src="${img}" alt="${p.name}"></div></div>
                     <div class="col-md-6 info-col">
                         <h1 class="fw-bold">${p.name}</h1>
+                        ${admBtn}
                         <p class="text-secondary">${p.desc || ''}</p>
-                        <p class="price-big">${p.price.toLocaleString('ru-RU')} ₽</p>
+                        <p class="price-big">${(p.price||0).toLocaleString('ru-RU')} ₽</p>
                         <p>${stockText}</p>
                         ${colorsBlock(p.colors)}
                         ${selectedColor ? `<p class="text-secondary mt-2">Выбрано: <b>${selectedColor}</b></p>` : ''}
+                        ${specsHTML}
                         <div class="d-flex gap-2 flex-wrap mt-3">
                             ${addBtn}
                             <a href="order.html" class="btn btn-dark mt-3" style="border-radius:980px;padding:10px 26px">Оформить заказ →</a>
