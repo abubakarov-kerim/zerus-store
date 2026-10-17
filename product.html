@@ -1,267 +1,326 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Товар — Technic Store</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>(function(){try{if(localStorage.getItem('zerus_theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
-    <style>
-        :root{
-            --bg:#0A0A0C; --surface:#141418; --surface2:#1B1B21; --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.15);
-            --blue:#2F6BFF; --blue-br:#5a86ff; --blue-soft:rgba(47,107,255,.14); --gold:#2F6BFF; --gold-soft:rgba(47,107,255,.14);
-            --text:#F5F5F7; --muted:#9A9AA3; --muted2:#6A6A73; --pill:999px; --ease:cubic-bezier(.2,.7,.3,1);
-            --disp:'Space Grotesk',sans-serif; --sans:'Manrope',-apple-system,sans-serif;
-            --glass:rgba(12,12,15,.72); --panel:rgba(255,255,255,.02); --bgglow:#12152B; --inp:rgba(255,255,255,.04); --inp2:rgba(255,255,255,.07);
-        }
-        :root[data-theme="light"]{
-            --bg:#F5F5F7; --surface:#FFFFFF; --surface2:#FFFFFF; --line:rgba(0,0,0,.09); --line2:rgba(0,0,0,.14);
-            --blue:#0A5FE0; --blue-br:#0A5FE0; --blue-soft:rgba(10,95,224,.1); --gold:#0A5FE0; --gold-soft:rgba(10,95,224,.1);
-            --text:#1D1D1F; --muted:#6E6E73; --muted2:#9093A0;
-            --glass:rgba(255,255,255,.82); --panel:rgba(0,0,0,.025); --bgglow:#E7ECF5; --inp:rgba(0,0,0,.035); --inp2:rgba(0,0,0,.06);
-        }
-        *{ box-sizing:border-box; }
-        body{ font-family:var(--sans); font-weight:300; color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased;
-            background:radial-gradient(1100px 620px at 50% -8%, var(--bgglow) 0%, transparent 60%), var(--bg) fixed; }
-        h1,h2,h3,h4,h5{ font-family:var(--disp); letter-spacing:-.02em; }
-        ::selection{ background:var(--blue); color:#fff; }
-        .navbar-apple { background:var(--glass); backdrop-filter:blur(16px) saturate(140%); border-bottom:1px solid var(--line); }
-        .navbar-apple .navbar-brand { color:var(--text); font-family:var(--disp); font-weight:600; letter-spacing:-.01em; }
-        .navbar-apple .navbar-brand:hover{ color:var(--gold); }
-        .text-secondary { color:var(--muted) !important; font-weight:300; }
-        .text-success{ color:#6fcf97 !important; } .text-danger{ color:#e06a5a !important; }
-        .btn-apple { display:inline-flex; align-items:center; gap:8px; background:var(--blue); color:#fff; border:none; border-radius:var(--pill); padding:12px 28px; font-weight:500; font-size:.92rem; text-decoration:none; cursor:pointer; box-shadow:0 10px 28px -10px rgba(62,107,255,.7); transition:background .25s, transform .2s; }
-        .btn-apple:hover { background:var(--blue-br); color:#fff; transform:translateY(-1px); }
-        .btn-dark { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line2)!important; color:var(--text); background:transparent; border-radius:var(--pill); padding:11px 26px; font-weight:500; text-decoration:none; transition:border-color .25s,color .25s; }
-        .btn-dark:hover{ border-color:var(--gold)!important; color:var(--gold); }
-        .eyebrow{ font-family:var(--disp); font-size:.66rem; letter-spacing:.26em; text-transform:uppercase; color:var(--muted); font-weight:600; }
-        .img-block { background:linear-gradient(140deg, var(--surface2), var(--surface) 72%); border:1px solid var(--line); border-radius:22px; padding:40px 34px 48px; text-align:center; box-shadow:0 30px 70px -34px rgba(0,0,0,.9); position:relative; overflow:hidden; }
-        .img-block::before{ content:''; position:absolute; inset:10% 18% 32%; border-radius:34px; z-index:0; background:radial-gradient(130% 120% at 50% 14%, var(--gold-soft), transparent 62%); opacity:.7; }
-        .img-block::after{ content:''; position:absolute; bottom:30px; left:50%; width:52%; height:24px; margin-left:-26%;
-            background:radial-gradient(ellipse at center, rgba(0,0,0,.4), transparent 72%); filter:blur(9px); border-radius:50%; z-index:0;
-            transition:transform .6s var(--ease), opacity .6s; will-change:transform; }
-        .img-block img { position:relative; z-index:1; max-width:82%; max-height:330px; object-fit:contain; filter:drop-shadow(0 28px 32px rgba(0,0,0,.5));
-            transition:transform .6s var(--ease), filter .6s, opacity .25s ease; will-change:transform; transform:translateZ(0); backface-visibility:hidden; }
-        .img-block:hover img { transform:translate3d(0,-12px,0) scale(1.04); filter:drop-shadow(0 44px 44px rgba(0,0,0,.58)); }
-        .img-block:hover::after{ transform:scaleX(.82); opacity:.82; }
-        .price-big { font-size:2.1rem; font-weight:700; font-family:var(--disp); }
-        .color-btn, .opt-btn { border:1px solid var(--line2); background:transparent; color:var(--text); border-radius:12px; padding:10px 16px; margin:0 8px 8px 0; cursor:pointer; text-align:left; font-weight:400; transition:.2s; }
-        .color-btn { border-radius:var(--pill); }
-        .color-btn:hover, .opt-btn:hover{ border-color:var(--muted); }
-        .color-btn.active, .opt-btn.active { border-color:var(--blue); background:var(--blue-soft); color:var(--blue-br); font-weight:600; }
-        .opt-btn .sub { display:block; font-size:.78rem; color:var(--muted2); font-weight:400; }
-        .opt-btn.active .sub { color:var(--blue-br); }
-        .lbl-soon{ display:inline-block; font-family:var(--disp); font-size:.66rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-soft); background:var(--gold-soft); padding:6px 14px; border-radius:var(--pill); }
-        #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(120px); background:var(--surface2); border:1px solid var(--line2); color:var(--text); padding:13px 26px; border-radius:14px; opacity:0; transition:all .3s ease; z-index:1000; display:flex; align-items:center; gap:9px; }
-        #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-        #toast i{ color:#6fcf97; }
-        @keyframes slideInLeft  { from { opacity:0; transform:translateX(-50px); } to { opacity:1; transform:none; } }
-        @keyframes slideInRight { from { opacity:0; transform:translateX(50px);  } to { opacity:1; transform:none; } }
-        .img-col  { animation: slideInLeft  .55s var(--ease) both; }
-        .info-col { animation: slideInRight .55s var(--ease) both; animation-delay:.08s; }
-        .pv-specs{ margin-top:24px; border-top:1px solid var(--line); padding-top:22px; }
-        .pv-specs .l{ font-family:var(--disp); font-size:.64rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
-        .pv-specs .srow{ display:flex; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid var(--line); font-size:.88rem; }
-        .pv-specs .srow:last-child{ border-bottom:none; } .pv-specs .srow .sk{ color:var(--muted); font-weight:300; }
-        @media(prefers-reduced-motion:reduce){ *{ animation:none!important; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Товар · Technic Store</title>
+<meta name="description" content="Оригинальная техника с гарантией и бесплатной доставкой по России.">
+<meta name="theme-color" content="#060B09">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%23EEF3F0'/%3E%3Crect x='7' y='7' width='14' height='5' rx='2' fill='%23060B09'/%3E%3Crect x='11.5' y='12' width='5' height='10' rx='2' fill='%2346C79A'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/geologica-cyr.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css?v=2026-10-17.1">
+<link rel="stylesheet" href="assets/icons.css?v=2026-10-17.1">
+<link rel="stylesheet" href="assets/app.css?v=2026-10-17.1">
+<script>
+var TECH_BUILD='2026-10-17.1';
+(function(d){ d.className+=' js';
+  try{ var t=localStorage.getItem('zerus_theme')||localStorage.getItem('zerus_theme_def'); if(t==='light') d.setAttribute('data-theme','light');
+    var p=sessionStorage.getItem('zerus_pal_preview')||localStorage.getItem('zerus_palette'); if(p&&p!=='malachite') d.setAttribute('data-palette',p); }catch(e){}
+})(document.documentElement);
+(function(){
+  if(location.protocol.indexOf('http')!==0 || !window.fetch) return;
+  fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){ return r.ok?r.text():''; }).then(function(t){
+    var m=t.match(/TECH_BUILD='([^']+)'/); if(!m || m[1]===TECH_BUILD) return;
+    try{ if(sessionStorage.getItem('tech_upd')===m[1]) return; sessionStorage.setItem('tech_upd',m[1]); }catch(e){ return; }
+    var q=new URLSearchParams(location.search); q.set('v',m[1]); location.replace(location.pathname+'?'+q.toString()+location.hash);
+  }).catch(function(){});
+})();
+</script>
+<style>
+.pp{ padding-top:clamp(18px,3vw,34px); }
+.crumbs{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:.86rem; color:var(--mut); margin-bottom:clamp(18px,3vw,32px); }
+.crumbs a:hover{ color:var(--text); } .crumbs i{ font-size:.7rem; color:var(--mut2); } .crumbs span{ color:var(--text); }
+.pp-grid{ display:grid; grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr); gap:clamp(24px,4.5vw,72px); align-items:start; }
+.pp-media{ position:sticky; top:calc(var(--nav-h) + 20px); }
+body.cms-admin-on .pp-media{ top:calc(var(--nav-h) + 66px); }
+.pp-stage{ position:relative; overflow:hidden; isolation:isolate; aspect-ratio:1/1; border-radius:calc(var(--r) + 10px); border:1px solid var(--line); display:grid; place-items:center; perspective:1100px;
+  background:radial-gradient(70% 60% at 50% 42%, color-mix(in srgb, var(--s2) 42%, transparent), transparent 72%), linear-gradient(170deg, var(--surf2), var(--surf) 60%, color-mix(in srgb, var(--s1) 70%, var(--surf))); }
+.pp-turn{ width:74%; height:74%; transform:rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg)); transition:transform .9s var(--ease); }
+.pp-turn img{ width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 40px 44px rgba(0,0,0,.42)); transition:opacity .35s ease, transform .6s var(--ease); }
+:root[data-theme="light"] .pp-turn img{ filter:drop-shadow(0 34px 36px rgba(20,40,30,.2)); }
+.pp-turn img.swap{ opacity:0; transform:scale(.97); }
+.pp-floor{ position:absolute; bottom:9%; left:26%; right:26%; height:26px; border-radius:50%; background:radial-gradient(closest-side, rgba(0,0,0,.4), transparent); filter:blur(8px); z-index:-1; }
+.pp-thumbs{ display:flex; gap:10px; margin-top:14px; overflow-x:auto; scrollbar-width:none; padding:2px; }
+.pp-thumbs::-webkit-scrollbar{ display:none; }
+.pp-thumbs button{ flex:0 0 74px; height:74px; border-radius:var(--r-s); border:1px solid var(--line); background:var(--surf); padding:8px; cursor:pointer; transition:border-color .25s, transform .3s var(--ease); }
+.pp-thumbs button:hover{ transform:translateY(-2px); }
+.pp-thumbs button.on{ border-color:var(--text); box-shadow:inset 0 0 0 1px var(--text); }
+.pp-thumbs img{ width:100%; height:100%; object-fit:contain; }
+.pp-info .pc-cat{ margin-bottom:12px; }
+.pp-info h1{ font-size:clamp(2rem,4vw,3.3rem); letter-spacing:-.045em; }
+.pp-desc{ color:var(--mut); margin-top:14px; line-height:1.6; max-width:52ch; }
+.pp-pr{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-top:24px; }
+.pp-price{ font-size:clamp(1.8rem,3vw,2.3rem); font-weight:560; letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
+.pp-price.tick{ animation:tick .5s var(--ease); }
+@keyframes tick{ 0%{ opacity:.35; transform:translateY(6px); } }
+.pp-old{ color:var(--mut2); text-decoration:line-through; }
+.pp-stock{ display:inline-flex; align-items:center; gap:7px; font-size:.88rem; color:var(--ok); margin-top:8px; }
+.pp-stock.out{ color:var(--bad); } .pp-stock.soon{ color:var(--ac); }
+.og{ margin-top:28px; }
+.og-h{ display:flex; justify-content:space-between; gap:10px; font-size:.92rem; margin-bottom:12px; }
+.og-h b{ font-weight:500; } .og-h span{ color:var(--mut); text-align:right; }
+.seg{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; }
+.seg.tight{ grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); }
+.opt{ text-align:left; padding:13px 15px; border-radius:var(--r-s); border:1px solid var(--line2); background:var(--surf); cursor:pointer; transition:border-color .25s, background-color .25s, transform .3s var(--ease); min-height:52px; }
+.opt:hover{ border-color:var(--mut); }
+.opt:active{ transform:scale(.98); }
+.opt b{ display:block; font-weight:500; font-size:.95rem; letter-spacing:-.01em; }
+.opt small{ display:block; color:var(--mut); font-size:.8rem; margin-top:2px; font-variant-numeric:tabular-nums; }
+.opt.on{ border-color:var(--ac); background:var(--ac-soft); box-shadow:inset 0 0 0 1px var(--ac); }
+.opt.on small{ color:var(--ac); }
+.sw{ display:flex; flex-wrap:wrap; gap:12px; }
+.swb{ width:42px; height:42px; border-radius:50%; border:1px solid var(--line2); padding:3px; background:transparent; cursor:pointer; transition:transform .3s var(--ease), border-color .25s; }
+.swb i{ display:block; width:100%; height:100%; border-radius:50%; background:var(--c); box-shadow:inset 0 0 0 1px rgba(128,128,128,.35), inset 0 -6px 10px rgba(0,0,0,.18); }
+.swb:hover{ transform:scale(1.06); }
+.swb.on{ border-color:var(--text); box-shadow:0 0 0 1px var(--text); }
+.pp-buy{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:30px; }
+.perks{ margin-top:26px; border-top:1px solid var(--line); }
+.perk{ display:flex; gap:14px; align-items:flex-start; padding:16px 0; border-bottom:1px solid var(--line); }
+.perk i{ color:var(--ac); font-size:1.15rem; margin-top:1px; } .perk b{ font-weight:500; display:block; font-size:.95rem; } .perk span{ color:var(--mut); font-size:.86rem; }
+.specs{ margin-top:clamp(60px,8vw,100px); }
+.spec-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(10px,1.4vw,16px); }
+.spec{ border-radius:var(--r); background:var(--surf); border:1px solid var(--line); padding:20px; }
+.spec .k{ font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mut2); }
+.spec .v{ margin-top:8px; font-size:1.05rem; font-weight:450; letter-spacing:-.015em; line-height:1.35; }
+.rel{ margin-top:clamp(60px,8vw,110px); }
+.rel-rail{ display:grid; grid-auto-flow:column; grid-auto-columns:clamp(220px,24vw,290px); gap:clamp(10px,1.4vw,18px); overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none;
+  margin:0 calc(-1 * clamp(16px,4vw,40px)); padding:4px clamp(16px,4vw,40px) 6px; scroll-padding-inline:clamp(16px,4vw,40px); }
+.rel-rail::-webkit-scrollbar{ display:none; } .rel-rail .pc{ scroll-snap-align:start; }
+.nf{ text-align:center; padding:clamp(60px,12vw,140px) 0; } .nf i{ font-size:2.6rem; color:var(--mut); } .nf h1{ font-size:clamp(2rem,4vw,3rem); margin-top:18px; } .nf p{ color:var(--mut); margin:12px auto 28px; max-width:40ch; }
+/* скелет до загрузки данных */
+.sk-line{ height:14px; border-radius:7px; background:linear-gradient(100deg, var(--surf2) 30%, var(--surf3) 50%, var(--surf2) 70%); background-size:300% 100%; animation:skel 1.4s linear infinite; margin:10px 0; }
+/* нижняя панель покупки (телефон) */
+.buybar{ position:fixed; left:0; right:0; bottom:0; z-index:340; display:none; align-items:center; gap:12px; padding:12px clamp(16px,4vw,24px) calc(env(safe-area-inset-bottom,0px) + 12px);
+  background:var(--glass); -webkit-backdrop-filter:blur(18px) saturate(150%); backdrop-filter:blur(18px) saturate(150%); border-top:1px solid var(--line);
+  transform:translateY(110%); transition:transform .5s var(--ease); }
+.buybar.show{ transform:none; }
+.buybar .bb-t{ flex:1; min-width:0; } .buybar .bb-t span{ display:block; font-size:.78rem; color:var(--mut); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.buybar .bb-t b{ font-weight:560; font-size:1.1rem; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.buybar .btn{ height:48px; }
+@media (max-width:1024px){ .spec-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:860px){
+  .pp-grid{ grid-template-columns:1fr; }
+  .pp-media{ position:static; }
+  .pp-stage{ aspect-ratio:1/0.9; }
+  .buybar{ display:flex; }
+  body.has-bar .foot{ padding-bottom:84px; }
+}
+@media (max-width:560px){
+  .pp-buy{ grid-template-columns:1fr; }
+  .seg{ grid-template-columns:1fr 1fr; } .seg.tight{ grid-template-columns:repeat(3,1fr); }
+  .opt{ padding:11px 12px; } .opt b{ font-size:.9rem; }
+  .spec-grid{ grid-template-columns:1fr 1fr; } .spec{ padding:16px; } .spec .v{ font-size:.95rem; }
+  .pp-thumbs button{ flex-basis:62px; height:62px; }
+}
+</style>
 </head>
 <body>
-
-    <nav class="navbar navbar-apple px-4 sticky-top">
-        <a href="store.html" class="navbar-brand fs-6 text-decoration-none"><i class="bi bi-arrow-left"></i> В магазин</a>
-        <a href="order.html" class="btn-apple"><i class="bi bi-bag"></i> Заказ (<span id="cartCount">0</span>)</a>
+<a class="skip" href="#main">Перейти к товару</a>
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="logo" aria-label="На главную"><span class="logo-mark"></span><span data-store-name>Technic Store</span></a>
+    <nav class="nav-links" aria-label="Разделы">
+      <a href="index.html#catalog" data-cat="">Каталог</a>
+      <a href="index.html#catalog" data-cat="Apple">Apple</a>
+      <a href="index.html#catalog" data-cat="Samsung">Samsung</a>
+      <a href="index.html#catalog" data-cat="Redmi">Redmi</a>
+      <a href="index.html#catalog" data-cat="POCO">POCO</a>
+      <a href="index.html#catalog" data-cat="Часы">Часы</a>
     </nav>
+    <span class="nav-sp"></span>
+    <div class="nav-act">
+      <button class="ibtn" data-theme-toggle aria-label="Сменить тему"><i class="bi bi-sun"></i></button>
+      <a class="ibtn" href="order.html" aria-label="Корзина"><i class="bi bi-bag"></i><span class="badge-n" data-cart-count></span></a>
+      <button class="ibtn burger" data-menu-open aria-label="Меню"><i class="bi bi-list"></i></button>
+    </div>
+  </div>
+</header>
+<div class="mnav" id="mnav" role="dialog" aria-modal="true" aria-label="Меню">
+  <div class="mnav-top"><a href="index.html" class="logo"><span class="logo-mark"></span><span data-store-name>Technic Store</span></a><button class="ibtn" data-menu-close aria-label="Закрыть меню"><i class="bi bi-x-lg"></i></button></div>
+  <nav class="mnav-list">
+    <a href="index.html#catalog" data-cat="">Каталог <i class="bi bi-arrow-right"></i></a>
+    <a href="index.html#catalog" data-cat="Apple">Apple <i class="bi bi-arrow-right"></i></a>
+    <a href="index.html#catalog" data-cat="Samsung">Samsung <i class="bi bi-arrow-right"></i></a>
+    <a href="index.html#catalog" data-cat="Redmi">Redmi <i class="bi bi-arrow-right"></i></a>
+    <a href="index.html#catalog" data-cat="POCO">POCO <i class="bi bi-arrow-right"></i></a>
+    <a href="index.html#catalog" data-cat="Часы">Часы <i class="bi bi-arrow-right"></i></a>
+    <a href="order.html">Корзина <i class="bi bi-bag"></i></a>
+  </nav>
+  <div class="mnav-foot"><a class="btn block" data-tg-link href="#" target="_blank" rel="noopener"><i class="bi bb-telegram"></i>Написать в Telegram</a></div>
+</div>
 
-    <div class="container my-4" style="max-width:1120px" id="productBox"></div>
-    <div id="toast"><i class="bi bi-check-circle-fill"></i> Добавлено в корзину</div>
+<main class="wrap pp" id="main">
+  <div id="box">
+    <div class="pp-grid"><div class="pp-stage"></div><div><div class="sk-line" style="width:30%"></div><div class="sk-line" style="height:40px;width:70%"></div><div class="sk-line"></div><div class="sk-line" style="width:80%"></div></div></div>
+  </div>
+  <section class="specs" id="specs" hidden aria-labelledby="specH"><h2 class="h2 rv" id="specH" style="margin-bottom:28px">Характеристики</h2><div class="spec-grid" id="specGrid"></div></section>
+  <section class="rel" id="rel" hidden aria-labelledby="relH"><h2 class="h2 rv" id="relH" style="margin-bottom:28px">Похожие товары</h2><div class="rel-rail" id="relRail"></div></section>
+</main>
 
-    <footer style="border-top:1px solid var(--line);margin-top:56px;background:var(--panel)">
-        <div class="container" id="cmsFooter" style="max-width:1120px;padding:48px 16px 30px"></div>
-    </footer>
+<div class="buybar" id="buybar" aria-hidden="true"><div class="bb-t"><span id="bbName"></span><b id="bbPrice"></b></div><button class="btn" id="bbBtn" tabindex="-1">В корзину</button></div>
 
-    <script src="products.js?v=6"></script>
-    <script src="cms.js?v=6"></script>
-    <script>
-        CMS.init({ footerEl:'cmsFooter' });
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        document.getElementById('cartCount').textContent = cart.length;
+<footer class="foot"><div class="wrap" id="cmsFooter"></div></footer>
 
-        const id = new URLSearchParams(location.search).get('id');
-        const p = CMS.getProducts().find(x=>x.id===id) || findProduct(id);
-        const box = document.getElementById('productBox');
-        const toast = document.getElementById('toast');
+<script src="products.js?v=2026-10-17.1"></script>
+<script src="cms.js?v=2026-10-17.1"></script>
+<script>
+(function(){
+  "use strict";
+  var $=function(s){ return document.querySelector(s); };
+  var esc=CMS.esc;
+  var COLORHEX = {
+    'Чёрный':'#1d1d1f','Космический чёрный':'#1d1d1f','Титановый чёрный':'#2b2b2e','Чёрный титан':'#2b2b2e','Тёмная ночь':'#2e3641','Полночь':'#2e3641','Тёмно-синий':'#24364f',
+    'Графитовый':'#4a4a4a','Серый космос':'#4a4a4a','Серый':'#8a8a8a','Титановый серый':'#8a8a8a',
+    'Белый':'#f2f2f0','Титановый белый':'#e8e8e6','Серебристый':'#dcdedd','Титановый натуральный':'#c9c3ba','Натуральный титан':'#c9c3ba','Пустынный титан':'#b8a084','Титановый золотой':'#c8a96a','Ваниль':'#f3e6c8','Кремовый':'#efe7d3','Сияющая звезда':'#efe7d3',
+    'Синий':'#4a6a9a','Титановый синий':'#4d5b6a','Небесно-голубой':'#a9c7e0','Ультрамарин':'#3a3fb0','Бирюзовый':'#7fb7c4',
+    'Зелёный':'#5b8a72','Тёмно-зелёный':'#33503f','Светлый мох':'#8a9a5b','Мятный':'#a8d5c0',
+    'Розовый':'#e7c0c8','Красный':'#c0392b','Жёлтый':'#e8c848','Титановый жёлтый':'#d9c47a',
+    'Фиолетовый':'#7a5b9a','Тёмно-фиолетовый':'#4b3b57','Титановый фиолетовый':'#6a5f8a','Лавандовый':'#c3b6e0','Космический оранжевый':'#d4753a','Золотой':'#e3c78a'
+  };
+  var hexOf=function(n){ return COLORHEX[n]||'#c7c7cc'; };
 
-        // цвет → кружок
-        const COLORHEX = {
-            'Чёрный':'#1d1d1f','Космический чёрный':'#1d1d1f','Титановый чёрный':'#2b2b2e','Чёрный титан':'#2b2b2e','Тёмная ночь':'#2e3641','Полночь':'#2e3641','Тёмно-синий':'#2e4a6b',
-            'Графитовый':'#4a4a4a','Серый космос':'#4a4a4a','Серый':'#8a8a8a','Титановый серый':'#8a8a8a',
-            'Белый':'#f2f2f0','Титановый белый':'#e8e8e8','Серебристый':'#dcdedd','Титановый натуральный':'#c9c3ba','Натуральный титан':'#c9c3ba','Пустынный титан':'#b8a084','Титановый золотой':'#c8a96a','Ваниль':'#f3e6c8','Кремовый':'#efe7d3','Сияющая звезда':'#efe7d3',
-            'Синий':'#4a6a9a','Титановый синий':'#4d5b6a','Небесно-голубой':'#a9c7e0','Ультрамарин':'#3a3fb0','Бирюзовый':'#7fb7c4',
-            'Зелёный':'#5b8a72','Тёмно-зелёный':'#33503f','Светлый мох':'#8a9a5b','Мятный':'#a8d5c0',
-            'Розовый':'#e7c0c8','Красный':'#c0392b','Жёлтый':'#e8c848','Титановый жёлтый':'#d9c47a',
-            'Фиолетовый':'#7a5b9a','Тёмно-фиолетовый':'#4b3b57','Титановый фиолетовый':'#6a5f8a','Лавандовый':'#c3b6e0','Космический оранжевый':'#d4753a','Золотой':'#e3c78a'
-        };
-        function colorHex(name){ return COLORHEX[name] || '#c7c7cc'; }
+  var id=new URLSearchParams(location.search).get('id');
+  var p=null, vI=0, sI=0, simI=0, color=null, first=true;
 
-        // состояние выбора
-        let vIndex = 0, sIndex = 0, simIndex = 0, selectedColor = null;
-        if (p) {
-            if (p.type === 'config') selectedColor = p.versions[0].colors[0] || null;
-            else if (p.colors && p.colors.length) selectedColor = p.colors[0];
-        }
+  function find(){ p=CMS.getProducts().find(function(x){ return x.id===id; }) || null; }
+  function initSel(){
+    vI=Math.min(vI,(p&&p.versions?p.versions.length-1:0)); sI=0; simI=0; color=null;
+    if(!p) return;
+    if(CMS.isConfig(p)){ var v=p.versions[vI]; color=(v.colors||[])[0]||null; }
+    else if(p.colors&&p.colors.length) color=p.colors[0];
+  }
+  function cur(){
+    if(!p) return null;
+    if(CMS.isConfig(p)){
+      var v=p.versions[vI], s=(p.storage||[])[sI]||{name:'',add:0}, sim=(p.sim&&p.sim.length)?p.sim[simI]:null;
+      if(v.colors && v.colors.indexOf(color)<0) color=v.colors[0]||null;
+      var img=(v.colorImages&&v.colorImages[color]) || v.img || p.img;
+      return { title:v.name, price:(+v.price||0)+(+s.add||0)+(sim?+sim.add||0:0), img:img,
+        name:v.name+(s.name?' · '+s.name:'')+(sim?' · '+sim.name:'')+(color?' · '+color:''), colors:v.colors||[], colorImages:v.colorImages||{} };
+    }
+    var img2=(p.colorImages&&p.colorImages[color]) || p.img;
+    return { title:p.name, price:+p.price||0, img:img2, name:p.name+(color?' · '+color:''), colors:p.colors||[], colorImages:p.colorImages||{} };
+  }
 
-        function colorsBlock(colors) {
-            if (!colors || !colors.length) return '';
-            let h = '<p class="mt-4 mb-2 fw-medium">Цвет:</p><div>';
-            colors.forEach(c => {
-                h += `<button class="color-btn ${c===selectedColor?'active':''}" onclick="pickColor('${c}')">
-                    <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${colorHex(c)};border:1px solid #c7c7cc;vertical-align:-2px;margin-right:7px"></span>${c}</button>`;
-            });
-            h += `</div>`;
-            return h;
-        }
+  function optsHTML(){
+    if(!CMS.isConfig(p)) return '';
+    var v=p.versions[vI], h='';
+    if(p.versions.length>1){
+      h+='<div class="og"><div class="og-h"><b>Модель</b><span>'+esc(v.name)+'</span></div><div class="seg">'+p.versions.map(function(x,i){
+        return '<button class="opt'+(i===vI?' on':'')+'" data-k="v'+i+'" data-v="'+i+'" aria-pressed="'+(i===vI)+'"><b>'+esc(x.name)+'</b><small>от '+CMS.money(x.price)+'</small></button>'; }).join('')+'</div></div>';
+    }
+    if(p.storage && p.storage.length){
+      h+='<div class="og"><div class="og-h"><b>Память</b><span>'+esc(p.storage[sI].name)+'</span></div><div class="seg tight">'+p.storage.map(function(x,i){
+        return '<button class="opt'+(i===sI?' on':'')+'" data-k="s'+i+'" data-s="'+i+'" aria-pressed="'+(i===sI)+'"><b>'+esc(x.name)+'</b><small>'+(x.add?'+'+CMS.money(x.add):'базовая')+'</small></button>'; }).join('')+'</div></div>';
+    }
+    if(p.sim && p.sim.length){
+      h+='<div class="og"><div class="og-h"><b>SIM-карта</b><span>'+esc(p.sim[simI].name)+'</span></div><div class="seg tight">'+p.sim.map(function(x,i){
+        return '<button class="opt'+(i===simI?' on':'')+'" data-k="m'+i+'" data-m="'+i+'" aria-pressed="'+(i===simI)+'"><b>'+esc(x.name)+'</b><small>'+(x.name==='eSIM'?'только электронная':'физическая + eSIM')+'</small></button>'; }).join('')+'</div></div>';
+    }
+    return h;
+  }
+  function colorsHTML(c){
+    if(!c.colors.length) return '';
+    return '<div class="og"><div class="og-h"><b>Цвет</b><span>'+esc(color||'')+'</span></div><div class="sw" role="radiogroup" aria-label="Цвет">'+c.colors.map(function(n){
+      return '<button class="swb'+(n===color?' on':'')+'" data-k="c'+esc(n)+'" data-c="'+esc(n)+'" role="radio" aria-checked="'+(n===color)+'" aria-label="'+esc(n)+'" title="'+esc(n)+'"><i style="--c:'+hexOf(n)+'"></i></button>'; }).join('')+'</div></div>';
+  }
+  function thumbsHTML(c){
+    var keys=c.colors.filter(function(n){ return c.colorImages[n]; });
+    if(keys.length<2) return '';
+    return '<div class="pp-thumbs">'+keys.map(function(n){ return '<button class="'+(n===color?'on':'')+'" data-c="'+esc(n)+'" aria-label="Фото: '+esc(n)+'"><img src="'+esc(CMS.thumb(c.colorImages[n]))+'" alt="" loading="lazy"></button>'; }).join('')+'</div>';
+  }
 
-        function render() {
-            if (!p) { box.innerHTML = '<h2 class="mt-4">Товар не найден</h2><a href="store.html">← Вернуться в магазин</a>'; return; }
+  function render(){
+    var box=$('#box');
+    if(!p){
+      document.title='Товар не найден · '+CMS.getStore().name;
+      box.innerHTML='<div class="nf"><i class="bi bi-box-seam"></i><h1>Товар не найден</h1><p>Возможно, его уже убрали из каталога. Посмотрите похожие модели.</p><a class="btn" href="index.html#catalog" data-cat="">Открыть каталог <i class="bi bi-arrow-right"></i></a></div>';
+      $('#specs').hidden=true; $('#rel').hidden=true; $('#buybar').classList.remove('show'); document.body.classList.remove('has-bar'); return;
+    }
+    var focusK=document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.k : null;
+    var c=cur(), stock=CMS.inStock(p), cat=CMS.catOf(p);
+    document.title=c.title+' · купить в '+CMS.getStore().name;
+    var adm=CMS.isAdmin()?'<button class="cms-inline" style="margin-top:14px" onclick="editProduct(\''+esc(p.id)+'\')"><i class="bi bi-pencil"></i>Изменить товар</button>':'';
+    var stockHTML = p.soon ? '<div class="pp-stock soon"><i class="bi bi-clock"></i>'+(p.release?'В продаже с '+esc(p.release):'Скоро в продаже')+'</div>'
+      : stock ? '<div class="pp-stock"><i class="bi bi-check2-circle"></i>В наличии</div>' : '<div class="pp-stock out"><i class="bi bi-x-circle"></i>Нет в наличии</div>';
+    var priceHTML = p.soon ? '<span class="pp-price" style="color:var(--ac)">Скоро</span>' : '<span class="pp-price" id="pPrice">'+CMS.money(c.price)+'</span>'+(!CMS.isConfig(p)&&p.oldPrice>p.price?'<span class="pp-old">'+CMS.money(p.oldPrice)+'</span>':'');
+    var buy = p.soon ? '<a class="btn" style="grid-column:1/-1" data-tg-link data-pre href="#" target="_blank" rel="noopener"><i class="bi bb-telegram"></i>Оформить предзаказ</a>'
+      : stock ? '<button class="btn" id="addBtn"><i class="bi bi-bag-plus"></i>В корзину</button><button class="btn ghost" id="buyBtn">Купить сейчас</button>'
+      : '<a class="btn ghost" style="grid-column:1/-1" data-tg-link href="#" target="_blank" rel="noopener"><i class="bi bi-bell"></i>Узнать о поступлении</a>';
+    var prevImg=$('#mainImg');
+    box.innerHTML=
+      '<nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><i class="bi bi-chevron-right"></i><a href="index.html#catalog" data-cat="'+esc(cat)+'">'+esc(cat)+'</a><i class="bi bi-chevron-right"></i><span>'+esc(p.name)+'</span></nav>'+
+      '<div class="pp-grid"><div class="pp-media"><div class="pp-stage" id="stage"><div class="pp-turn" id="turn"><img id="mainImg" src="'+esc(c.img)+'" alt="'+esc(c.title+(color?', '+color:''))+'"></div><div class="pp-floor"></div></div>'+thumbsHTML(c)+'</div>'+
+      '<div class="pp-info"><div class="pc-cat">'+esc(cat)+'</div><h1>'+esc(c.title)+'</h1>'+adm+
+      '<p class="pp-desc">'+esc(p.desc||p.description||'')+'</p>'+
+      '<div class="pp-pr">'+priceHTML+'</div>'+stockHTML+
+      optsHTML()+colorsHTML(c)+
+      '<div class="pp-buy">'+buy+'</div>'+
+      '<div class="perks"><div class="perk"><i class="bi bb-truck"></i><div><b>Бесплатная доставка</b><span>По всей России, от 3 дней</span></div></div>'+
+      '<div class="perk"><i class="bi bi-shield-check"></i><div><b>Официальная гарантия</b><span>1 год на всю технику</span></div></div>'+
+      '<div class="perk"><i class="bi bi-patch-check"></i><div><b>Оригинал</b><span>Можно проверить при получении</span></div></div></div>'+
+      '</div></div>';
+    if(prevImg && !first){ var ni=$('#mainImg'); if(prevImg.getAttribute('src')!==ni.getAttribute('src')){ ni.classList.add('swap'); var done=function(){ requestAnimationFrame(function(){ ni.classList.remove('swap'); }); }; if(ni.complete) done(); else { ni.onload=done; ni.onerror=done; } } }
+    if(!first && $('#pPrice')){ $('#pPrice').classList.add('tick'); }
+    first=false;
+    if(focusK){ var f=document.querySelector('[data-k="'+focusK.replace(/"/g,'\\"')+'"]'); if(f) f.focus({preventScroll:true}); }
+    paintTg(); tilt();
+    // характеристики
+    var sp=p.specs||[];
+    $('#specs').hidden=!sp.length;
+    $('#specGrid').innerHTML=sp.map(function(s,i){ return '<div class="spec rv" style="--d:'+(Math.min(i,8)*.03)+'s"><div class="k">'+esc(s.k)+'</div><div class="v">'+esc(s.v)+'</div></div>'; }).join('');
+    // похожие
+    var rel=CMS.getProducts().filter(function(x){ return x.id!==p.id && CMS.catOf(x)===cat; });
+    if(rel.length<4) rel=rel.concat(CMS.getProducts().filter(function(x){ return x.id!==p.id && rel.indexOf(x)<0; }).slice(0,8-rel.length));
+    rel=rel.slice(0,8);
+    $('#rel').hidden=!rel.length; $('#relRail').innerHTML=rel.map(CMS.card).join('');
+    CMS.observeReveal();
+    // нижняя панель
+    $('#bbName').textContent=c.name; $('#bbPrice').textContent=p.soon?'Скоро':CMS.money(c.price);
+    $('#bbBtn').textContent = p.soon ? 'Предзаказ' : stock ? 'В корзину' : 'Узнать';
+  }
 
-            const specsHTML = (p.specs && p.specs.length) ? `<div class="pv-specs"><div class="l">Характеристики</div>${p.specs.map(s=>`<div class="srow"><span class="sk">${CMS.esc(s.k)}</span><span>${CMS.esc(s.v)}</span></div>`).join('')}</div>` : '';
-            const admBtn = CMS.isAdmin() ? `<button class="cms-inline" style="margin:12px 0" onclick="editProduct('${p.id}')"><i class="bi bi-pencil"></i> Изменить товар</button>` : '';
+  function paintTg(){
+    var tg=CMS.getStore().telegram;
+    document.querySelectorAll('#box [data-tg-link]').forEach(function(a){ if(tg){ a.href='https://t.me/'+encodeURIComponent(tg); a.hidden=false; } else a.hidden=true; });
+  }
+  var tiltOn=matchMedia('(pointer:fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function tilt(){
+    if(!tiltOn) return; var st=$('#stage'), t=$('#turn'); if(!st) return; var raf=0, rx=0, ry=0;
+    st.addEventListener('pointermove',function(e){ var r=st.getBoundingClientRect(); ry=((e.clientX-r.left)/r.width-.5)*18; rx=-((e.clientY-r.top)/r.height-.5)*12;
+      if(!raf) raf=requestAnimationFrame(function(){ raf=0; t.style.setProperty('--ry',ry.toFixed(2)+'deg'); t.style.setProperty('--rx',rx.toFixed(2)+'deg'); }); });
+    st.addEventListener('pointerleave',function(){ t.style.setProperty('--ry','0deg'); t.style.setProperty('--rx','0deg'); });
+  }
 
-            // --- СКОРО ---
-            if (p.soon) {
-                box.innerHTML = `
-                <a href="store.html" class="text-decoration-none text-secondary">← Все товары</a>
-                <div class="row mt-2 g-4 align-items-center">
-                    <div class="col-md-6 img-col"><div class="img-block"><img src="${p.img}" alt="${p.name}" style="filter:brightness(0.9)"></div></div>
-                    <div class="col-md-6 info-col">
-                        <span class="lbl-soon">Скоро в продаже</span>
-                        <h1 class="fw-bold mt-3">${p.name}</h1>
-                        ${admBtn}
-                        <p class="text-secondary">${p.desc || ''}</p>
-                        <p class="price-big" style="color:var(--gold)">В продаже с ${p.release}</p>
-                        ${specsHTML}
-                        <p class="text-secondary">Оформи предзаказ уже сейчас — напиши в Telegram, и мы придержим для тебя ${p.name}.</p>
-                        <a href="https://t.me/zerus9501" class="btn-apple mt-2"><i class="bi bi-telegram"></i> Оформить предзаказ</a>
-                    </div>
-                </div>`;
-                return;
-            }
+  function add(){ var c=cur(); CMS.cart.add({ id:p.id, name:c.name, price:c.price, img:c.img }); }
+  document.addEventListener('click',function(e){
+    var b;
+    if((b=e.target.closest('[data-v]'))){ vI=+b.dataset.v; sI=Math.min(sI,(p.storage||[1]).length-1); render(); return; }
+    if((b=e.target.closest('[data-s]'))){ sI=+b.dataset.s; render(); return; }
+    if((b=e.target.closest('[data-m]'))){ simI=+b.dataset.m; render(); return; }
+    if((b=e.target.closest('[data-c]'))){ color=b.dataset.c; render(); return; }
+    if(e.target.closest('#addBtn') || (e.target.closest('#bbBtn') && p && !p.soon && CMS.inStock(p))){
+      add(); CMS.toast('Добавлено в корзину',{href:'order.html',text:'Оформить'}); return; }
+    if(e.target.closest('#buyBtn')){ add(); location.href='order.html'; return; }
+    if(e.target.closest('#bbBtn')){ var l=document.querySelector('#box [data-tg-link]'); if(l && !l.hidden) l.click(); return; }
+    var pre=e.target.closest('[data-pre]');
+    if(pre){ var t='Здравствуйте! Хочу оформить предзаказ: '+p.name+'.'; try{ navigator.clipboard.writeText(t); }catch(_){} CMS.toast('Текст предзаказа скопирован. Вставьте его в чат.'); }
+  });
 
-            // --- КОНФИГУРАТОР (версия + память + цвет) ---
-            if (p.type === 'config') {
-                const v = p.versions[vIndex];
-                if (!v.colors.includes(selectedColor)) selectedColor = v.colors[0] || null;
-                const s = p.storage[sIndex];
-                const sim = (p.sim && p.sim.length) ? p.sim[simIndex] : null;
-                const price = v.price + s.add + (sim ? sim.add : 0);
-                const img = (v.colorImages && v.colorImages[selectedColor]) ? v.colorImages[selectedColor] : v.img;
+  /* панель снизу появляется, когда кнопки покупки ушли за экран */
+  var bar=$('#buybar');
+  if(window.IntersectionObserver){
+    /* два наблюдателя: «кнопки на экране» и «кнопки на экране или выше» — работает даже при резкой прокрутке */
+    var onScreen=false, passed=false, watched=null;
+    function sync(){ var show=passed && !onScreen && !!p; bar.classList.toggle('show',show); document.body.classList.toggle('has-bar',show); bar.setAttribute('aria-hidden',show?'false':'true'); $('#bbBtn').tabIndex=show?0:-1; }
+    var ioA=new IntersectionObserver(function(es){ onScreen=es[es.length-1].isIntersecting; sync(); });
+    var ioB=new IntersectionObserver(function(es){ passed=es[es.length-1].isIntersecting; sync(); },{rootMargin:'100000px 0px 0px 0px'});
+    new MutationObserver(function(){ var t=document.querySelector('.pp-buy'); if(t && t!==watched){ if(watched){ ioA.unobserve(watched); ioB.unobserve(watched); } watched=t; ioA.observe(t); ioB.observe(t); } }).observe($('#box'),{childList:true});
+  }
 
-                let versionsHTML = '<p class="mt-4 mb-2 fw-medium">Модель:</p><div>';
-                p.versions.forEach((vv, i) => {
-                    versionsHTML += `<button class="opt-btn ${i===vIndex?'active':''}" onclick="pickVersion(${i})">${vv.name}<span class="sub">от ${vv.price.toLocaleString('ru-RU')} ₽</span></button>`;
-                });
-                versionsHTML += '</div>';
-
-                let storageHTML = '<p class="mt-4 mb-2 fw-medium">Память:</p><div>';
-                p.storage.forEach((ss, i) => {
-                    const sub = ss.add ? `+${ss.add.toLocaleString('ru-RU')} ₽` : 'базовая';
-                    storageHTML += `<button class="opt-btn ${i===sIndex?'active':''}" onclick="pickStorage(${i})">${ss.name}<span class="sub">${sub}</span></button>`;
-                });
-                storageHTML += '</div>';
-
-                let simHTML = '';
-                if (p.sim && p.sim.length) {
-                    simHTML = '<p class="mt-4 mb-2 fw-medium">Тип SIM:</p><div>';
-                    p.sim.forEach((sm, i) => {
-                        const sub = sm.add ? `+${sm.add.toLocaleString('ru-RU')} ₽` : '';
-                        simHTML += `<button class="opt-btn ${i===simIndex?'active':''}" onclick="pickSim(${i})">${sm.name}${sub?`<span class="sub">${sub}</span>`:''}</button>`;
-                    });
-                    simHTML += '</div>';
-                }
-
-                box.innerHTML = `
-                <a href="store.html" class="text-decoration-none text-secondary">← Все товары</a>
-                <div class="row mt-2 g-4 align-items-start">
-                    <div class="col-md-6 img-col"><div class="img-block"><img id="mainImg" src="${img}" alt="${v.name}"></div></div>
-                    <div class="col-md-6 info-col">
-                        <h1 class="fw-bold">${v.name}</h1>
-                        ${admBtn}
-                        <p class="text-secondary">${p.desc || ''}</p>
-                        <p class="price-big">${price.toLocaleString('ru-RU')} ₽</p>
-                        <p><span class="text-success"><i class="bi bi-check-circle"></i> В наличии</span></p>
-                        ${versionsHTML}
-                        ${storageHTML}
-                        ${simHTML}
-                        ${colorsBlock(v.colors)}
-                        <p class="text-secondary mt-2">Выбрано: <b>${v.name} · ${s.name}${sim ? ' · ' + sim.name : ''}${selectedColor ? ' · ' + selectedColor : ''}</b></p>
-                        ${specsHTML}
-                        <div class="d-flex gap-2 flex-wrap mt-3">
-                            <button class="btn-apple" onclick="addConfig()">Добавить в корзину</button>
-                            <a href="order.html" class="btn btn-dark" style="border-radius:980px;padding:10px 26px">Оформить заказ →</a>
-                        </div>
-                    </div>
-                </div>`;
-                return;
-            }
-
-            // --- ОБЫЧНЫЙ ТОВАР ---
-            const inStock = p.stock > 0;
-            const stockText = inStock ? `<span class="text-success"><i class="bi bi-check-circle"></i> В наличии: ${p.stock} шт.</span>` : `<span class="text-danger"><i class="bi bi-x-circle"></i> Нет в наличии</span>`;
-            const img = (p.colorImages && p.colorImages[selectedColor]) ? p.colorImages[selectedColor] : p.img;
-            const addBtn = inStock
-                ? `<button class="btn-apple mt-3" onclick="addSimple()">Добавить в корзину</button>`
-                : `<button class="btn btn-secondary mt-3" disabled style="border-radius:980px;padding:10px 26px">Нет в наличии</button>`;
-            box.innerHTML = `
-                <a href="store.html" class="text-decoration-none text-secondary">← Все товары</a>
-                <div class="row mt-2 g-4 align-items-center">
-                    <div class="col-md-6 img-col"><div class="img-block"><img id="mainImg" src="${img}" alt="${p.name}"></div></div>
-                    <div class="col-md-6 info-col">
-                        <h1 class="fw-bold">${p.name}</h1>
-                        ${admBtn}
-                        <p class="text-secondary">${p.desc || ''}</p>
-                        <p class="price-big">${(p.price||0).toLocaleString('ru-RU')} ₽</p>
-                        <p>${stockText}</p>
-                        ${colorsBlock(p.colors)}
-                        ${selectedColor ? `<p class="text-secondary mt-2">Выбрано: <b>${selectedColor}</b></p>` : ''}
-                        ${specsHTML}
-                        <div class="d-flex gap-2 flex-wrap mt-3">
-                            ${addBtn}
-                            <a href="order.html" class="btn btn-dark mt-3" style="border-radius:980px;padding:10px 26px">Оформить заказ →</a>
-                        </div>
-                    </div>
-                </div>`;
-        }
-
-        function pickVersion(i) { vIndex = i; sIndex = 0; render(); }
-        function pickStorage(i) { sIndex = i; render(); }
-        function pickSim(i)     { simIndex = i; render(); }
-        function pickColor(c)   { selectedColor = c; render(); }
-
-        function showToast() { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1500); }
-
-        function addConfig() {
-            const v = p.versions[vIndex], s = p.storage[sIndex];
-            const sim = (p.sim && p.sim.length) ? p.sim[simIndex] : null;
-            const name = `${v.name} · ${s.name}${sim ? ' · ' + sim.name : ''}${selectedColor ? ' · ' + selectedColor : ''}`;
-            cart.push({ name, price: v.price + s.add + (sim ? sim.add : 0) });
-            localStorage.setItem('cart', JSON.stringify(cart));
-            document.getElementById('cartCount').textContent = cart.length;
-            showToast();
-        }
-        function addSimple() {
-            const name = selectedColor ? `${p.name} — ${selectedColor}` : p.name;
-            cart.push({ name, price: p.price });
-            localStorage.setItem('cart', JSON.stringify(cart));
-            document.getElementById('cartCount').textContent = cart.length;
-            showToast();
-        }
-
-        render();
-    </script>
-
+  CMS.init({ footerEl:'cmsFooter', onChange:function(){ var keep=p&&p.id; find(); if(!p || p.id!==keep) initSel(); render(); } });
+  find(); initSel(); render();
+})();
+</script>
 </body>
 </html>

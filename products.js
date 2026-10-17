@@ -10,7 +10,7 @@ const iSim = [{name:'eSIM + SIM',add:0},{name:'eSIM',add:0}];
 
 const products = [
     // ===== iPhone — конфигураторы по поколениям =====
-    { id:'iphone13', brand:'Apple', cat:'tech', name:'iPhone 13', img:'images/ip13.png', type:'config', stock:12,
+    { id:'iphone13', brand:'Apple', cat:'tech', name:'iPhone 13', img:'images/ip13_blue.png', type:'config', stock:12,
       desc:'Выбери версию, память и цвет. Чип A15 Bionic, экран Super Retina XDR.',
       storage:iStorageOld, sim:iSim,
       versions:[
@@ -19,7 +19,7 @@ const products = [
         {name:'iPhone 13 Pro', price:44000, img:'images/ip13pro.png', colors:['Графитовый','Золотой','Серебристый','Небесно-голубой']},
         {name:'iPhone 13 Pro Max', price:50000, img:'images/ip13promax.png', colors:['Графитовый','Золотой','Серебристый','Небесно-голубой']},
       ] },
-    { id:'iphone14', brand:'Apple', cat:'tech', name:'iPhone 14', img:'images/ip14.png', type:'config', stock:12,
+    { id:'iphone14', brand:'Apple', cat:'tech', name:'iPhone 14', img:'images/ip14_midnight.png', type:'config', stock:12,
       desc:'Выбери версию, память и цвет. Dynamic Island (Pro), камера 48 Мп.',
       storage:iStorageOld, sim:iSim,
       versions:[
@@ -30,7 +30,7 @@ const products = [
         {name:'iPhone 14 Pro Max', price:65000, img:'images/ip14promax.png', colors:['Космический чёрный','Серебристый','Золотой','Тёмно-фиолетовый'],
           colorImages:{'Космический чёрный':'images/ip14promax_spaceblack.png','Серебристый':'images/ip14promax_silver.png','Золотой':'images/ip14promax_gold.png','Тёмно-фиолетовый':'images/ip14promax_deeppurple.png'}},
       ] },
-    { id:'iphone15', brand:'Apple', cat:'tech', name:'iPhone 15', img:'images/ip15.png', type:'config', stock:14,
+    { id:'iphone15', brand:'Apple', cat:'tech', name:'iPhone 15', img:'images/ip15_pink.png', type:'config', stock:14,
       desc:'Выбери версию, память и цвет. USB-C, Dynamic Island, титан (Pro).',
       storage:iStorageNew,
       sim:iSim,
@@ -42,7 +42,7 @@ const products = [
         {name:'iPhone 15 Pro Max', price:78000, img:'images/ip15promax.png', colors:['Титановый чёрный','Титановый белый','Титановый синий','Титановый натуральный'],
           colorImages:{'Титановый чёрный':'images/ip15promax_black-titanium.png','Титановый белый':'images/ip15promax_white-titanium.png','Титановый синий':'images/ip15promax_blue-titanium.png','Титановый натуральный':'images/ip15promax_natural-titanium.png'}},
       ] },
-    { id:'iphone16', brand:'Apple', cat:'tech', name:'iPhone 16', img:'images/ip16.png', type:'config', stock:12,
+    { id:'iphone16', brand:'Apple', cat:'tech', name:'iPhone 16', img:'images/ip16_ultramarine.png', type:'config', stock:12,
       desc:'Выбери версию, память и цвет. Чип A18, кнопка камеры, Apple Intelligence.',
       storage:iStorageNew,
       sim:iSim,
@@ -54,7 +54,7 @@ const products = [
         {name:'iPhone 16 Pro Max', price:90000, img:'images/ip16promax.png', colors:['Титановый чёрный','Титановый белый','Титановый натуральный','Пустынный титан'],
           colorImages:{'Титановый чёрный':'images/ip16promax_black-titanium.png','Титановый белый':'images/ip16promax_white-titanium.png','Титановый натуральный':'images/ip16promax_natural-titanium.png','Пустынный титан':'images/ip16promax_desert-titanium.png'}},
       ] },
-    { id:'iphone17', brand:'Apple', cat:'tech', name:'iPhone 17', img:'images/ip17.png', type:'config', stock:10,
+    { id:'iphone17', brand:'Apple', cat:'tech', name:'iPhone 17', img:'images/ip17_lavender.png', type:'config', stock:10,
       desc:'Выбери версию, память и цвет. Новейшее поколение, топовая камера.',
       storage:iStorageNew,
       sim:iSim,
@@ -68,7 +68,7 @@ const products = [
       ] },
 
     // ===== iPhone 18 — уже в продаже =====
-    { id:'ip18', brand:'Apple', cat:'tech', name:'iPhone 18', img:'images/ip17promax.png', type:'config', stock:9,
+    { id:'ip18', brand:'Apple', cat:'tech', name:'iPhone 18', img:'images/ip17promax_silver.png', type:'config', stock:9,
       desc:'Новейшее поколение iPhone. Выбери версию, память, цвет и тип SIM. Чип нового поколения, улучшенная камера и экран.',
       storage:iStorage18, sim:iSim,
       versions:[
@@ -99,7 +99,7 @@ const products = [
     { id:'imac', brand:'Apple', cat:'tech', name:'iMac 24"', img:'images/imac.png', price:170000, stock:4,
       desc:'Моноблок с ярким дисплеем 4.5K в семи цветах.', colors:['Синий','Зелёный','Розовый','Серебристый'] },
     { id:'macmini', brand:'Apple', cat:'tech', name:'Mac mini M2', img:'images/macmini.png', price:65000, stock:7,
-      desc:'Компактный настольный компьютер. Маленький корпус — большая мощность.', colors:[] },
+      desc:'Компактный настольный компьютер. Маленький корпус, большая мощность.', colors:[] },
 
     // ===== Apple — часы и ремешки =====
     { id:'watchse', brand:'Apple', cat:'watch', name:'Apple Watch SE', img:'images/se_midnight.png', price:30000, stock:11,
@@ -121,7 +121,7 @@ const products = [
     { id:'airpods4', brand:'Apple', cat:'acc', name:'AirPods 4', img:'images/airpods4.png', price:15000, stock:16,
       desc:'Новые AirPods с чипом H2 и улучшенным звуком.', colors:[] },
     { id:'case', brand:'Apple', cat:'acc', name:'Чехол iPhone (MagSafe)', img:'images/case_black.png', price:5000, stock:20,
-      desc:'Силиконовый чехол с MagSafe. Выбери свой цвет — фото меняется под него.',
+      desc:'Силиконовый чехол с MagSafe. Выбери свой цвет: фото меняется под него.',
       colors:['Чёрный','Светлый мох','Ваниль','Тёмно-синий'],
       colorImages:{ 'Чёрный':'images/case_black.png', 'Светлый мох':'images/case_moss.png', 'Ваниль':'images/case_vanilla.png', 'Тёмно-синий':'images/case_midnight.png' } },
     { id:'powerbank', brand:'Apple', cat:'acc', name:'Повербанк MagSafe', img:'images/powerbank.png', price:9000, stock:15,
