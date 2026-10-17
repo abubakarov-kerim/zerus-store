@@ -154,9 +154,12 @@ p{ margin:0; }
 .nav.stuck{ border-bottom-color:var(--line); }
 .nav .wrap{ height:100%; display:flex; align-items:center; gap:28px; }
 .logo{ display:inline-flex; align-items:center; gap:11px; font-weight:600; font-size:1.12rem; letter-spacing:-.03em; white-space:nowrap; }
-.logo-mark{ width:28px; height:28px; border-radius:8px; background:var(--text); position:relative; flex-shrink:0; overflow:hidden; transition:background-color .5s; }
-.logo-mark::before{ content:''; position:absolute; left:7px; top:7px; width:14px; height:5px; border-radius:2px; background:var(--bg); }
-.logo-mark::after{ content:''; position:absolute; left:11.5px; top:12px; width:5px; height:10px; border-radius:2px; background:var(--ac); }
+/* знак магазина: линза. Тонкое кольцо с переливом в цвет палитры + сплошной центр. Размеры в %, поэтому знак любого размера */
+.logo-mark{ width:28px; height:28px; border-radius:50%; position:relative; flex-shrink:0; }
+.logo-mark::before{ content:''; position:absolute; inset:0; border-radius:50%;
+  background:conic-gradient(from 215deg, var(--ac2), var(--ac) 28%, color-mix(in srgb, var(--ac) 22%, transparent) 58%, color-mix(in srgb, var(--text) 30%, transparent) 78%, var(--ac2));
+  -webkit-mask:radial-gradient(closest-side, transparent 76%, #000 79%); mask:radial-gradient(closest-side, transparent 76%, #000 79%); }
+.logo-mark::after{ content:''; position:absolute; inset:34%; border-radius:50%; background:var(--text); }
 .nav-links{ display:flex; gap:4px; }
 .nav-links a{ padding:8px 13px; border-radius:var(--pill); font-size:.9rem; color:var(--mut); cursor:pointer; transition:color .25s, background-color .25s; }
 .nav-links a:hover, .nav-links a.on{ color:var(--text); background:color-mix(in srgb, var(--text) 6%, transparent); }
