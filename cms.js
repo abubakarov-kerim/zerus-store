@@ -18,7 +18,7 @@
     address:'Укажите адрес магазина в админке',
     hours:'Пн-Вс: 10:00-21:00',
     telegram:'zerus9501', whatsapp:'', instagram:'',
-    currency:'₽', hero:'', palette:'malachite', theme:'dark'
+    currency:'₽', hero:'', palette:'azure', theme:'dark'
   };
   /* пароль хранится только в виде отпечатка SHA-256 (стандартный: zerus2026) */
   const DEFAULT_ADMIN = { user:'admin', hash:'c9d9d647b031eecbdaa8d93e8a407fda1c5029b8bfe2391143114eb5cc20b5a6' };
@@ -26,8 +26,9 @@
   const PLACEHOLDER = 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect x="130" y="70" width="140" height="260" rx="26" fill="none" stroke="#8a948f" stroke-width="6" opacity=".5"/><rect x="180" y="88" width="40" height="8" rx="4" fill="#8a948f" opacity=".5"/></svg>');
 
   const PALETTES = [
-    { id:'malachite', name:'Малахит', desc:'Глубокий изумруд и нефрит', sw:['#060B09','#0A2A1F','#1E7154','#46C79A'] },
+    { id:'azure',     name:'Лазурь',  desc:'Ледяная лазурь на глубоком синем', sw:['#04080D','#082640','#137196','#3EB4F5'] },
     { id:'sapphire',  name:'Сапфир',  desc:'Ночная синева и лёд',      sw:['#05070D','#0B1838','#2C52A8','#86A9FF'] },
+    { id:'malachite', name:'Малахит', desc:'Глубокий изумруд и нефрит', sw:['#060B09','#0A2A1F','#1E7154','#46C79A'] },
     { id:'garnet',    name:'Гранат',  desc:'Тёмное вино и коралл',     sw:['#0B0607','#3A0D17','#922C3D','#E8707F'] },
     { id:'graphite',  name:'Графит',  desc:'Графит и оранжевый титан', sw:['#09090A','#1C1C20','#4F4A49','#FF7A3D'] }
   ];
@@ -150,19 +151,19 @@
   /* ---------- ПАЛИТРА И ТЕМА ---------- */
   function previewPalette(){ try{ return sessionStorage.getItem('zerus_pal_preview'); }catch(e){ return null; } }
   function applyPalette(){
-    const id = previewPalette() || STORE.palette || 'malachite';
-    const ok = PALETTES.some(p=>p.id===id) ? id : 'malachite';
-    if(ok==='malachite') document.documentElement.removeAttribute('data-palette'); else document.documentElement.setAttribute('data-palette', ok);
+    const id = previewPalette() || STORE.palette || 'azure';
+    const ok = PALETTES.some(p=>p.id===id) ? id : 'azure';
+    if(ok==='azure') document.documentElement.removeAttribute('data-palette'); else document.documentElement.setAttribute('data-palette', ok);
     if(!previewPalette()) lsSet(LS.pal, ok);
     lsSet(LS.themeDef, STORE.theme==='light'?'light':'dark');
     if(!lsGet(LS.theme)) setThemeAttr(STORE.theme==='light'?'light':'dark');
-    const mc=$('meta[name="theme-color"]'); if(mc) mc.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()||'#060B09';
+    const mc=$('meta[name="theme-color"]'); if(mc) mc.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()||'#04080D';
   }
   function currentTheme(){ return document.documentElement.getAttribute('data-theme')==='light' ? 'light' : 'dark'; }
   function setThemeAttr(t){ if(t==='light') document.documentElement.setAttribute('data-theme','light'); else document.documentElement.removeAttribute('data-theme'); updateThemeIcons(); }
   function updateThemeIcons(){ $$('[data-theme-toggle] i').forEach(i=>{ i.className = currentTheme()==='light' ? 'bi bi-moon' : 'bi bi-sun'; });
     $$('[data-theme-toggle]').forEach(b=>b.setAttribute('aria-label', currentTheme()==='light'?'Включить ночную тему':'Включить дневную тему'));
-    const mc=$('meta[name="theme-color"]'); if(mc) mc.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()||'#060B09'; }
+    const mc=$('meta[name="theme-color"]'); if(mc) mc.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()||'#04080D'; }
   function toggleTheme(){ const t=currentTheme()==='light'?'dark':'light'; setThemeAttr(t); lsSet(LS.theme,t); }
 
   /* ---------- ОБЩИЕ БЛОКИ (инъекция) ---------- */
@@ -275,7 +276,12 @@
   function applyContent(){
     $$('[data-edit]').forEach(el=>{
       const k=el.dataset.edit, type=el.dataset.editType||'text';
-      if(!el.dataset.def) el.dataset.def = type==='image' ? (el.getAttribute('src')||'') : el.textContent;
+      if(!el.dataset.def && type!=='link') el.dataset.def = type==='image' ? ((el.tagName==='IMG'?el:el.querySelector('img')||el).getAttribute('src')||'') : el.textContent;
+      if(type==='link'){
+        if(!el.dataset.def) el.dataset.def=(new URLSearchParams((el.getAttribute('href')||'').split('?')[1]||'')).get('id')||'';
+        const id=CONTENT[k]||el.dataset.def; if(id) el.setAttribute('href','product.html?id='+encodeURIComponent(id));
+        return;
+      }
       if(type==='image'){
         if(k==='heroImg') return;
         const v=CONTENT[k]; const img = el.tagName==='IMG' ? el : el.querySelector('img');
@@ -289,15 +295,71 @@
     if(bg){ if(STORE.hero){ bg.style.backgroundImage='url("'+String(STORE.hero).replace(/["\\]/g,'')+'")'; bg.hidden=false; } else { bg.hidden=true; bg.style.backgroundImage=''; } }
     $$('[data-store-name]').forEach(el=>el.textContent=STORE.name);
   }
-  function editContent(el){
-    const k=el.dataset.edit, type=el.dataset.editType||'text', label=el.dataset.editLabel||'Текст';
-    if(type==='image'){ openImageEditor(k,label); return; }
-    const cur = (CONTENT[k]!=null && CONTENT[k]!=='') ? CONTENT[k] : el.textContent.trim();
-    promptModal('Изменить: '+label,'Текст на сайте (оставьте пустым, чтобы вернуть стандартный)',cur,function(v){
-      v=(v||'').trim(); const c=DB.content();
-      if(v==='' || v===el.dataset.def) delete c[k]; else c[k]=v;
-      DB.save(LS.content,c); reloadAll(); closeForm(); toast('Сохранено. Нажмите «Опубликовать», чтобы увидели все.');
-    }, true);
+  /* ---------- ПРАВКА БЛОКАМИ: у каждого блока страницы кнопка «Изменить блок» ----------
+     В окне собраны все поля блока ([data-edit] внутри [data-block]) с подписями «Группа: поле». */
+  function blockFields(block){
+    const seen={}, out=[];
+    block.querySelectorAll('[data-edit]').forEach(el=>{ const k=el.dataset.edit; if(seen[k]) return; seen[k]=1; out.push(el); });
+    return out;
+  }
+  function injectBlockButtons(){
+    $$('[data-block]').forEach(b=>{
+      if(b.querySelector(':scope > .blk-edit')) return;
+      b.insertAdjacentHTML('afterbegin',`<button type="button" class="blk-edit" aria-label="Изменить блок: ${esc(b.dataset.block)}"><i class="bi bi-pencil-square"></i><span>Изменить блок</span></button>`);
+      b.querySelector(':scope > .blk-edit').addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); openBlockEditor(b); });
+    });
+  }
+  function openBlockEditor(block){
+    const els=blockFields(block);
+    $('#cmsFormTitle').textContent=block.dataset.block;
+    let lastGroup=null, html=`<p class="cms-hint" style="margin-bottom:6px">Здесь всё, что можно поменять в этом блоке. Пустое поле вернёт стандартный текст.</p>`;
+    els.forEach((el,i)=>{
+      const k=el.dataset.edit, type=el.dataset.editType||'text', full=el.dataset.editLabel||'Текст';
+      const ci=full.indexOf(': '), group=ci>-1?full.slice(0,ci):'', label=ci>-1?full.slice(ci+2):full;
+      if(group && group!==lastGroup){ html+=`<div class="grp-h">${esc(group)}</div>`; lastGroup=group; }
+      const id='bf'+i, L=label.charAt(0).toUpperCase()+label.slice(1);
+      if(type==='image'){
+        const cur = k==='heroImg' ? (STORE.hero||'') : (CONTENT[k]||'');
+        const shown = cur || el.dataset.def || '';
+        html+=`<div class="fld"><label for="${id}">${esc(L)}</label><div class="img-fld">
+          <div class="pv">${shown?`<img src="${esc(shown)}" alt="">`:'<i class="bi bi-image"></i>'}</div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+            <input class="inp" id="${id}" data-k="${esc(k)}" data-type="image" value="${esc(cur.indexOf('data:')===0?'(загруженное фото)':cur)}" placeholder="${k==='heroImg'?'Пусто — живая анимация':'Пусто — стандартное фото'}">
+            <label class="filebtn"><input type="file" accept="image/*" hidden onchange="cmsPickImg(this,'${id}')"><i class="bi bi-upload"></i>Загрузить с устройства</label></div></div></div>`;
+      } else if(type==='link'){
+        const cur=CONTENT[k]||el.dataset.def||'';
+        html+=`<div class="fld"><label for="${id}">${esc(L)}</label><select class="inp" id="${id}" data-k="${esc(k)}" data-type="link">
+          ${PRODUCTS.map(p=>`<option value="${esc(p.id)}" ${p.id===cur?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>`;
+      } else {
+        const def=el.dataset.def||'', cur=(CONTENT[k]!=null&&CONTENT[k]!=='')?CONTENT[k]:def;
+        const tag = def.length>48 || cur.length>48 ? `<textarea class="inp" id="${id}" data-k="${esc(k)}" rows="3" style="min-height:84px" placeholder="${esc(def)}">${esc(cur)}</textarea>` : `<input class="inp" id="${id}" data-k="${esc(k)}" value="${esc(cur)}" placeholder="${esc(def)}">`;
+        html+=`<div class="fld"><label for="${id}">${esc(L)}</label>${tag}</div>`;
+      }
+    });
+    html+=`<button type="button" class="mini" id="blkReset" style="margin-top:6px"><i class="bi bi-arrow-counterclockwise"></i> Вернуть всё стандартное в этом блоке</button>`;
+    $('#cmsFormBody').innerHTML=html;
+    $$('#cmsFormBody [data-type="image"]').forEach(inp=>{
+      const k=inp.dataset.k, cur = k==='heroImg' ? (STORE.hero||'') : (CONTENT[k]||'');
+      if(cur.indexOf('data:')===0) inp.dataset.data=cur;
+      const pv=()=>{ const v=inp.dataset.data||(inp.value==='(загруженное фото)'?'':inp.value.trim()); const box=inp.closest('.img-fld').querySelector('.pv'); box.innerHTML = v?`<img src="${esc(v)}" alt="">`:'<i class="bi bi-image"></i>'; };
+      inp.addEventListener('input',()=>{ delete inp.dataset.data; pv(); }); inp.addEventListener('change',pv);
+    });
+    $('#blkReset').onclick=()=>confirmAction('Вернуть стандартные тексты и фото в блоке «'+block.dataset.block+'»?',()=>{
+      const c=DB.content(); els.forEach(el=>{ const k=el.dataset.edit; if(k==='heroImg'){ const st=DB.load(LS.store,{}); st.hero=''; DB.save(LS.store,st); } else delete c[k]; });
+      DB.save(LS.content,c); reloadAll(); closeForm(); toast('Блок вернулся к стандартному виду');
+    });
+    $('#cmsFormSave').textContent='Сохранить блок';
+    $('#cmsFormSave').onclick=function(){
+      const c=DB.content();
+      $$('#cmsFormBody [data-k]').forEach(inp=>{
+        const k=inp.dataset.k, el=els.find(x=>x.dataset.edit===k), def=(el&&el.dataset.def)||'';
+        let v = inp.dataset.data || (inp.value==='(загруженное фото)'?'':inp.value.trim());
+        if(k==='heroImg'){ const st=DB.load(LS.store,{}); st.hero=v; DB.save(LS.store,st); return; }
+        if(v==='' || v===def) delete c[k]; else c[k]=v;
+      });
+      DB.save(LS.content,c); reloadAll(); closeForm(); toast('Блок сохранён. Нажмите «Опубликовать», чтобы увидели все.');
+    };
+    openForm();
   }
   function openImageEditor(k,label){
     $('#cmsFormTitle').textContent='Изменить: '+label;
@@ -333,7 +395,7 @@
     if(ok){
       try{ sessionStorage.setItem('zerus_authed','1'); }catch(e){}
       $('#cmsLogin').classList.remove('open'); enableAdminMode(); openAdmin();
-      toast('Вы вошли. Тексты и фото можно править прямо на сайте.');
+      toast('Вы вошли. У каждого блока на странице есть кнопка «Изменить блок».');
     } else { $('#cmsLoginF').classList.add('bad'); $('#cmsLoginP').select(); }
   }
   function logoutAdmin(){ try{ sessionStorage.removeItem('zerus_authed'); }catch(e){} disableAdminMode(); closeAdmin(); toast('Вы вышли из админки'); }
@@ -402,7 +464,7 @@
       const k=Math.min(1,1200/Math.max(img.width,img.height)); const c=document.createElement('canvas');
       c.width=Math.round(img.width*k); c.height=Math.round(img.height*k); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
       const png = /png|webp|gif/.test(f.type);
-      t.dataset.data = c.toDataURL(png?'image/png':'image/jpeg', .88); t.value='(загруженное фото)'; URL.revokeObjectURL(url); toast('Фото загружено');
+      t.dataset.data = c.toDataURL(png?'image/png':'image/jpeg', .88); t.value='(загруженное фото)'; t.dispatchEvent(new Event('change')); URL.revokeObjectURL(url); toast('Фото загружено');
     };
     img.onerror=()=>{ URL.revokeObjectURL(url); toast('Не удалось прочитать фото'); };
     img.src=url; input.value='';
@@ -450,7 +512,7 @@
 
   /* ---------- АДМИН: ОФОРМЛЕНИЕ ---------- */
   function admLook(){
-    const cur=STORE.palette||'malachite';
+    const cur=STORE.palette||'azure';
     $('#cmsAdmBody').innerHTML=`<div class="cms-sech"><h2>Оформление</h2></div>
       <p class="cms-hint" style="margin-bottom:20px">Цвет всего сайта: кнопки, фон первого экрана, акценты. Выбор применяется сразу, а после <b>«Опубликовать»</b> его увидят все.</p>
       <div class="pal-grid">${PALETTES.map(p=>`<button class="pal${p.id===cur?' on':''}" onclick="setPalette('${p.id}')">
@@ -721,14 +783,7 @@
       loadData(); applyPalette(); updateTg(); updateThemeIcons(); applyContent(); Cart.paint();
       if(CMS.footerEl) renderFooter(CMS.footerEl);
       initChrome();
-      document.addEventListener('click', function(e){
-        if(!document.body.classList.contains('cms-admin-on')) return;
-        if(e.target.closest('.cms-modal, .cms-admin, #cmsBar')) return;
-        const el = e.target.closest('[data-edit]');
-        if(!el) return;
-        e.preventDefault(); e.stopPropagation();
-        editContent(el);
-      }, true);
+      injectBlockButtons();
       window.addEventListener('storage', e=>{ if(e.key===LS.cart) Cart.paint(); });
       if(isAdmin()) enableAdminMode();
       if(location.hash==='#admin') openAdminGate();

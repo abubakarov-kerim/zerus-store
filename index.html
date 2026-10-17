@@ -5,24 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Technic Store · оригинальная техника Apple, Samsung и Xiaomi</title>
 <meta name="description" content="Technic Store: оригинальные iPhone, Apple Watch, MacBook, Samsung, Redmi и POCO. Официальная гарантия, бесплатная доставка по всей России.">
-<meta name="theme-color" content="#060B09">
+<meta name="theme-color" content="#04080D">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Technic Store · оригинальная техника">
 <meta property="og:description" content="iPhone, Apple Watch, MacBook, Samsung, Redmi и POCO с гарантией и бесплатной доставкой по России.">
 <meta property="og:image" content="https://abubakarov-kerim.github.io/zerus-store/images/ip17pro_cosmic-orange.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%23EEF3F0'/%3E%3Crect x='7' y='7' width='14' height='5' rx='2' fill='%23060B09'/%3E%3Crect x='11.5' y='12' width='5' height='10' rx='2' fill='%2346C79A'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%23EEF4F9'/%3E%3Crect x='7' y='7' width='14' height='5' rx='2' fill='%2304080D'/%3E%3Crect x='11.5' y='12' width='5' height='10' rx='2' fill='%233EB4F5'/%3E%3C/svg%3E">
 <link rel="preload" href="fonts/geologica-cyr.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="images/ip17pro_cosmic-orange.png" as="image" fetchpriority="high">
-<link rel="stylesheet" href="assets/fonts.css?v=2026-10-17.1">
-<link rel="stylesheet" href="assets/icons.css?v=2026-10-17.1">
-<link rel="stylesheet" href="assets/app.css?v=2026-10-17.1">
+<link rel="stylesheet" href="assets/fonts.css?v=2026-10-17.2">
+<link rel="stylesheet" href="assets/icons.css?v=2026-10-17.2">
+<link rel="stylesheet" href="assets/app.css?v=2026-10-17.2">
 <script>
 /* Версия сайта. При каждой публикации кода менять TECH_BUILD (и ?v= у файлов) на всех страницах:
    у посетителей со старой сохранённой копией сайт сам обновится. */
-var TECH_BUILD='2026-10-17.1';
+var TECH_BUILD='2026-10-17.2';
 (function(d){ d.className+=' js';
   try{ var t=localStorage.getItem('zerus_theme')||localStorage.getItem('zerus_theme_def'); if(t==='light') d.setAttribute('data-theme','light');
-    var p=sessionStorage.getItem('zerus_pal_preview')||localStorage.getItem('zerus_palette'); if(p&&p!=='malachite') d.setAttribute('data-palette',p); }catch(e){}
+    var p=sessionStorage.getItem('zerus_pal_preview')||localStorage.getItem('zerus_palette'); if(p&&p!=='azure') d.setAttribute('data-palette',p); }catch(e){}
 })(document.documentElement);
 (function(){
   if(location.protocol.indexOf('http')!==0 || !window.fetch) return;
@@ -64,9 +64,6 @@ var TECH_BUILD='2026-10-17.1';
 .hero h1{ font-size:clamp(2.6rem,4.5vw,4.4rem); font-weight:560; letter-spacing:-.05em; line-height:1.02; margin-top:20px; max-width:16ch; }
 .hero-sub{ margin-top:22px; color:var(--mut); font-size:clamp(1.02rem,1.35vw,1.18rem); line-height:1.6; max-width:40ch; }
 .hero-cta{ display:flex; gap:12px; flex-wrap:wrap; margin-top:34px; }
-.hero-edit{ position:absolute; top:calc(var(--nav-h) + 16px); right:16px; z-index:5; display:inline-flex; align-items:center; gap:8px; padding:9px 15px; border-radius:var(--pill);
-  border:none; background:var(--ac); color:var(--ac-ink); font-size:.82rem; font-weight:500; cursor:pointer; }
-body:not(.cms-admin-on) .hero-edit{ display:none; }
 /* витрина товара */
 .hero-stage{ position:relative; display:grid; place-items:center; aspect-ratio:1/1; max-height:min(68vh,620px); justify-self:center; width:100%; perspective:1100px; }
 .stage-glow{ position:absolute; inset:12%; border-radius:50%; background:radial-gradient(closest-side, color-mix(in srgb, var(--s3) 18%, transparent), transparent 72%); filter:blur(10px); }
@@ -89,6 +86,10 @@ body:not(.cms-admin-on) .hero-edit{ display:none; }
 .js .hero.live .h-a:nth-child(2){ transition-delay:.08s } .js .hero.live .h-a:nth-child(3){ transition-delay:.16s } .js .hero.live .h-a:nth-child(4){ transition-delay:.24s }
 .js .hero-stage{ opacity:0; transform:scale(.94); transition:opacity 1.2s var(--ease) .2s, transform 1.4s var(--ease) .2s; }
 .js .hero.live .hero-stage{ opacity:1; transform:none; }
+
+.hero > .blk-edit{ top:calc(var(--nav-h) + 16px); right:clamp(16px,4vw,40px); }
+.facts > .blk-edit{ top:-54px; }
+.cta-band > .blk-edit{ top:16px; right:16px; }
 
 /* ===== ПРЕИМУЩЕСТВА ===== */
 .facts{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-top:clamp(8px,2vw,24px); }
@@ -185,6 +186,7 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
 @media (max-width:860px){
   .hero{ min-height:auto; }
   .hero-in{ grid-template-columns:1fr; gap:6px; padding-block:30px 10px; }
+  body.cms-admin-on .hero-in{ padding-top:76px; }
   .hero h1{ max-width:13ch; }
   .hero-stage{ max-height:none; width:min(100%,460px); }
   .stage-tag{ right:50%; transform:translateX(50%); bottom:6%; }
@@ -262,11 +264,11 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
 
 <main>
 <!-- ПЕРВЫЙ ЭКРАН -->
-<section class="hero" id="hero">
+<section class="hero" id="hero" data-block="Первый экран">
   <canvas class="silk" id="silk" aria-hidden="true"></canvas>
   <div class="hero-photo" id="heroPhoto" hidden></div>
   <div class="hero-fade"></div>
-  <button class="hero-edit cms-img-chip" data-edit="heroImg" data-edit-type="image" data-edit-label="Фон первого экрана"><i class="bi bi-image"></i>Сменить фон</button>
+  <span hidden data-edit="heroImg" data-edit-type="image" data-edit-label="Фон: своё фото вместо живой анимации"></span>
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="kicker h-a" data-edit="hero_eyebrow" data-edit-label="Надпись над заголовком">Apple · Samsung · Xiaomi</p>
@@ -279,7 +281,7 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
     </div>
     <a class="hero-stage" id="heroStage" href="product.html?id=iphone17" aria-label="Открыть товар: iPhone 17 Pro">
       <div class="stage-glow"></div>
-      <div class="stage-turn"><img id="heroImg" data-edit="heroProduct" data-edit-type="image" data-edit-label="Фото товара на первом экране" src="images/ip17pro_cosmic-orange.png" alt="iPhone 17 Pro" width="447" height="447" fetchpriority="high"></div>
+      <div class="stage-turn"><img id="heroImg" data-edit="heroProduct" data-edit-type="image" data-edit-label="Фото товара справа" src="images/ip17pro_cosmic-orange.png" alt="iPhone 17 Pro" width="447" height="447" fetchpriority="high"></div>
       <div class="stage-floor"></div>
       <div class="stage-tag" id="heroTag"><span>iPhone 17 Pro</span><b class="num" id="heroPrice">от 82 000 ₽</b><i class="bi bi-arrow-up-right"></i></div>
     </a>
@@ -288,7 +290,7 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
 
 <div class="wrap">
   <!-- ПРЕИМУЩЕСТВА -->
-  <div class="facts rv">
+  <div class="facts rv" data-block="Преимущества">
     <div class="fact"><i class="bi bi-patch-check"></i><div><div class="t" data-edit="trust3_t" data-edit-label="Преимущество 1: заголовок">Оригинал</div><div class="s" data-edit="trust3_s" data-edit-label="Преимущество 1: текст">Только подлинные устройства</div></div></div>
     <div class="fact"><i class="bi bi-shield-check"></i><div><div class="t" data-edit="trust2_t" data-edit-label="Преимущество 2: заголовок">Гарантия</div><div class="s" data-edit="trust2_s" data-edit-label="Преимущество 2: текст">Официальная, 1 год</div></div></div>
     <div class="fact"><i class="bi bi-truck"></i><div><div class="t" data-edit="trust1_t" data-edit-label="Преимущество 3: заголовок">Доставка по России</div><div class="s" data-edit="trust1_s" data-edit-label="Преимущество 3: текст">Бесплатно, от 3 дней</div></div></div>
@@ -296,65 +298,65 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
   </div>
 
   <!-- ХИТЫ -->
-  <section class="sec" aria-labelledby="hitH">
-    <div class="sec-head rv"><h2 class="h2" id="hitH" data-edit="hit_title" data-edit-label="Хиты: заголовок">Забирают быстро.</h2></div>
+  <section class="sec" aria-labelledby="hitH" data-block="Хиты продаж">
+    <div class="sec-head rv"><h2 class="h2" id="hitH" data-edit="hit_title" data-edit-label="Раздел: заголовок">Забирают быстро.</h2></div>
     <div class="bento">
-      <a class="tile t-a rv" href="product.html?id=iphone17">
+      <a class="tile t-a rv" href="product.html?id=iphone17" data-edit="hit_link" data-edit-type="link" data-edit-label="Большая плитка: ведёт на товар">
         <span class="go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-        <h3 data-edit="hit_name" data-edit-label="Хит: название">iPhone 17</h3>
-        <p data-edit="hit_desc" data-edit-label="Хит: описание">Обычный, Pro и Pro Max. Выбери память, цвет и тип SIM.</p>
-        <div class="price num" data-edit="hit_price" data-edit-label="Хит: цена">от 69 000 ₽</div>
-        <div class="art"><img data-edit="hit_img" data-edit-type="image" data-edit-label="Хит: фото" src="images/ip17pro_deep-blue.png" alt="iPhone 17" loading="lazy" width="447" height="447"></div>
+        <h3 data-edit="hit_name" data-edit-label="Большая плитка: название">iPhone 17</h3>
+        <p data-edit="hit_desc" data-edit-label="Большая плитка: описание">Обычный, Pro и Pro Max. Выбери память, цвет и тип SIM.</p>
+        <div class="price num" data-edit="hit_price" data-edit-label="Большая плитка: цена">от 69 000 ₽</div>
+        <div class="art"><img data-edit="hit_img" data-edit-type="image" data-edit-label="Большая плитка: фото" src="images/ip17pro_deep-blue.png" alt="iPhone 17" loading="lazy" width="447" height="447"></div>
       </a>
-      <a class="tile t-b rv" href="product.html?id=ip18" style="--d:.06s">
+      <a class="tile t-b rv" href="product.html?id=ip18" style="--d:.06s" data-edit="new_link" data-edit-type="link" data-edit-label="Плитка «Новинка»: ведёт на товар">
         <span class="go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
         <div class="txt">
           <span class="flag">Новинка</span>
-          <h3 data-edit="new_name" data-edit-label="Новинка: название">iPhone 18</h3>
-          <p data-edit="new_desc" data-edit-label="Новинка: описание">Новое поколение уже в продаже.</p>
-          <div class="price num" data-edit="new_price" data-edit-label="Новинка: цена">от 79 000 ₽</div>
+          <h3 data-edit="new_name" data-edit-label="Плитка «Новинка»: название">iPhone 18</h3>
+          <p data-edit="new_desc" data-edit-label="Плитка «Новинка»: описание">Новое поколение уже в продаже.</p>
+          <div class="price num" data-edit="new_price" data-edit-label="Плитка «Новинка»: цена">от 79 000 ₽</div>
         </div>
-        <div class="art"><img data-edit="new_img" data-edit-type="image" data-edit-label="Новинка: фото" src="images/w/ip17promax_silver.webp" alt="iPhone 18" loading="lazy" width="448" height="448"></div>
+        <div class="art"><img data-edit="new_img" data-edit-type="image" data-edit-label="Плитка «Новинка»: фото" src="images/w/ip17promax_silver.webp" alt="iPhone 18" loading="lazy" width="448" height="448"></div>
       </a>
-      <a class="tile t-c rv" href="product.html?id=ultra" style="--d:.1s">
+      <a class="tile t-c rv" href="product.html?id=ultra" style="--d:.1s" data-edit="ultra_link" data-edit-type="link" data-edit-label="Плитка часов: ведёт на товар">
         <span class="go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-        <div class="art"><img data-edit="ultra_img" data-edit-type="image" data-edit-label="Ultra: фото" src="images/w/applewatchultra.webp" alt="Apple Watch Ultra 2" loading="lazy" width="640" height="640"></div>
-        <h3 data-edit="ultra_name" data-edit-label="Ultra: название">Apple Watch Ultra 2</h3>
-        <p data-edit="ultra_desc" data-edit-label="Ultra: описание">Титан и до 36 часов работы.</p>
-        <div class="price num" data-edit="ultra_price" data-edit-label="Ultra: цена">90 000 ₽</div>
+        <div class="art"><img data-edit="ultra_img" data-edit-type="image" data-edit-label="Плитка часов: фото" src="images/w/applewatchultra.webp" alt="Apple Watch Ultra 2" loading="lazy" width="640" height="640"></div>
+        <h3 data-edit="ultra_name" data-edit-label="Плитка часов: название">Apple Watch Ultra 2</h3>
+        <p data-edit="ultra_desc" data-edit-label="Плитка часов: описание">Титан и до 36 часов работы.</p>
+        <div class="price num" data-edit="ultra_price" data-edit-label="Плитка часов: цена">90 000 ₽</div>
       </a>
-      <a class="tile t-d rv" href="product.html?id=airpodspro" style="--d:.14s">
+      <a class="tile t-d rv" href="product.html?id=airpodspro" style="--d:.14s" data-edit="pods_link" data-edit-type="link" data-edit-label="Плитка AirPods: ведёт на товар">
         <span class="go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-        <div class="art"><img data-edit="pods_img" data-edit-type="image" data-edit-label="Карточка AirPods: фото" src="images/w/airpods.webp" alt="AirPods Pro 2" loading="lazy" width="640" height="640"></div>
-        <h3 data-edit="pods_name" data-edit-label="Карточка AirPods: название">AirPods Pro 2</h3>
-        <p data-edit="pods_desc" data-edit-label="Карточка AirPods: описание">Активное шумоподавление.</p>
-        <div class="price num" data-edit="pods_price" data-edit-label="Карточка AirPods: цена">22 000 ₽</div>
+        <div class="art"><img data-edit="pods_img" data-edit-type="image" data-edit-label="Плитка AirPods: фото" src="images/w/airpods.webp" alt="AirPods Pro 2" loading="lazy" width="640" height="640"></div>
+        <h3 data-edit="pods_name" data-edit-label="Плитка AirPods: название">AirPods Pro 2</h3>
+        <p data-edit="pods_desc" data-edit-label="Плитка AirPods: описание">Активное шумоподавление.</p>
+        <div class="price num" data-edit="pods_price" data-edit-label="Плитка AirPods: цена">22 000 ₽</div>
       </a>
-      <a class="tile t-e rv" href="product.html?id=macbookpro">
+      <a class="tile t-e rv" href="product.html?id=macbookpro" data-edit="mac_link" data-edit-type="link" data-edit-label="Широкая плитка: ведёт на товар">
         <span class="go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
         <div class="txt">
-          <h3 data-edit="mac_name" data-edit-label="MacBook: название">MacBook Pro 14</h3>
-          <p data-edit="mac_desc" data-edit-label="MacBook: описание">Дисплей Liquid Retina XDR и мощность для серьёзной работы.</p>
-          <div class="price num" data-edit="mac_price" data-edit-label="MacBook: цена">240 000 ₽</div>
+          <h3 data-edit="mac_name" data-edit-label="Широкая плитка: название">MacBook Pro 14</h3>
+          <p data-edit="mac_desc" data-edit-label="Широкая плитка: описание">Дисплей Liquid Retina XDR и мощность для серьёзной работы.</p>
+          <div class="price num" data-edit="mac_price" data-edit-label="Широкая плитка: цена">240 000 ₽</div>
         </div>
-        <div class="art"><img data-edit="mac_img" data-edit-type="image" data-edit-label="MacBook: фото" src="images/w/macbookpro.webp" alt="MacBook Pro 14" loading="lazy" width="640" height="640"></div>
+        <div class="art"><img data-edit="mac_img" data-edit-type="image" data-edit-label="Широкая плитка: фото" src="images/w/macbookpro.webp" alt="MacBook Pro 14" loading="lazy" width="640" height="640"></div>
       </a>
     </div>
   </section>
 
   <!-- КАТЕГОРИИ -->
-  <section class="sec" aria-labelledby="catH">
+  <section class="sec" aria-labelledby="catH" data-block="Категории">
     <div class="sec-head head-row rv">
-      <h2 class="h2" id="catH" data-edit="cat_title" data-edit-label="Категории: заголовок">Выбери своё.</h2>
+      <h2 class="h2" id="catH" data-edit="cat_title" data-edit-label="Заголовок">Выбери своё.</h2>
       <div class="rail-nav"><button class="ibtn" style="border-color:var(--line2)" data-rail="-1" aria-label="Назад"><i class="bi bi-arrow-left"></i></button><button class="ibtn" style="border-color:var(--line2)" data-rail="1" aria-label="Вперёд"><i class="bi bi-arrow-right"></i></button></div>
     </div>
     <div class="rail rv" id="rail"></div>
   </section>
 
   <!-- КАТАЛОГ -->
-  <section class="sec" id="catalog" aria-labelledby="catalogH">
+  <section class="sec" id="catalog" aria-labelledby="catalogH" data-block="Каталог">
     <div class="sec-head head-row rv">
-      <h2 class="h2" id="catalogH" data-edit="catalog_title" data-edit-label="Каталог: заголовок">Вся техника.</h2>
+      <h2 class="h2" id="catalogH" data-edit="catalog_title" data-edit-label="Заголовок">Вся техника.</h2>
     </div>
     <div class="tools">
       <div class="tools-row">
@@ -374,10 +376,10 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
 
   <!-- ПРИЗЫВ -->
   <section class="sec">
-    <div class="cta-band rv">
+    <div class="cta-band rv" data-block="Призыв внизу">
       <div>
-        <h2 data-edit="cta_title" data-edit-label="Призыв: заголовок">Нужной модели нет в каталоге?</h2>
-        <p data-edit="cta_sub" data-edit-label="Призыв: текст">Напишите нам: подберём технику под задачу и привезём под заказ.</p>
+        <h2 data-edit="cta_title" data-edit-label="Заголовок">Нужной модели нет в каталоге?</h2>
+        <p data-edit="cta_sub" data-edit-label="Текст">Напишите нам: подберём технику под задачу и привезём под заказ.</p>
       </div>
       <div class="acts"><a class="btn" data-tg-link href="#" target="_blank" rel="noopener"><i class="bi bi-telegram"></i>Написать в Telegram</a></div>
     </div>
@@ -387,9 +389,9 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
 
 <footer class="foot"><div class="wrap" id="cmsFooter"></div></footer>
 
-<script src="products.js?v=2026-10-17.1"></script>
-<script src="cms.js?v=2026-10-17.1"></script>
-<script src="assets/silk.js?v=2026-10-17.1"></script>
+<script src="products.js?v=2026-10-17.2"></script>
+<script src="cms.js?v=2026-10-17.2"></script>
+<script src="assets/silk.js?v=2026-10-17.2"></script>
 <script>
 (function(){
   "use strict";
