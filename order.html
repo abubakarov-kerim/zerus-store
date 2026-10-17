@@ -8,11 +8,11 @@
 <meta name="theme-color" content="#04080D">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%23EEF4F9'/%3E%3Crect x='7' y='7' width='14' height='5' rx='2' fill='%2304080D'/%3E%3Crect x='11.5' y='12' width='5' height='10' rx='2' fill='%233EB4F5'/%3E%3C/svg%3E">
 <link rel="preload" href="fonts/geologica-cyr.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts.css?v=2026-10-17.2">
-<link rel="stylesheet" href="assets/icons.css?v=2026-10-17.2">
-<link rel="stylesheet" href="assets/app.css?v=2026-10-17.2">
+<link rel="stylesheet" href="assets/fonts.css?v=2026-10-17.3">
+<link rel="stylesheet" href="assets/icons.css?v=2026-10-17.3">
+<link rel="stylesheet" href="assets/app.css?v=2026-10-17.3">
 <script>
-var TECH_BUILD='2026-10-17.2';
+var TECH_BUILD='2026-10-17.3';
 (function(d){ d.className+=' js';
   try{ var t=localStorage.getItem('zerus_theme')||localStorage.getItem('zerus_theme_def'); if(t==='light') d.setAttribute('data-theme','light');
     var p=sessionStorage.getItem('zerus_pal_preview')||localStorage.getItem('zerus_palette'); if(p&&p!=='azure') d.setAttribute('data-palette',p); }catch(e){}
@@ -62,6 +62,7 @@ body.cms-admin-on .sum-box{ top:calc(var(--nav-h) + 66px); }
 .req{ color:var(--ac); }
 .note{ display:flex; gap:10px; color:var(--mut); font-size:.84rem; margin-top:14px; line-height:1.5; }
 .note i{ color:var(--ac); }
+.note a{ color:var(--text); text-decoration:underline; text-decoration-color:var(--line2); text-underline-offset:3px; }
 .emp{ grid-column:1/-1; text-align:center; padding:clamp(56px,10vw,120px) 20px; border:1px dashed var(--line2); border-radius:calc(var(--r) + 6px); }
 .emp .ic{ width:76px; height:76px; border-radius:50%; margin:0 auto; display:grid; place-items:center; background:var(--ac-soft); color:var(--ac); font-size:1.8rem; }
 .emp h2{ font-size:clamp(1.6rem,3vw,2.2rem); margin-top:20px; } .emp p{ color:var(--mut); margin:10px auto 26px; max-width:38ch; }
@@ -126,7 +127,7 @@ body.cms-admin-on .sum-box{ top:calc(var(--nav-h) + 66px); }
         <div class="fld"><label for="fCity">Город доставки <span class="req" aria-hidden="true">*</span></label><input class="inp" id="fCity" name="city" autocomplete="address-level2" required><div class="err">Укажите город, чтобы рассчитать сроки.</div></div>
         <div class="fld"><label for="fNote">Комментарий</label><textarea class="inp" id="fNote" name="comment" rows="2" style="min-height:72px"></textarea></div>
         <button class="btn block" type="submit"><i class="bi bi-send"></i>Оформить заказ</button>
-        <p class="note"><i class="bi bi-info-circle"></i><span>Заказ уйдёт менеджеру в Telegram, WhatsApp или Instagram. Он подтвердит наличие, оплату и сроки доставки.</span></p>
+        <p class="note"><i class="bi bi-info-circle"></i><span>Выберите Telegram, WhatsApp или Instagram*: сообщение с заказом составится само. Нажимая кнопку, вы соглашаетесь с <a href="#" data-info="terms">условиями покупки</a>. <a href="#" data-info="privacy">Конфиденциальность</a>.</span></p>
       </form>
     </aside>
   </div>
@@ -134,8 +135,8 @@ body.cms-admin-on .sum-box{ top:calc(var(--nav-h) + 66px); }
 
 <footer class="foot"><div class="wrap" id="cmsFooter"></div></footer>
 
-<script src="products.js?v=2026-10-17.2"></script>
-<script src="cms.js?v=2026-10-17.2"></script>
+<script src="products.js?v=2026-10-17.3"></script>
+<script src="cms.js?v=2026-10-17.3"></script>
 <script>
 (function(){
   "use strict";

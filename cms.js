@@ -18,6 +18,9 @@
     address:'Укажите адрес магазина в админке',
     hours:'Пн-Вс: 10:00-21:00',
     telegram:'zerus9501', whatsapp:'', instagram:'',
+    seller:'', inn:'',
+    delivery:'Доставляем по всей России службами СДЭК и Почта России, обычно за 1-3 дня. Перед отправкой менеджер согласует адрес, сроки и стоимость.',
+    warranty:'На всю технику действует официальная гарантия производителя: 1 год. При заводском браке обменяем устройство или вернём деньги.',
     currency:'₽', hero:'', palette:'azure', theme:'dark'
   };
   /* пароль хранится только в виде отпечатка SHA-256 (стандартный: zerus2026) */
@@ -180,15 +183,21 @@
   <div class="cms-modal" id="cmsOrder" role="dialog" aria-modal="true" aria-labelledby="cmsOrderH"><div class="box">
     <div class="cms-mh"><h3 id="cmsOrderH">Отправить заказ</h3><button class="cms-x" onclick="closeOrder()" aria-label="Закрыть"><i class="bi bi-x-lg"></i></button></div>
     <div class="cms-mb">
-      <p class="cms-hint">Выберите мессенджер. Текст заказа уже собран и скопирован: если он не подставится сам, просто вставьте его в чат.</p>
+      <p class="cms-hint">Выберите, где вам удобнее. Мы уже составили сообщение с вашим заказом: оно подставится в чат само, а если нет, просто вставьте его.</p>
       <div class="cms-ch" id="cmsCh">
         <button class="cms-chb" data-ch="telegram" onclick="sendOrder('telegram')"><i class="bi bi-telegram" style="color:#2AABEE"></i><span>Telegram</span></button>
         <button class="cms-chb" data-ch="whatsapp" onclick="sendOrder('whatsapp')"><i class="bi bi-whatsapp" style="color:#25D366"></i><span>WhatsApp</span></button>
-        <button class="cms-chb" data-ch="instagram" onclick="sendOrder('instagram')"><i class="bi bi-instagram" style="color:#E4405F"></i><span>Instagram</span></button>
+        <button class="cms-chb" data-ch="instagram" onclick="sendOrder('instagram')"><i class="bi bi-instagram" style="color:#E4405F"></i><span>Instagram*</span></button>
       </div>
       <div class="fld" style="margin:0"><label for="cmsOrderText">Текст заказа</label><textarea class="cms-ot" id="cmsOrderText" readonly></textarea></div>
+      <p class="cms-legal">Сайт не собирает ваши данные: всё, что вы напишете, увидит только менеджер в переписке. <a href="#" data-info="privacy">Конфиденциальность</a> и <a href="#" data-info="terms">Условия покупки</a>.<br>* Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой в России.</p>
     </div>
     <div class="cms-mf"><button class="btn ghost block" onclick="copyOrder()"><i class="bi bi-copy"></i>Скопировать</button><button class="btn block" onclick="closeOrder()">Готово</button></div>
+  </div></div>
+  <div class="cms-modal" id="cmsInfo" role="dialog" aria-modal="true" aria-labelledby="cmsInfoH"><div class="box">
+    <div class="cms-mh"><h3 id="cmsInfoH">Условия покупки</h3><button class="cms-x" onclick="closeInfo()" aria-label="Закрыть"><i class="bi bi-x-lg"></i></button></div>
+    <div class="cms-mb cms-info" id="cmsInfoBody"></div>
+    <div class="cms-mf"><button class="btn block" onclick="closeInfo()">Понятно</button></div>
   </div></div>
   <div class="cms-modal" id="cmsLogin" role="dialog" aria-modal="true" aria-labelledby="cmsLoginH"><div class="box" style="width:min(420px,100%)">
     <div class="cms-mh"><h3 id="cmsLoginH">Вход в админку</h3><button class="cms-x" onclick="closeLogin()" aria-label="Закрыть"><i class="bi bi-x-lg"></i></button></div>
@@ -230,12 +239,21 @@
   function syncLock(){ const open = $$('.cms-modal.open, .cms-admin.open, .mnav.open').length>0; document.documentElement.style.overflow = open ? 'hidden' : ''; }
 
   /* ---------- ЗАКАЗ ---------- */
+  /* Текст заказа собирается автоматически: приветствие, товары с параметрами, итог, данные клиента. */
   function buildOrderText(cart, info){
     info=info||{};
-    const lines = cart.map((it,i)=>`${i+1}. ${it.name}${it.qty>1?` × ${it.qty}`:''}: ${money(it.price*it.qty)}`);
+    const units = cart.reduce((n,it)=>n+(it.qty||1),0);
     const total = cart.reduce((s,it)=>s+it.price*it.qty,0);
-    const who = [info.name?`Имя: ${info.name}`:'', info.phone?`Телефон: ${info.phone}`:'', info.city?`Город: ${info.city}`:'', info.comment?`Комментарий: ${info.comment}`:''].filter(Boolean);
-    return `Здравствуйте! Хочу оформить заказ в ${STORE.name}:\n\n${lines.join('\n')}\n\nИтого: ${money(total)}`+(who.length?`\n\n${who.join('\n')}`:'')+`\n\nПодскажите, пожалуйста, по оплате и доставке.`;
+    const lines = cart.map((it,i)=>`${i+1}. ${it.name}\n    ${it.qty>1?`${it.qty} шт. × ${money(it.price)} = ${money(it.price*it.qty)}`:money(it.price)}`);
+    const first = (info.name||'').trim().split(/\s+/)[0];
+    const hello = first ? `Здравствуйте! Меня зовут ${first}.` : 'Здравствуйте!';
+    const what = units===1 ? 'Хочу заказать в' : `Хочу оформить заказ в`;
+    let t = `${hello} ${what} ${STORE.name}:\n\n${lines.join('\n')}\n\nИтого: ${money(total)} (${units} ${plural(units,'товар','товара','товаров')})`;
+    const who = [info.name?`Имя: ${info.name}`:'', info.phone?`Телефон: ${info.phone}`:'', info.city?`Доставка: ${info.city}`:''].filter(Boolean);
+    if(who.length) t += `\n\n${who.join('\n')}`;
+    if(info.comment) t += `\nКомментарий: ${info.comment}`;
+    t += `\n\nПодтвердите, пожалуйста, наличие, стоимость доставки и удобный способ оплаты.`+(info.phone?' Можно связаться по телефону.':'')+`\nСпасибо!`;
+    return t;
   }
   function openOrder(cart, info){
     cart = cart || Cart.get();
@@ -251,11 +269,34 @@
     const raw=$('#cmsOrderText').value, text=encodeURIComponent(raw);
     copyText(raw);
     let url='';
-    if(ch==='whatsapp'){ const n=(STORE.whatsapp||'').replace(/\D/g,''); if(!n){ toast('WhatsApp пока не подключён. Выберите Telegram.'); return; } url=`https://wa.me/${n}?text=${text}`; }
-    else if(ch==='telegram'){ if(!STORE.telegram){ toast('Telegram пока не подключён'); return; } url=`https://t.me/${encodeURIComponent(STORE.telegram)}`; toast('Текст скопирован. Вставьте его в чат.'); }
-    else if(ch==='instagram'){ if(!STORE.instagram){ toast('Instagram пока не подключён. Выберите Telegram.'); return; } url=`https://ig.me/m/${encodeURIComponent(STORE.instagram)}`; toast('Текст скопирован. Вставьте его в чат.'); }
+    if(ch==='whatsapp'){ const n=(STORE.whatsapp||'').replace(/\D/g,''); if(!n){ toast('WhatsApp пока не подключён. Выберите другой мессенджер.'); return; } url=`https://wa.me/${n}?text=${text}`; }
+    else if(ch==='telegram'){ if(!STORE.telegram){ toast('Telegram пока не подключён. Выберите другой мессенджер.'); return; } url=`https://t.me/${encodeURIComponent(STORE.telegram)}?text=${text}`; toast('Текст заказа скопирован. Если он не появился в чате, вставьте его.'); }
+    else if(ch==='instagram'){ if(!STORE.instagram){ toast('Instagram пока не подключён. Выберите другой мессенджер.'); return; } url=`https://ig.me/m/${encodeURIComponent(STORE.instagram)}?text=${text}`; toast('Текст заказа скопирован. Если он не появился в чате, вставьте его.'); }
     window.open(url,'_blank','noopener');
   }
+
+  /* ---------- УСЛОВИЯ ПОКУПКИ И КОНФИДЕНЦИАЛЬНОСТЬ ---------- */
+  function sellerLine(){ const s=STORE; return s.seller ? esc(s.seller)+(s.inn?', ИНН '+esc(s.inn):'') : 'продавец магазина '+esc(s.name); }
+  function contactsLine(){ const s=STORE; return [s.telegram?'Telegram @'+esc(s.telegram):'', s.whatsapp?'WhatsApp '+esc(s.whatsapp):'', s.instagram?'Instagram* '+esc(s.instagram):''].filter(Boolean).join(', ') || 'контакты в подвале сайта'; }
+  function openInfo(kind){
+    const s=STORE;
+    const T = kind==='privacy' ? ['Конфиденциальность',`
+      <h4>Что собирает сайт</h4><p>Ничего. На сайте нет регистрации, счётчиков посещений, рекламных трекеров и cookie. Шрифты и картинки загружаются с самого сайта.</p>
+      <h4>Корзина и форма заказа</h4><p>Товары в корзине, имя, телефон и город хранятся только в памяти вашего браузера, чтобы не вводить их заново. На сервер они не отправляются. Удалить их можно, очистив данные сайта в браузере.</p>
+      <h4>Когда вы пишете менеджеру</h4><p>Кнопки заказа открывают переписку в мессенджере (${contactsLine()}). Данные, которые вы там сообщаете, нужны только чтобы подтвердить заказ и доставить его, и не передаются третьим лицам, кроме службы доставки. Мессенджеры обрабатывают данные по своим правилам.</p>
+      <h4>Удаление данных</h4><p>Напишите менеджеру, и переписка с вашими данными будет удалена.</p>
+      <h4>Кто отвечает</h4><p>${sellerLine()}.</p>`]
+    : ['Условия покупки',`
+      <h4>Как заказать</h4><p>Добавьте технику в корзину, заполните имя и город и нажмите «Оформить заказ». Выберите Telegram, WhatsApp или Instagram*: сообщение с заказом составится само. Менеджер подтвердит наличие, цену и сроки.</p>
+      <h4>Доставка</h4><p>${esc(s.delivery||DEFAULT_STORE.delivery)}</p>
+      <h4>Оплата</h4><p>Способ и момент оплаты согласуются с менеджером до отправки. Цены на сайте указаны в рублях.</p>
+      <h4>Гарантия</h4><p>${esc(s.warranty||DEFAULT_STORE.warranty)}</p>
+      <h4>Обмен и возврат</h4><p>Обмен и возврат проводятся в соответствии с законом «О защите прав потребителей». Сохраняйте упаковку, комплектацию и чек до конца проверки устройства.</p>
+      <h4>Продавец</h4><p>${sellerLine()}. Связь: ${contactsLine()}.</p>`];
+    $('#cmsInfoH').textContent=T[0]; $('#cmsInfoBody').innerHTML=T[1]+(s.instagram||kind==='terms'?'<p class="cms-legal">* Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой в России.</p>':'');
+    $('#cmsInfoBody').scrollTop=0; $('#cmsInfo').classList.add('open'); syncLock();
+  }
+  function closeInfo(){ $('#cmsInfo').classList.remove('open'); syncLock(); }
 
   /* ---------- ПОДТВЕРЖДЕНИЕ / ФОРМА ---------- */
   let confirmCb=null;
@@ -324,7 +365,7 @@
         html+=`<div class="fld"><label for="${id}">${esc(L)}</label><div class="img-fld">
           <div class="pv">${shown?`<img src="${esc(shown)}" alt="">`:'<i class="bi bi-image"></i>'}</div>
           <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
-            <input class="inp" id="${id}" data-k="${esc(k)}" data-type="image" value="${esc(cur.indexOf('data:')===0?'(загруженное фото)':cur)}" placeholder="${k==='heroImg'?'Пусто — живая анимация':'Пусто — стандартное фото'}">
+            <input class="inp" id="${id}" data-k="${esc(k)}" data-type="image" value="${esc(cur.indexOf('data:')===0?'(загруженное фото)':cur)}" placeholder="${k==='heroImg'?'Пусто: живая анимация':'Пусто: стандартное фото'}">
             <label class="filebtn"><input type="file" accept="image/*" hidden onchange="cmsPickImg(this,'${id}')"><i class="bi bi-upload"></i>Загрузить с устройства</label></div></div></div>`;
       } else if(type==='link'){
         const cur=CONTENT[k]||el.dataset.def||'';
@@ -543,11 +584,18 @@
         <div class="fld"><label for="sWa">WhatsApp (номер)</label><input class="inp" id="sWa" value="${esc(s.whatsapp)}" inputmode="tel" placeholder="7 900 000-00-00"></div></div>
       <div class="row2"><div class="fld"><label for="sIg">Instagram (без @)</label><input class="inp" id="sIg" value="${esc(s.instagram)}" placeholder="technic.store"></div>
         <div class="fld"><label for="sCur">Валюта</label><input class="inp" id="sCur" value="${esc(s.currency)}" maxlength="3"></div></div>
+      <p class="cms-hint" style="margin:-4px 0 18px">Каждый заполненный мессенджер становится кнопкой в окне заказа. Пустой показывается бледным.</p>
+      <div class="row2"><div class="fld"><label for="sSeller">Продавец (ИП или самозанятый, ФИО)</label><input class="inp" id="sSeller" value="${esc(s.seller||'')}" placeholder="ИП Иванов Иван Иванович"></div>
+        <div class="fld"><label for="sInn">ИНН</label><input class="inp" id="sInn" value="${esc(s.inn||'')}" inputmode="numeric" maxlength="12"></div></div>
+      <div class="fld"><label for="sDel">Доставка (текст для «Условий покупки»)</label><textarea class="inp" id="sDel">${esc(s.delivery||'')}</textarea></div>
+      <div class="fld"><label for="sWar">Гарантия (текст для «Условий покупки»)</label><textarea class="inp" id="sWar">${esc(s.warranty||'')}</textarea>
+        <div class="help">Проверить, как это выглядит: ссылка «Условия покупки» внизу сайта.</div></div>
       <button class="btn" onclick="saveStore()">Сохранить</button>`;
   }
   function saveStore(){ const s=DB.load(LS.store,{});
     Object.assign(s,{ name:$('#sName').value.trim()||'Technic Store', about:$('#sAbout').value.trim(), address:$('#sAddr').value.trim(), hours:$('#sHours').value.trim(),
-      telegram:$('#sTg').value.trim().replace(/^@/,''), whatsapp:$('#sWa').value.trim(), instagram:$('#sIg').value.trim().replace(/^@/,''), currency:$('#sCur').value.trim()||'₽' });
+      telegram:$('#sTg').value.trim().replace(/^@/,'').replace(/^https?:\/\/t\.me\//,''), whatsapp:$('#sWa').value.trim(), instagram:$('#sIg').value.trim().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//,'').replace(/\/.*$/,''), currency:$('#sCur').value.trim()||'₽',
+      seller:$('#sSeller').value.trim(), inn:$('#sInn').value.replace(/\D/g,''), delivery:$('#sDel').value.trim(), warranty:$('#sWar').value.trim() });
     DB.save(LS.store,s); reloadAll(); toast('Сохранено'); }
 
   /* ---------- АДМИН: ДОСТУП ---------- */
@@ -668,12 +716,18 @@
       <div><div class="fh">Магазин</div>
         <div class="fi"><i class="bi bi-geo-alt"></i><span>${esc(s.address)}</span></div>
         <div class="fi"><i class="bi bi-clock"></i><span>${esc(s.hours)}</span></div>
-        ${s.telegram?`<div class="fi"><i class="bi bi-telegram"></i><a href="${tg}" target="_blank" rel="noopener">@${esc(s.telegram)}</a></div>`:''}
-        ${s.whatsapp?`<div class="fi"><i class="bi bi-whatsapp"></i><a href="${wa}" target="_blank" rel="noopener">${esc(s.whatsapp)}</a></div>`:''}
-        ${s.instagram?`<div class="fi"><i class="bi bi-instagram"></i><a href="${ig}" target="_blank" rel="noopener">@${esc(s.instagram)}</a></div>`:''}
+        ${s.seller?`<div class="fi"><i class="bi bi-shop"></i><span>${esc(s.seller)}${s.inn?`, ИНН ${esc(s.inn)}`:''}</span></div>`:''}
+      </div>
+      <div><div class="fh">Связь</div>
+        ${s.telegram?`<div class="fi"><i class="bi bi-telegram"></i><a href="${tg}" target="_blank" rel="noopener">Telegram: @${esc(s.telegram)}</a></div>`:''}
+        ${s.whatsapp?`<div class="fi"><i class="bi bi-whatsapp"></i><a href="${wa}" target="_blank" rel="noopener">WhatsApp: ${esc(s.whatsapp)}</a></div>`:''}
+        ${s.instagram?`<div class="fi"><i class="bi bi-instagram"></i><a href="${ig}" target="_blank" rel="noopener">Instagram*: @${esc(s.instagram)}</a></div>`:''}
+        ${!s.telegram&&!s.whatsapp&&!s.instagram?'<div class="fi"><span>Контакты появятся скоро</span></div>':''}
       </div>
     </div>
-    <div class="fbot"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>Оригинальная техника с гарантией</span></div>`;
+    <div class="fbot"><span>© ${new Date().getFullYear()} ${esc(s.name)}. Все права защищены.</span>
+      <span class="flinks"><a href="#" data-info="terms">Условия покупки</a><a href="#" data-info="privacy">Конфиденциальность</a></span></div>
+    ${s.instagram?'<p class="fnote">* Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой в России.</p>':''}`;
     el.querySelectorAll('.fcat').forEach(a=>a.addEventListener('click',e=>{ if(CMS.onCatPick){ e.preventDefault(); CMS.onCatPick(a.dataset.cat); } else { try{ sessionStorage.setItem('zerus_cat',a.dataset.cat); }catch(_){} } }));
   }
   function updateTg(){ const f=$('#cmsTg'); if(!f) return; if(STORE.telegram){ f.href=`https://t.me/${encodeURIComponent(STORE.telegram)}`; f.hidden=false; } else f.hidden=true;
@@ -691,13 +745,15 @@
       if(e.key!=='Escape') return;
       if($('#cmsConfirm.open')) return closeConfirm();
       if($('#cmsForm.open')) return closeForm();
+      if($('#cmsInfo.open')) return closeInfo();
       if($('#cmsOrder.open')) return closeOrder();
       if($('#cmsLogin.open')) return closeLogin();
       if($('#cmsAdmin.open')) return closeAdmin();
       if(menu && menu.classList.contains('open')) return closeMenu();
     });
+    document.addEventListener('click',e=>{ const a=e.target.closest('[data-info]'); if(!a) return; e.preventDefault(); openInfo(a.dataset.info); });
     $$('.cms-modal').forEach(m=>m.addEventListener('click',e=>{ if(e.target!==m) return;
-      if(m.id==='cmsConfirm') closeConfirm(); else if(m.id==='cmsForm') closeForm(); else if(m.id==='cmsOrder') closeOrder(); else if(m.id==='cmsLogin') closeLogin(); }));
+      if(m.id==='cmsConfirm') closeConfirm(); else if(m.id==='cmsForm') closeForm(); else if(m.id==='cmsInfo') closeInfo(); else if(m.id==='cmsOrder') closeOrder(); else if(m.id==='cmsLogin') closeLogin(); }));
     /* тень под шапкой после начала прокрутки */
     const nav=$('.nav');
     if(nav && window.IntersectionObserver){
@@ -766,7 +822,7 @@
 
   Object.assign(window, { openAdminGate, closeAdmin, closeLogin, tryLogin, logoutAdmin, openAdmin, openAdminAt, admTab,
     editProduct, saveProductForm, askDeleteProduct, cmsPickImg, addCat, renameCat, askDeleteCat, saveStore, saveAccess,
-    exportDB, importDB, askReset, closeForm, closeConfirm, closeOrder, sendOrder, copyOrder, publishDB, saveGH,
+    exportDB, importDB, askReset, closeForm, closeConfirm, closeOrder, sendOrder, copyOrder, openInfo, closeInfo, publishDB, saveGH,
     setPalette, setDefTheme, clearHero, openImageEditor });
 
   /* ---------- init ---------- */

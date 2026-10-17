@@ -229,7 +229,7 @@ body.cms-admin-on .nav{ top:46px; }
 /* ===== ПОДВАЛ ===== */
 .foot{ margin-top:clamp(70px,10vw,130px); border-top:1px solid var(--line); background:var(--bg2); }
 .foot .wrap{ padding-block:clamp(48px,6vw,72px) 30px; }
-.cms-foot .fgrid{ display:grid; grid-template-columns:1.6fr 1fr 1.3fr; gap:40px; }
+.cms-foot .fgrid{ display:grid; grid-template-columns:1.5fr 1fr 1.1fr 1.25fr; gap:40px; }
 .cms-foot .fb{ display:flex; align-items:center; gap:11px; font-weight:600; font-size:1.2rem; letter-spacing:-.03em; }
 .cms-foot p{ color:var(--mut); font-size:.92rem; margin-top:14px; max-width:38ch; line-height:1.6; }
 .cms-foot .fh{ font-family:var(--mono); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mut2); margin-bottom:14px; }
@@ -241,6 +241,14 @@ body.cms-admin-on .nav{ top:46px; }
 .cms-foot .fcat:hover{ color:var(--text); }
 .cms-foot .fbot{ border-top:1px solid var(--line); margin-top:44px; padding-top:22px; color:var(--mut2); font-size:.8rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 .cms-foot .fbot a:hover{ color:var(--text); }
+.cms-foot .flinks{ display:flex; gap:20px; flex-wrap:wrap; }
+.cms-foot .flinks a{ color:var(--mut); text-decoration:underline; text-decoration-color:var(--line2); text-underline-offset:4px; }
+.cms-foot .fnote{ margin-top:16px; color:var(--mut2); font-size:.74rem; line-height:1.5; max-width:70ch; }
+.cms-legal{ margin-top:14px; color:var(--mut2); font-size:.76rem; line-height:1.55; }
+.cms-legal a{ color:var(--mut); text-decoration:underline; text-underline-offset:3px; }
+.cms-legal a:hover{ color:var(--text); }
+.cms-info h4{ font-size:.98rem; font-weight:560; margin:22px 0 6px; } .cms-info h4:first-child{ margin-top:0; }
+.cms-info p{ color:var(--mut); line-height:1.65; font-size:.92rem; max-width:62ch; }
 
 /* ===== ОБЩИЕ БЛОКИ CMS ===== */
 #cmsToast{ position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom,0px) + 24px); z-index:6000; transform:translate(-50%,20px); opacity:0; pointer-events:none;
@@ -382,6 +390,7 @@ body.cms-admin-on .blk-edit{ display:inline-flex; }
   .cms-atab{ white-space:nowrap; flex-shrink:0; padding:9px 13px; }
 }
 @media (max-width:560px){
+  .foot .wrap{ padding-bottom:100px; }
   .nav .wrap{ gap:8px; }
   .nav-act{ gap:0; margin-right:-6px; }
   .nav .ibtn{ width:40px; height:40px; }
