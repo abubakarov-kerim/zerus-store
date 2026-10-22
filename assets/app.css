@@ -210,7 +210,16 @@ body.cms-admin-on .nav{ top:46px; }
 .pc-price .from{ font-weight:350; color:var(--mut); font-size:.82rem; margin-right:3px; }
 .pc-price s{ display:block; color:var(--mut2); font-size:.78rem; font-weight:350; }
 .pc-stock{ font-size:.76rem; color:var(--mut); margin-top:2px; }
-.pc-stock.out{ color:var(--bad); } .pc-stock.soon{ color:var(--ac); }
+.pc-stock.out{ color:var(--bad); } .pc-stock.soon{ color:var(--ac); } .pc-stock.used{ color:var(--text); opacity:.78; }
+.pc-flag.used{ background:var(--surf); color:var(--text); border:1px solid var(--line2); }
+/* админка: поля Б/У */
+.cms-used{ border:1px solid var(--line2); border-radius:14px; padding:14px 14px 4px; margin-bottom:16px; background:color-mix(in srgb, var(--ac) 5%, transparent); }
+.cms-used[hidden]{ display:none; }
+.cms-used-h{ display:flex; align-items:center; gap:8px; font-weight:600; font-size:.9rem; margin-bottom:12px; }
+.cms-used-h i{ color:var(--ac); }
+.cms-check{ display:inline-flex; align-items:center; gap:8px; margin-top:8px; font-size:.84rem; cursor:pointer; min-height:32px; }
+.cms-check input{ width:18px; height:18px; accent-color:var(--ac); }
+.cms-used textarea:disabled{ opacity:.45; }
 .pc-add{ width:40px; height:40px; flex-shrink:0; border-radius:var(--pill); border:1px solid var(--line2); background:transparent; display:grid; place-items:center; cursor:pointer;
   color:var(--text); transition:background-color .3s, color .3s, border-color .3s, transform .3s var(--ease); }
 .pc-add:hover{ background:var(--ac); border-color:var(--ac); color:var(--ac-ink); }

@@ -1,7 +1,7 @@
 {
  "_v": 2,
- "_rev": 1792278698771,
- "_date": "2026-10-17T23:11:38.771Z",
+ "_rev": 1792689154196,
+ "_date": "2026-10-22T17:12:34.000Z",
  "products": [
   {
    "id": "iphone13",
@@ -904,6 +904,94 @@
     "Белый",
     "Чёрный"
    ]
+  },
+  {
+   "id": "used-ip13pro",
+   "brand": "Apple",
+   "cat": "tech",
+   "type": "simple",
+   "category": "Б/У",
+   "name": "iPhone 13 Pro 128 ГБ",
+   "img": "images/ip13pro.png",
+   "price": 38900,
+   "oldPrice": null,
+   "stock": 1,
+   "desc": "Проверенный iPhone 13 Pro. Все функции работают, Face ID в порядке, экран без выгораний.",
+   "description": "Проверенный iPhone 13 Pro. Все функции работают, Face ID в порядке, экран без выгораний.",
+   "specs": [
+    {
+     "k": "Память",
+     "v": "128 ГБ"
+    },
+    {
+     "k": "Цвет",
+     "v": "Графитовый"
+    },
+    {
+     "k": "SIM",
+     "v": "eSIM + SIM"
+    },
+    {
+     "k": "Face ID",
+     "v": "Работает"
+    }
+   ],
+   "used": {
+    "used": true,
+    "grade": "good",
+    "battery": 86,
+    "defects": [
+     "Мелкие потёртости на рамке"
+    ],
+    "kit": "Телефон, кабель",
+    "warranty": "30 дней от магазина"
+   },
+   "newArrival": false,
+   "soon": false,
+   "release": ""
+  },
+  {
+   "id": "used-ip14",
+   "brand": "Apple",
+   "cat": "tech",
+   "type": "simple",
+   "category": "Б/У",
+   "name": "iPhone 14 128 ГБ",
+   "img": "images/ip14.png",
+   "price": 44900,
+   "oldPrice": null,
+   "stock": 1,
+   "desc": "iPhone 14 в отличном состоянии, без ремонтов. Полный комплект с коробкой.",
+   "description": "iPhone 14 в отличном состоянии, без ремонтов. Полный комплект с коробкой.",
+   "specs": [
+    {
+     "k": "Память",
+     "v": "128 ГБ"
+    },
+    {
+     "k": "Цвет",
+     "v": "Тёмная ночь"
+    },
+    {
+     "k": "SIM",
+     "v": "eSIM + SIM"
+    },
+    {
+     "k": "Ремонты",
+     "v": "Не было"
+    }
+   ],
+   "used": {
+    "used": true,
+    "grade": "excellent",
+    "battery": 92,
+    "defects": [],
+    "kit": "Коробка, кабель",
+    "warranty": "30 дней от магазина"
+   },
+   "newArrival": false,
+   "soon": false,
+   "release": ""
   }
  ],
  "categories": [
@@ -912,7 +1000,8 @@
   "Redmi",
   "POCO",
   "Часы",
-  "Аксессуары"
+  "Аксессуары",
+  "Б/У"
  ],
  "store": {
   "name": "Technic Store",

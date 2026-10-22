@@ -11,7 +11,12 @@
   /* ---------- стандартные данные ---------- */
   const LS = { prod:'zerus_products', cats:'zerus_categories', store:'zerus_store', admin:'zerus_admin', content:'zerus_content',
                pub:'zerus_pub', gh:'zerus_gh', theme:'zerus_theme', themeDef:'zerus_theme_def', pal:'zerus_palette', cart:'cart' };
-  const DEFAULT_CATEGORIES = ['Apple','Samsung','Redmi','POCO','Часы','Аксессуары'];
+  const DEFAULT_CATEGORIES = ['Apple','Samsung','Redmi','POCO','Часы','Аксессуары','Б/У'];
+  /* Б/У техника: категория и состояние */
+  const USED_CAT = 'Б/У';
+  const GRADES = [['new','Как новый'],['excellent','Отличное'],['good','Хорошее'],['fair','Удовлетворительное']];
+  const gradeName = g => (GRADES.find(x=>x[0]===g)||GRADES[2])[1];
+  const isUsed = p => !!(p && p.used);
   const DEFAULT_STORE = {
     name:'Technic Store',
     about:'Магазин техники Apple, Samsung, Redmi и POCO. Оригинальные устройства, гарантия и доставка по всей России.',
@@ -452,7 +457,7 @@
     const rows = PRODUCTS.map(p=>{
       const pr = isConfig(p) ? ('от '+money(priceOf(p))) : money(p.price);
       return `<div class="cms-arow"><img src="${esc(thumb(p.img))}" alt="" loading="lazy">
-        <div class="i"><div class="n">${esc(p.name)}</div><div class="m">${esc(catOf(p))} · ${pr}${isConfig(p)?' · конфигуратор':''}${p.soon?' · скоро':''}</div></div>
+        <div class="i"><div class="n">${esc(p.name)}</div><div class="m">${esc(catOf(p))} · ${pr}${isConfig(p)?' · конфигуратор':''}${p.soon?' · скоро':''}${isUsed(p)?' · Б/У, АКБ '+(+p.used.battery||0)+'%':''}</div></div>
         <div class="acts"><button class="mini" onclick="editProduct('${esc(p.id)}')">Изменить</button><button class="mini danger" onclick="askDeleteProduct('${esc(p.id)}')">Удалить</button></div></div>`;
     }).join('');
     $('#cmsAdmBody').innerHTML = `<div class="cms-sech"><h2>Товары</h2><button class="btn sm" onclick="editProduct(null)"><i class="bi bi-plus-lg"></i>Добавить товар</button></div>
@@ -485,6 +490,7 @@
         <button type="button" class="chip${p.soon?' on':''}" id="fSoon">Скоро в продаже</button>
       </div></div>
       <div class="fld" id="fReleaseWrap" ${p.soon?'':'hidden'}><label for="fRelease">Дата выхода</label><input class="inp" id="fRelease" value="${esc(p.release||'')}" placeholder="20 сентября 2026"></div>
+      ${cfg ? '' : usedFields(p)}
       <div class="fld"><label for="fDesc">Описание</label><textarea class="inp" id="fDesc">${esc(p.description||p.desc||'')}</textarea></div>
       <div class="fld"><label for="fSpecs">Характеристики</label><textarea class="inp" id="fSpecs" placeholder="Экран: 6,1&quot; OLED&#10;Память: 128 ГБ">${esc(specsText)}</textarea><div class="help">Каждая с новой строки, в виде «Название: значение».</div></div>
       <div class="fld"><label for="fImg">Фото: ссылка</label><input class="inp" id="fImg" value="${esc(imgVal)}" placeholder="https://...">
@@ -493,9 +499,28 @@
       ${cfg ? '<p class="cms-hint">Это конфигуратор (версии, память, цвета). Здесь меняются название, категория, фото, описание и характеристики, варианты остаются как есть.</p>' : ''}`;
     const fi=$('#fImg'); if((p.img||'').indexOf('data:')===0) fi.dataset.data=p.img; fi.addEventListener('input',()=>{ delete fi.dataset.data; });
     $('#fNew').onclick=function(){ this.classList.toggle('on'); };
+    const uw=$('#fUsedWrap'); if(uw){ const sync=()=>{ uw.hidden = $('#fCat').value!==USED_CAT; }; $('#fCat').addEventListener('change',sync); sync(); }
+    const nd=$('#fNoDef'); if(nd){ const syncD=()=>{ $('#fDefects').disabled=nd.checked; }; nd.addEventListener('change',syncD); syncD(); }
     $('#fSoon').onclick=function(){ this.classList.toggle('on'); $('#fReleaseWrap').hidden=!this.classList.contains('on'); };
     $('#cmsFormSave').textContent='Сохранить'; $('#cmsFormSave').onclick=saveProductForm;
     openForm(); setTimeout(()=>{ if(!id) $('#fName').focus(); },100);
+  }
+  /* поля Б/У: видны, когда выбрана категория «Б/У» */
+  function usedFields(p){
+    const u=p.used||{}, defs=(u.defects||[]).join('\n'), none=!!u.used && !(u.defects||[]).length;
+    return `<div class="cms-used" id="fUsedWrap">
+      <div class="cms-used-h"><i class="bi bi-patch-check"></i>Б/У: состояние техники</div>
+      <div class="row2">
+        <div class="fld"><label for="fGrade">Состояние</label><select class="inp" id="fGrade">${GRADES.map(([k,t])=>`<option value="${k}"${(u.grade||'good')===k?' selected':''}>${t}</option>`).join('')}</select></div>
+        <div class="fld"><label for="fBattery">Аккумулятор, %</label><input class="inp" id="fBattery" type="number" inputmode="numeric" min="0" max="100" value="${u.battery!=null?+u.battery:''}" placeholder="например, 87"><div class="err">От 0 до 100.</div></div>
+      </div>
+      <div class="fld"><label for="fDefects">Дефекты</label><textarea class="inp" id="fDefects" placeholder="Царапина на задней крышке&#10;Небольшой скол на рамке">${esc(defs)}</textarea>
+        <label class="cms-check"><input type="checkbox" id="fNoDef"${none||(!u.grade&&!defs)?' checked':''}> Без дефектов</label>
+        <div class="help">Каждый дефект с новой строки. Покупатель увидит их списком на странице товара.</div></div>
+      <div class="row2">
+        <div class="fld"><label for="fKit">Комплект</label><input class="inp" id="fKit" value="${esc(u.kit||'')}" placeholder="Коробка, кабель"></div>
+        <div class="fld"><label for="fUWarr">Гарантия</label><input class="inp" id="fUWarr" value="${esc(u.warranty||'')}" placeholder="30 дней от магазина"></div>
+      </div></div>`;
   }
   function cmsPickImg(input,targetId){
     const f=input.files[0]; if(!f) return;
@@ -526,6 +551,15 @@
         img: img||PLACEHOLDER, stock: Math.max(0, parseInt($('#fStock').value)||0),
         specs, newArrival:$('#fNew').classList.contains('on'), soon, release: soon?$('#fRelease').value.trim():'' });
       if(src && img && img!==src.img) delete obj.colorImages;   // новое общее фото: старые фото по цветам больше не подходят
+    }
+    if(!cfg){
+      if($('#fCat').value===USED_CAT){
+        const bv=$('#fBattery').value.trim(), b=bv===''?null:Math.round(+bv);
+        if(b!=null && (isNaN(b)||b<0||b>100)){ $('#fBattery').closest('.fld').classList.add('bad'); $('#fBattery').focus(); return; }
+        obj.used={ used:true, grade:$('#fGrade').value, battery:b,
+          defects: $('#fNoDef').checked ? [] : $('#fDefects').value.split('\n').map(l=>l.trim()).filter(Boolean),
+          kit:$('#fKit').value.trim(), warranty:$('#fUWarr').value.trim() };
+      } else delete obj.used;
     }
     const list=DB.products();
     if(editingId){ const i=list.findIndex(x=>x.id===editingId); if(i>-1) list[i]=obj; else list.push(obj); } else list.push(obj);
@@ -778,7 +812,9 @@
       act = cfg ? `<a class="pc-add" href="${href}" aria-label="Выбрать конфигурацию: ${esc(p.name)}"><i class="bi bi-sliders2"></i></a>`
           : (stock ? `<button class="pc-add" data-add="${esc(p.id)}" aria-label="В корзину: ${esc(p.name)}"><i class="bi bi-plus-lg"></i></button>` : '');
     }
-    if(p.newArrival) flag='<span class="pc-flag">Новинка</span>';
+    if(isUsed(p)){ flag='<span class="pc-flag used">Б/У</span>';
+      if(!p.soon && stock) st=`<div class="pc-stock used">${p.used.battery!=null?'АКБ '+(+p.used.battery)+'%, ':''}${esc(gradeName(p.used.grade).toLowerCase())}</div>`; }
+    else if(p.newArrival) flag='<span class="pc-flag">Новинка</span>';
     else if(!p.soon && p.oldPrice && p.oldPrice>p.price) flag=`<span class="pc-flag">−${Math.round((1-p.price/p.oldPrice)*100)}%</span>`;
     return `<article class="pc rv" style="--d:${(Math.min(i,7)*0.04).toFixed(2)}s">${adm}${flag}
       <a class="pc-stage" href="${href}" tabindex="-1" aria-hidden="true"><img src="${esc(thumb(p.img))}" alt="" loading="lazy" decoding="async"></a>
@@ -789,7 +825,7 @@
   document.addEventListener('click',function(e){
     const add=e.target.closest('[data-add]'); if(!add) return;
     const p=PRODUCTS.find(x=>x.id===add.dataset.add); if(!p) return;
-    Cart.add({ id:p.id, name:p.name, price:p.price, img:p.img });
+    Cart.add({ id:p.id, name:p.name+(isUsed(p)?' (Б/У)':''), price:p.price, img:p.img });
     add.classList.add('done'); add.innerHTML='<i class="bi bi-check-lg"></i>';
     setTimeout(()=>{ add.classList.remove('done'); add.innerHTML='<i class="bi bi-plus-lg"></i>'; },1600);
     toast('Добавлено: '+p.name,{href:'order.html',text:'Корзина'});
@@ -829,7 +865,7 @@
   const CMS = {
     onChange:null, onCatPick:null, footerEl:null, ready:false,
     getProducts:()=>PRODUCTS, getCategories:()=>CATEGORIES, getStore:()=>STORE, getContent:()=>CONTENT, palettes:PALETTES,
-    catOf, money, fmt, priceOf, isAdmin, openOrder, isConfig, thumb, inStock, plural, esc, toast, cart:Cart, card,
+    catOf, money, fmt, priceOf, isAdmin, openOrder, isConfig, isUsed, gradeName, thumb, inStock, plural, esc, toast, cart:Cart, card,
     reload:reloadAll, observeReveal, applyPalette,
     init(opts){
       opts=opts||{};
