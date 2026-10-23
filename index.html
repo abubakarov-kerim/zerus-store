@@ -13,13 +13,13 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2304080D'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='%233EB4F5' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23EEF4F9'/%3E%3C/svg%3E">
 <link rel="preload" href="fonts/geologica-cyr.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="images/ip17pro_cosmic-orange.png" as="image" fetchpriority="high">
-<link rel="stylesheet" href="assets/fonts.css?v=2026-10-22.1">
-<link rel="stylesheet" href="assets/icons.css?v=2026-10-22.1">
-<link rel="stylesheet" href="assets/app.css?v=2026-10-22.1">
+<link rel="stylesheet" href="assets/fonts.css?v=2026-10-23.1">
+<link rel="stylesheet" href="assets/icons.css?v=2026-10-23.1">
+<link rel="stylesheet" href="assets/app.css?v=2026-10-23.1">
 <script>
 /* Версия сайта. При каждой публикации кода менять TECH_BUILD (и ?v= у файлов) на всех страницах:
    у посетителей со старой сохранённой копией сайт сам обновится. */
-var TECH_BUILD='2026-10-22.1';
+var TECH_BUILD='2026-10-23.1';
 (function(d){ d.className+=' js';
   try{ var t=localStorage.getItem('zerus_theme')||localStorage.getItem('zerus_theme_def'); if(t==='light') d.setAttribute('data-theme','light');
     var p=sessionStorage.getItem('zerus_pal_preview')||localStorage.getItem('zerus_palette'); if(p&&p!=='azure') d.setAttribute('data-palette',p); }catch(e){}
@@ -163,6 +163,12 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
 .pill.on{ background:var(--text); color:var(--bg); border-color:var(--text); }
 .pill small{ font-family:var(--mono); font-size:.72rem; opacity:.6; margin-left:6px; }
 .count{ font-family:var(--mono); font-size:.8rem; color:var(--mut); white-space:nowrap; }
+/* телефон: закреплён только ряд категорий */
+@media (max-width:760px){
+  .tools{ top:calc(var(--nav-h) - var(--trh,110px)); background:var(--bg); padding-bottom:10px; }
+  body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px - var(--trh,110px)); }
+  .tools .count{ display:none; }
+}
 .empty{ text-align:center; padding:70px 20px; border:1px dashed var(--line2); border-radius:var(--r); }
 .empty i{ font-size:2rem; color:var(--mut); } .empty h3{ font-size:1.3rem; margin-top:14px; } .empty p{ color:var(--mut); margin:8px 0 20px; }
 
@@ -235,6 +241,7 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
       <a href="#catalog" data-cat="Redmi">Redmi</a>
       <a href="#catalog" data-cat="POCO">POCO</a>
       <a href="#catalog" data-cat="Часы">Часы</a>
+      <a href="#catalog" data-cat="Аксессуары">Аксессуары</a>
       <a href="#catalog" data-cat="Б/У">Б/У</a>
     </nav>
     <span class="nav-sp"></span>
@@ -257,6 +264,7 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
     <a href="#catalog" data-cat="Redmi">Redmi <i class="bi bi-arrow-right"></i></a>
     <a href="#catalog" data-cat="POCO">POCO <i class="bi bi-arrow-right"></i></a>
     <a href="#catalog" data-cat="Часы">Часы <i class="bi bi-arrow-right"></i></a>
+    <a href="#catalog" data-cat="Аксессуары">Аксессуары <i class="bi bi-arrow-right"></i></a>
     <a href="#catalog" data-cat="Б/У">Б/У <i class="bi bi-arrow-right"></i></a>
     <a href="order.html">Корзина <i class="bi bi-bag"></i></a>
   </nav>
@@ -370,6 +378,19 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
       </div>
       <div class="pills" id="pills" role="tablist" aria-label="Категории"></div>
     </div>
+    <div class="uh" id="usedHero" hidden>
+      <div class="uh-copy">
+        <h3 class="uh-t" data-edit="used_title" data-edit-label="Раздел Б/У: заголовок">Б/У техника, которой можно доверять</h3>
+        <p class="uh-p" data-edit="used_text" data-edit-label="Раздел Б/У: текст">Проверяем каждое устройство перед продажей и честно пишем аккумулятор, состояние и дефекты.</p>
+        <ul class="uh-pts">
+          <li><i class="bi bi-patch-check"></i><span data-edit="used_p1" data-edit-label="Раздел Б/У: преимущества">Проверка перед продажей</span></li>
+          <li><i class="bi bi-phone"></i><span data-edit="used_p2" data-edit-label="Раздел Б/У: преимущества">Аккумулятор в процентах</span></li>
+          <li><i class="bi bi-info-circle"></i><span data-edit="used_p3" data-edit-label="Раздел Б/У: преимущества">Все дефекты в описании</span></li>
+          <li><i class="bi bi-shield-check"></i><span data-edit="used_p4" data-edit-label="Раздел Б/У: преимущества">Гарантия магазина</span></li>
+        </ul>
+      </div>
+      <div class="uh-art" id="usedArt" aria-hidden="true"></div>
+    </div>
     <div class="grid-p" id="grid" aria-live="polite"></div>
     <div style="text-align:center;margin-top:28px" id="moreWrap" hidden><button class="btn ghost" id="more">Показать ещё</button></div>
     <div class="empty" id="empty" hidden><i class="bi bi-search"></i><h3>Ничего не нашли</h3><p>Попробуйте другой запрос или сбросьте фильтры.</p><button class="btn ghost" id="reset">Сбросить фильтры</button></div>
@@ -390,9 +411,9 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
 
 <footer class="foot"><div class="wrap" id="cmsFooter"></div></footer>
 
-<script src="products.js?v=2026-10-22.1"></script>
-<script src="cms.js?v=2026-10-22.1"></script>
-<script src="assets/silk.js?v=2026-10-22.1"></script>
+<script src="products.js?v=2026-10-23.1"></script>
+<script src="cms.js?v=2026-10-23.1"></script>
+<script src="assets/silk.js?v=2026-10-23.1"></script>
 <script>
 (function(){
   "use strict";
@@ -412,6 +433,18 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
     }
     return true;
   }
+  /* витрина раздела «Б/У»: показывается над товарами, когда выбрана категория */
+  function usedHero(){
+    var h=$('#usedHero'); if(!h) return;
+    var on=state.cat==='Б/У'; h.hidden=!on; if(!on) return;
+    var used=CMS.getProducts().filter(function(p){ return CMS.isUsed(p) && CMS.inStock(p); });
+    var pics=used.slice().sort(function(a,b){ return CMS.priceOf(b)-CMS.priceOf(a); }).slice(0,3);
+    $('#usedArt').innerHTML=pics.map(function(p,i){ return '<img class="uh-i i'+i+'" src="'+esc(CMS.thumb(p.img))+'" alt="" loading="lazy">'; }).join('')+
+      (used.length?'<div class="uh-n"><b>'+used.length+'</b>'+CMS.plural(used.length,'устройство','устройства','устройств')+' в наличии</div>':'');
+  }
+  /* телефон: при прокрутке закреплён только ряд категорий, поиск и фильтры уезжают под шапку */
+  (function(){ var t=document.querySelector('.tools'), r=t&&t.querySelector('.tools-row'); if(!r||!window.ResizeObserver) return;
+    new ResizeObserver(function(){ t.style.setProperty('--trh', (r.offsetHeight+16)+'px'); }).observe(r); })();
   function renderPills(){
     var cats=CMS.getCategories(), all=CMS.getProducts();
     var h='<button class="pill'+(state.cat==='all'?' on':'')+'" data-cat="" role="tab" aria-selected="'+(state.cat==='all')+'">Все<small>'+all.length+'</small></button>';
@@ -428,10 +461,11 @@ body.cms-admin-on .tools{ top:calc(var(--nav-h) + 46px); }
     if(rest>0) $('#more').textContent='Показать ещё '+Math.min(rest,PAGE)+' из '+rest;
     $('#empty').hidden=!!list.length;
     $('#count').textContent=list.length+' '+CMS.plural(list.length,'товар','товара','товаров');
+    usedHero();
     CMS.observeReveal($('#grid'));
   }
   function renderRail(){
-    var all=CMS.getProducts(), pics={'Apple':'images/w/macbook.webp','Samsung':'images/w/samsung_s24.webp','Redmi':'images/w/redmi_note13pro.webp','POCO':'images/w/poco_x6pro.webp','Часы':'images/w/newarrivals_watch.webp','Аксессуары':'images/w/airpods4.webp'};
+    var all=CMS.getProducts(), pics={'Apple':'images/w/macbook.webp','Samsung':'images/w/samsung_s24.webp','Redmi':'images/w/redmi_note13pro.webp','POCO':'images/w/poco_x6pro.webp','Часы':'images/w/newarrivals_watch.webp','Аксессуары':'images/w/airpods4.webp','Б/У':'images/w/ip15pro_natural-titanium.webp'};
     $('#rail').innerHTML=CMS.getCategories().map(function(c){
       var items=all.filter(function(p){ return CMS.catOf(p)===c; }); var img=pics[c] || (items[0] ? CMS.thumb(items[0].img) : '');
       return '<button class="cat" data-cat="'+esc(c)+'"><div class="art">'+(img?'<img src="'+esc(img)+'" alt="" loading="lazy">':'')+'</div><b>'+esc(c)+'</b><small>'+items.length+' '+CMS.plural(items.length,'товар','товара','товаров')+'</small></button>';

@@ -1,7 +1,7 @@
 {
  "_v": 2,
- "_rev": 1792689154196,
- "_date": "2026-10-22T17:12:34.000Z",
+ "_rev": 1792750524794,
+ "_date": "2026-10-23T10:15:24.000Z",
  "products": [
   {
    "id": "iphone13",
@@ -957,7 +957,7 @@
    "type": "simple",
    "category": "Б/У",
    "name": "iPhone 14 128 ГБ",
-   "img": "images/ip14.png",
+   "img": "images/ip14_midnight.png",
    "price": 44900,
    "oldPrice": null,
    "stock": 1,
@@ -987,6 +987,182 @@
     "battery": 92,
     "defects": [],
     "kit": "Коробка, кабель",
+    "warranty": "30 дней от магазина"
+   },
+   "newArrival": false,
+   "soon": false,
+   "release": ""
+  },
+  {
+   "id": "used-ip15pro",
+   "brand": "Apple",
+   "cat": "tech",
+   "type": "simple",
+   "category": "Б/У",
+   "name": "iPhone 15 Pro 256 ГБ",
+   "img": "images/ip15pro_natural-titanium.png",
+   "price": 74900,
+   "oldPrice": null,
+   "stock": 1,
+   "desc": "iPhone 15 Pro в натуральном титане. Без ремонтов, все функции работают, полный комплект.",
+   "description": "iPhone 15 Pro в натуральном титане. Без ремонтов, все функции работают, полный комплект.",
+   "specs": [
+    {
+     "k": "Память",
+     "v": "256 ГБ"
+    },
+    {
+     "k": "Цвет",
+     "v": "Натуральный титан"
+    },
+    {
+     "k": "SIM",
+     "v": "eSIM + SIM"
+    },
+    {
+     "k": "Ремонты",
+     "v": "Не было"
+    }
+   ],
+   "used": {
+    "used": true,
+    "grade": "excellent",
+    "battery": 94,
+    "defects": [],
+    "kit": "Коробка, кабель",
+    "warranty": "30 дней от магазина"
+   },
+   "newArrival": false,
+   "soon": false,
+   "release": ""
+  },
+  {
+   "id": "used-ip14promax",
+   "brand": "Apple",
+   "cat": "tech",
+   "type": "simple",
+   "category": "Б/У",
+   "name": "iPhone 14 Pro Max 256 ГБ",
+   "img": "images/ip14promax_deeppurple.png",
+   "price": 61900,
+   "oldPrice": null,
+   "stock": 1,
+   "desc": "Большой экран, Dynamic Island и камера 48 Мп. Face ID и камеры работают.",
+   "description": "Большой экран, Dynamic Island и камера 48 Мп. Face ID и камеры работают.",
+   "specs": [
+    {
+     "k": "Память",
+     "v": "256 ГБ"
+    },
+    {
+     "k": "Цвет",
+     "v": "Тёмно-фиолетовый"
+    },
+    {
+     "k": "SIM",
+     "v": "eSIM + SIM"
+    },
+    {
+     "k": "Face ID",
+     "v": "Работает"
+    }
+   ],
+   "used": {
+    "used": true,
+    "grade": "good",
+    "battery": 88,
+    "defects": [
+     "Лёгкие потёртости на углах корпуса"
+    ],
+    "kit": "Телефон, кабель",
+    "warranty": "30 дней от магазина"
+   },
+   "newArrival": false,
+   "soon": false,
+   "release": ""
+  },
+  {
+   "id": "used-s24",
+   "brand": "Samsung",
+   "cat": "tech",
+   "type": "simple",
+   "category": "Б/У",
+   "name": "Samsung Galaxy S24 256 ГБ",
+   "img": "images/samsung_s24.png",
+   "price": 42900,
+   "oldPrice": null,
+   "stock": 1,
+   "desc": "Компактный флагман Samsung. Экран без выгораний, полный комплект.",
+   "description": "Компактный флагман Samsung. Экран без выгораний, полный комплект.",
+   "specs": [
+    {
+     "k": "Память",
+     "v": "256 ГБ"
+    },
+    {
+     "k": "Экран",
+     "v": "6,2\" AMOLED 120 Гц"
+    },
+    {
+     "k": "SIM",
+     "v": "2 SIM + eSIM"
+    },
+    {
+     "k": "Ремонты",
+     "v": "Не было"
+    }
+   ],
+   "used": {
+    "used": true,
+    "grade": "new",
+    "battery": 97,
+    "defects": [],
+    "kit": "Коробка, кабель",
+    "warranty": "30 дней от магазина"
+   },
+   "newArrival": false,
+   "soon": false,
+   "release": ""
+  },
+  {
+   "id": "used-mbp",
+   "brand": "Apple",
+   "cat": "tech",
+   "type": "simple",
+   "category": "Б/У",
+   "name": "MacBook Pro 14 M2 Pro",
+   "img": "images/macbookpro.png",
+   "price": 119900,
+   "oldPrice": null,
+   "stock": 1,
+   "desc": "Мощный MacBook Pro для работы с видео и графикой. Клавиатура и экран в порядке.",
+   "description": "Мощный MacBook Pro для работы с видео и графикой. Клавиатура и экран в порядке.",
+   "specs": [
+    {
+     "k": "Процессор",
+     "v": "Apple M2 Pro"
+    },
+    {
+     "k": "Память",
+     "v": "16 ГБ / 512 ГБ"
+    },
+    {
+     "k": "Экран",
+     "v": "14,2\" Liquid Retina XDR"
+    },
+    {
+     "k": "Циклы зарядки",
+     "v": "148"
+    }
+   ],
+   "used": {
+    "used": true,
+    "grade": "good",
+    "battery": 91,
+    "defects": [
+     "Небольшая потёртость на крышке"
+    ],
+    "kit": "Ноутбук, зарядка",
     "warranty": "30 дней от магазина"
    },
    "newArrival": false,

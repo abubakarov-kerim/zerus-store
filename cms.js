@@ -764,6 +764,16 @@
     ${s.instagram?'<p class="fnote">* Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой в России.</p>':''}`;
     el.querySelectorAll('.fcat').forEach(a=>a.addEventListener('click',e=>{ if(CMS.onCatPick){ e.preventDefault(); CMS.onCatPick(a.dataset.cat); } else { try{ sessionStorage.setItem('zerus_cat',a.dataset.cat); }catch(_){} } }));
   }
+  /* телефон: круглая кнопка Telegram не закрывает товары — показываем её в начале страницы и у подвала */
+  function fabAuto(){
+    const f=$('#cmsTg'); if(!f || !window.IntersectionObserver) return;
+    const mq=matchMedia('(max-width:760px)'), seen=new Map();
+    const top=document.createElement('div'); top.style.cssText='position:absolute;left:0;top:0;width:1px;height:90vh;pointer-events:none'; top.setAttribute('aria-hidden','true'); document.body.prepend(top);
+    const io=new IntersectionObserver(es=>{ es.forEach(e=>seen.set(e.target,e.isIntersecting)); apply(); });
+    const apply=()=>{ const on=!mq.matches || [...seen.values()].some(Boolean); f.classList.toggle('away',!on); };
+    io.observe(top); const foot=document.querySelector('.cms-foot, footer'); if(foot) io.observe(foot);
+    mq.addEventListener ? mq.addEventListener('change',apply) : mq.addListener(apply);
+  }
   function updateTg(){ const f=$('#cmsTg'); if(!f) return; if(STORE.telegram){ f.href=`https://t.me/${encodeURIComponent(STORE.telegram)}`; f.hidden=false; } else f.hidden=true;
     $$('[data-tg-link]').forEach(a=>{ if(STORE.telegram){ a.href=`https://t.me/${encodeURIComponent(STORE.telegram)}`; a.hidden=false; } else a.hidden=true; }); }
 
@@ -797,6 +807,12 @@
     observeReveal();
   }
   /* карточка товара (каталог, «похожие») */
+  /* строка состояния на карточке Б/У: значок батареи с процентом и оценка делениями */
+  function usedLine(u){
+    const lv={'new':4,excellent:3,good:2,fair:1}[u.grade]||2, b=u.battery;
+    return `<div class="pcu">${b!=null?`<span class="pcu-b${b<80?' low':''}" title="Аккумулятор ${+b}%"><i><b style="width:${Math.max(6,Math.min(100,+b))}%"></b></i>${+b}%</span>`:''}`+
+      `<span class="pcu-g" title="Состояние: ${esc(gradeName(u.grade))}">${esc(gradeName(u.grade))}<span class="pcu-d" aria-hidden="true">${[1,2,3,4].map(i=>`<b${i<=lv?' class="on"':''}></b>`).join('')}</span></span></div>`;
+  }
   function card(p,i){
     i=i||0;
     const adm = isAdmin() ? `<div class="pc-adm"><button onclick="editProduct('${esc(p.id)}')" aria-label="Изменить"><i class="bi bi-pencil"></i></button><button onclick="askDeleteProduct('${esc(p.id)}')" aria-label="Удалить"><i class="bi bi-trash"></i></button></div>` : '';
@@ -813,10 +829,10 @@
           : (stock ? `<button class="pc-add" data-add="${esc(p.id)}" aria-label="В корзину: ${esc(p.name)}"><i class="bi bi-plus-lg"></i></button>` : '');
     }
     if(isUsed(p)){ flag='<span class="pc-flag used">Б/У</span>';
-      if(!p.soon && stock) st=`<div class="pc-stock used">${p.used.battery!=null?'АКБ '+(+p.used.battery)+'%, ':''}${esc(gradeName(p.used.grade).toLowerCase())}</div>`; }
+      if(!p.soon && stock) st=usedLine(p.used); }
     else if(p.newArrival) flag='<span class="pc-flag">Новинка</span>';
     else if(!p.soon && p.oldPrice && p.oldPrice>p.price) flag=`<span class="pc-flag">−${Math.round((1-p.price/p.oldPrice)*100)}%</span>`;
-    return `<article class="pc rv" style="--d:${(Math.min(i,7)*0.04).toFixed(2)}s">${adm}${flag}
+    return `<article class="pc rv${isUsed(p)?' pc-u':''}" style="--d:${(Math.min(i,7)*0.04).toFixed(2)}s">${adm}${flag}
       <a class="pc-stage" href="${href}" tabindex="-1" aria-hidden="true"><img src="${esc(thumb(p.img))}" alt="" loading="lazy" decoding="async"></a>
       <div class="pc-body"><div class="pc-cat">${esc(catOf(p))}</div><a class="pc-name" href="${href}">${esc(p.name)}</a>
       <div class="pc-foot"><div><div class="pc-price">${price}</div>${st}</div>${act}</div></div></article>`;
@@ -874,7 +890,7 @@
       document.getElementById('cmsConfirmYes').addEventListener('click',()=>{ const cb=confirmCb; closeConfirm(); if(cb) cb(); });
       loadData(); applyPalette(); updateTg(); updateThemeIcons(); applyContent(); Cart.paint();
       if(CMS.footerEl) renderFooter(CMS.footerEl);
-      initChrome();
+      initChrome(); fabAuto();
       injectBlockButtons();
       window.addEventListener('storage', e=>{ if(e.key===LS.cart) Cart.paint(); });
       if(isAdmin()) enableAdminMode();
